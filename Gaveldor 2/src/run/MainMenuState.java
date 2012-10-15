@@ -8,7 +8,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class MainMenuState extends BasicGameState {
 	
-	public static int STATE_ID = 0;
+	public static final int STATE_ID = 0;
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
