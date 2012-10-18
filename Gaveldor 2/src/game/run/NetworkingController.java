@@ -16,6 +16,9 @@ public class NetworkingController implements Runnable{
 	public int port;
 	public final boolean isHosting;
     
+	/**
+	 *Constructor for non-hosting player.
+	 */
     public NetworkingController(String IP, int port, ArrayDeque<Action> sendDeque, ArrayDeque<Action> receiveDeque) {
         this.socket = new Socket(IP,port);
 		this.port = port;
@@ -24,6 +27,9 @@ public class NetworkingController implements Runnable{
 		this.isHosting = false;
     }
 	
+    /**
+     * Constructor for hosting player.
+     */
 	public NetworkingController(int port, ArrayDeque<Action> sendDeque, ArrayDeque<Action> receiveDeque) {
         this.socket = null;
 		this.port = port;
@@ -77,10 +83,10 @@ public class NetworkingController implements Runnable{
     }
     
     private void HandleRequest(Action input) {
-        switch(input.getType()) {
-        case GameStart:
+        switch(input.Type) {
+        case Attack:
 		    synchronized(this.sendables) {
-                this.sendables.add(/*new Action("Received" */));
+                this.sendables.add(new HeartBeatAction());
 			}
 			synchronized(this.receivables) {
 			    this.receivables.add(input);
