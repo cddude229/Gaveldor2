@@ -51,13 +51,13 @@ public class NetworkingController implements Runnable{
             while (true) {
                 if (this.sendables.size() > 0) {
                     synchronized(this.sendables) {
-                        Message output = this.sendables.pop();
+                        Action output = this.sendables.pop();
                         System.out.println("Sending" + output);
                         out.writeObject(output);
                     }
                     out.flush();
                 }
-                Message line = (Message) in.readObject();
+                Action line = (Action) in.readObject();
                 System.out.println("Received" + line);
                 if (line.equals(null)) {
                     break;
