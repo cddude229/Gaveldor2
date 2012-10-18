@@ -34,7 +34,7 @@ public class NetworkingController implements Runnable{
     
     @Override
     public void run() {
-	    if (this.hosting) {
+	    if (this.isHosting) {
 			serverSocket = new ServerSocket(this.port);
 			this.socket = serverSocket.accept();
 		}
