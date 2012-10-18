@@ -80,7 +80,7 @@ public class NetworkingController implements Runnable{
         switch(input.getType()) {
         case GameStart:
 		    synchronized(this.sendables) {
-                this.sendables.add(new Action("Received"));
+                this.sendables.add(/*new Action("Received" */));
 			}
 			synchronized(this.receivables) {
 			    this.receivables.add(input);
