@@ -19,6 +19,7 @@ public class Game extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
 		addState(new MainMenuState());
+		addState(new PlayGameState());
 	}
 	
 	public static void main(String[] args) throws SlickException, IOException, URISyntaxException{
