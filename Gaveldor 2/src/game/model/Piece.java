@@ -1,7 +1,10 @@
 package game.model;
 
+import org.newdawn.slick.Image;
+
 public abstract class Piece {
-    private int currentHealth, x, y, currentDirection;
+    private int currentHealth, currentDirection;
+    private Point point;
     private final Player owner;
     
     /**
@@ -9,10 +12,10 @@ public abstract class Piece {
      * @param x
      * @param y
      */
-    public Piece(Player owner, int x, int y){
+    public Piece(Player owner, Point p){
         this.owner = owner;
         currentHealth = defaultHealth();
-        setPosition(x, y);
+        setPosition(p);
     }
     
     /**
@@ -65,48 +68,52 @@ public abstract class Piece {
      * Where is the piece currently?
      * @return
      */
-    final public int[] getPosition(){
-        return new int[]{ x, y };
+    final public Point getPosition(){
+        return point;
     }
     
     /**
      * Update the piece's position
-     * @param x
-     * @param y
+     * @param p
      */
-    final public void setPosition(int x, int y){
-        this.x = x;
-        this.y = y;
+    final public void setPosition(Point p){
+        this.point = p;
     }
     
     /**
      * Can the piece move to this spot?
-     * @param x
-     * @param y
+     * @param p
      * @return
      */
-    final public boolean isValidMove(int x, int y){
-        // TODO
-        throw new RuntimeException("Not yet implemented");
+    final public boolean isValidMove(Point p){
+        for(Point p2 : getValidMoves()){
+            if(p.equals(p2)){
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
      * Return a list of all the pieces valid moves
      * @return
      */
-    final public int[][] getValidMoves(){
+    final public Point[] getValidMoves(){
         // TODO
         throw new RuntimeException("Not yet implemented");
     }
     
     /**
      * Can the piece attack this spot, if a unit is there?
-     * @param x
-     * @param y
+     * @param p
      * @return
      */
-    final public boolean isValidAttack(int x, int y){
-        // TODO
+    final public boolean isValidAttack(Point p){
+        for(Point p2 : getValidAttacks()){
+            if(p.equals(p2)){
+                return true;
+            }
+        }
         throw new RuntimeException("Not yet implemented");
     }
     
@@ -114,7 +121,7 @@ public abstract class Piece {
      * Return the list of where they can attack, if opponents are there
      * @return
      */
-    final public int[][] getValidAttacks(){
+    final public Point[] getValidAttacks(){
         // TODO
         throw new RuntimeException("Not yet implemented");
     }
@@ -153,8 +160,6 @@ public abstract class Piece {
      * Return the path to this piece's sprite
      * @return
      */
-    abstract public String getSprite();
+    abstract public Image getSprite();
     // TODO: Todd, what's the sprite we want to return?
-    
-
 }
