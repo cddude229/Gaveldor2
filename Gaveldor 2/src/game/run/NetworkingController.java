@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ArrayDeque;
 
 import game.model.Action;
+import game.model.Action.Type;
 
 public class NetworkingController implements Runnable{
     private ArrayDeque<Action> sendables;
@@ -43,6 +44,7 @@ public class NetworkingController implements Runnable{
 	    if (this.isHosting) {
 			serverSocket = new ServerSocket(this.port);
 			this.socket = serverSocket.accept();
+			this.sendables.add(new GameStartAction())
 		}
 		
         ObjectInputStream in = null;
@@ -72,6 +74,7 @@ public class NetworkingController implements Runnable{
                     HandleRequest(line);
                 }
             }
+            this.receivables.add(new DisconnectAction())
             out.close();
             in.close();
             this.socket.close();
@@ -82,6 +85,9 @@ public class NetworkingController implements Runnable{
             }
     }
     
+    /**
+     * Likely to be moved into the game logic, where the switch can actually handle all the types.
+     */
     private void HandleRequest(Action input) {
         switch(input.Type) {
         case Attack:
