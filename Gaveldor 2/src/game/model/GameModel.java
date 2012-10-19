@@ -1,5 +1,7 @@
 package game.model;
 
+import java.io.IOException;
+
 
 public class GameModel {
     
@@ -8,9 +10,13 @@ public class GameModel {
     private final Player player1, player2;
     private boolean player1IsCurrent = true;
     
-    public GameModel(){
+    private final TerrainType[][] map;
+    
+    public GameModel(String mapFileName) throws IOException{
         player1 = new Player(1);
         player2 = new Player(2);
+        
+        map = TerrainType.loadMap(mapFileName);
     }
     
     public Player getCurrentPlayer(){

@@ -7,6 +7,8 @@ import game.run.GameUI;
 import game.run.LocalPlayerController;
 import game.run.RemotePlayerController;
 
+import java.io.IOException;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -26,7 +28,13 @@ public class PlayGameState extends BasicGameState {
             throws SlickException {
         //TODO
         GameUI ui = new GameUI();
-        GameModel model = new GameModel();
+        GameModel model;
+        try {
+            model = new GameModel(null);
+        } catch (IOException e) {
+            // TODO
+            throw new RuntimeException(e);
+        }
         match = new GameMatch(ui, model,
                 new LocalPlayerController(null, ui, model),
                 new RemotePlayerController(null));
