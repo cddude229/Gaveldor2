@@ -17,6 +17,8 @@ public enum TerrainType {
     //TODO
     ;
     
+    // TODO: We need a way for them to map a TerrainType to a tile.  That should be enclosed here.
+    
     private static final Map<Character, TerrainType> byRepChar = new HashMap<Character, TerrainType>();
     static{
         for (TerrainType t : TerrainType.values()){
