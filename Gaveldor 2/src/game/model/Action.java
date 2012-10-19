@@ -4,25 +4,12 @@ import java.io.Serializable;
 
 public abstract class Action implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    public static final long serialVersionUID = 1L;
     public enum Type {
     	Forfeit,Move,Attack,Response,TurnEnd,HeartBeat,GameStart,Disconnect
     	};
     public Type type;
     
-    //TODO: add Action subclasses here
-    
-    public class ExampleAction extends Action {
-
-        private static final long serialVersionUID = -1848285699363419566L;
-        
-        public final int someArgument;
-        
-        public ExampleAction(int someArgument){
-            this.someArgument = someArgument;
-            this.type = Type.Forfeit;
-        }
-    }
     
     public class ForfeitAction extends Action {
     	

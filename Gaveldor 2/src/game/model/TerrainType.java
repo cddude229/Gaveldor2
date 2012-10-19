@@ -9,6 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
+import util.Resources;
+
 public enum TerrainType {
 
     OPEN_LAND('L'),
@@ -17,7 +22,6 @@ public enum TerrainType {
     //TODO
     ;
     
-    // TODO: We need a way for them to map a TerrainType to a tile.  That should be enclosed here.
     
     private static final Map<Character, TerrainType> byRepChar = new HashMap<Character, TerrainType>();
     static{
@@ -26,7 +30,14 @@ public enum TerrainType {
         }
     }
     
+    private static Image tileset;
+    
     public final char repChar;
+    
+
+    // TODO: We need a way for them to map a TerrainType to a tile.  That should be enclosed here.
+    public final int tileIndex = -1;
+    private Image tile = null;
     
     private TerrainType(char repChar){
         this.repChar = repChar;
@@ -36,6 +47,16 @@ public enum TerrainType {
         return byRepChar.get(repChar);
     }
     
+    public static void loadTileset(String path) throws SlickException{
+        tileset = Resources.getImage(path);
+    }
+    
+    public Image getTile(){
+        if (tile == null){
+            tile = tileset.getSubImage(tileIndex, 0, 1, 1); //TODO: actual coordinates and dimensions
+        }
+        return tile;
+    }
     
     public static TerrainType[][] loadMap(String fileName) throws IOException{
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
@@ -43,8 +64,7 @@ public enum TerrainType {
             List<TerrainType[]> rows = new ArrayList<TerrainType[]>();
             String rowLine;
             int width = -1;
-            int j = 0;
-            while ((rowLine = reader.readLine()) != null){
+            for (int j = 0; (rowLine = reader.readLine()) != null; j++){
                 rowLine = rowLine.replaceAll("\\s", "");
                 if (width == -1){
                     width = rowLine.length();
