@@ -1,14 +1,16 @@
 package game.run;
 
+import game.model.Action;
+import game.model.Action.DisconnectAction;
+import game.model.Action.GameStartAction;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayDeque;
-
-import game.model.Action;
-import game.model.Action.Type;
 
 public class NetworkingController implements Runnable{
     private ArrayDeque<Action> sendables;
@@ -19,8 +21,10 @@ public class NetworkingController implements Runnable{
     
 	/**
 	 *Constructor for non-hosting player.
+	 * @throws IOException 
+	 * @throws UnknownHostException 
 	 */
-    public NetworkingController(String IP, int port, ArrayDeque<Action> sendDeque, ArrayDeque<Action> receiveDeque) {
+    public NetworkingController(String IP, int port, ArrayDeque<Action> sendDeque, ArrayDeque<Action> receiveDeque) throws UnknownHostException, IOException {
         this.socket = new Socket(IP,port);
 		this.port = port;
         this.sendables = sendDeque;
@@ -42,9 +46,14 @@ public class NetworkingController implements Runnable{
     @Override
     public void run() {
 	    if (this.isHosting) {
-			serverSocket = new ServerSocket(this.port);
-			this.socket = serverSocket.accept();
-			this.sendables.add(new GameStartAction())
+			ServerSocket serverSocket;
+            try {
+                serverSocket = new ServerSocket(this.port);
+                this.socket = serverSocket.accept();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+			this.sendables.add(new GameStartAction()); // Need an instance?
 		}
 		
         ObjectInputStream in = null;
@@ -74,7 +83,7 @@ public class NetworkingController implements Runnable{
                     HandleRequest(line);
                 }
             }
-            this.receivables.add(new DisconnectAction())
+            this.receivables.add(new DisconnectAction());
             out.close();
             in.close();
             this.socket.close();
@@ -89,10 +98,10 @@ public class NetworkingController implements Runnable{
      * Likely to be moved into the game logic, where the switch can actually handle all the types.
      */
     private void HandleRequest(Action input) {
-        switch(input.Type) {
+        switch(input.type) {
         case Attack:
 		    synchronized(this.sendables) {
-                this.sendables.add(new HeartBeatAction());
+                this.sendables.add(input.new HeartBeatAction());
 			}
 			synchronized(this.receivables) {
 			    this.receivables.add(input);

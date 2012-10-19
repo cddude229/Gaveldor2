@@ -62,10 +62,10 @@ public abstract class Action implements Serializable {
     	}
     }
 
-    public class AttackAction() extends Action {
+    public class AttackAction extends Action {
     	
-    	public final int[2] sourceLocation;
-    	public final int[2] attackLocation;
+    	public final int[] sourceLocation;
+    	public final int[] attackLocation;
     	
     	public AttackAction(int[] source, int[] attack) {
     		this.sourceLocation = source;
@@ -74,10 +74,10 @@ public abstract class Action implements Serializable {
     	}
     }
     
-    public class MoveAction() extends Action {
+    public class MoveAction extends Action {
     	
     	public final int unitID;
-    	public final int[2] destination;
+    	public final int[] destination;
     	public final int rotation;
     	
     	public MoveAction(int ID, int[] destination, int rotation) {
