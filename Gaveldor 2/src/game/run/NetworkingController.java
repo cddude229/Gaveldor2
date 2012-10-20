@@ -53,8 +53,8 @@ public class NetworkingController implements Runnable{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-			this.sendables.add(new GameStartAction()); 
-			this.receivables.add(new GameStartAction());
+			this.sendables.add(new GameStartAction(2)); 
+			this.receivables.add(new GameStartAction(1));
 		}
 		
         ObjectInputStream in = null;
@@ -84,7 +84,11 @@ public class NetworkingController implements Runnable{
                     this.receivables.add(line);
                 }
             }
-            this.receivables.add(new DisconnectAction());
+            int otherPlayer = 1;
+            if (this.isHosting) {
+                otherPlayer = 2;
+            }
+            this.receivables.add(new DisconnectAction(otherPlayer));
             out.close();
             in.close();
             this.socket.close();
