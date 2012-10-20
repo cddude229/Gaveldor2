@@ -1,6 +1,5 @@
 package run;
 
-import game.model.Constants;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -10,6 +9,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import util.Constants;
 import util.Resources;
 
 public class Game extends StateBasedGame {

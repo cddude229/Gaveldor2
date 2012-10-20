@@ -1,4 +1,4 @@
-package game.model;
+package util;
 
 /*
  * Global constants file
