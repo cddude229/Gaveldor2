@@ -1,5 +1,7 @@
 package run;
 
+import game.model.Constants;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -27,7 +29,7 @@ public class Game extends StateBasedGame {
 	    
         AppGameContainer app = new AppGameContainer(new Game());
         app.setVerbose(false);
-        app.setDisplayMode(800, 600, false); //TODO: arbitrary width and height
+        app.setDisplayMode(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, Constants.WINDOW_FULLSCREEN);
         app.setVSync(true);
         app.setShowFPS(false);
         app.start();

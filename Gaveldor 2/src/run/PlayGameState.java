@@ -5,7 +5,7 @@ import game.model.GameModel;
 import game.run.GameMatch;
 import game.run.GameUI;
 import game.run.LocalPlayerController;
-import game.run.RemotePlayerController;
+import game.run.RemotePlayerController.HostRemotePlayerController;
 
 import java.io.IOException;
 
@@ -37,7 +37,7 @@ public class PlayGameState extends BasicGameState {
         }
         match = new GameMatch(ui, model,
                 new LocalPlayerController(null, ui, model),
-                new RemotePlayerController(null));
+                new HostRemotePlayerController(null, -1));
         
     }
 
