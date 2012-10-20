@@ -32,7 +32,7 @@ public abstract class RemotePlayerController extends PlayerController {
     public static class HostRemotePlayerController extends RemotePlayerController{
 
         public HostRemotePlayerController(Player player, int port) {
-            super(player, new NetworkingController(port, null, null)); //TODO: remove nulls
+            super(player, new NetworkingController(port)); 
         }
         
     }
@@ -40,7 +40,7 @@ public abstract class RemotePlayerController extends PlayerController {
     public static class ClientRemotePlayerController extends RemotePlayerController{
 
         public ClientRemotePlayerController(Player player, String host, int port) throws IOException{
-            super(player, new NetworkingController(host, port, null, null)); //TODO: remove nulls
+            super(player, new NetworkingController(host, port)); 
         }
         
     }

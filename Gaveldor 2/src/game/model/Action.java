@@ -6,42 +6,52 @@ public abstract class Action implements Serializable {
 
     public static final long serialVersionUID = 1L;
     public enum Type {
-    	Forfeit,Move,Attack,Response,TurnEnd,HeartBeat,GameStart,Disconnect
+    	FORFEIT,MOVE,ATTACK,RESPONSE,TURN_END,HEART_BEAT,GAME_START,DISCONNECT
     	};
+    	
+    public enum Move {ROCK,PAPER,SCISSORS};
     public Type type;
     
     
     public class ForfeitAction extends Action {
     	
-    	public ForfeitAction() {
-    		this.type = Type.Forfeit;
+        private static final long serialVersionUID = -1991155911677095030L;
+
+        public ForfeitAction() {
+    		this.type = Type.FORFEIT;
     	}
     }
     
     public class GameStartAction extends Action {
     	
-    	public GameStartAction() {
-    		this.type = Type.GameStart;
+        private static final long serialVersionUID = 6305597468815847402L;
+
+        public GameStartAction() {
+    		this.type = Type.GAME_START;
     	}
     }
     
     public class DisconnectAction extends Action {
     	
-    	public DisconnectAction() {
-    		this.type = Type.Disconnect;
+        private static final long serialVersionUID = -5895590625354734189L;
+
+        public DisconnectAction() {
+    		this.type = Type.DISCONNECT;
     	}
     }
     
     public class HeartBeatAction extends Action {
     	
-    	public HeartBeatAction() {
-    		this.type = Type.HeartBeat;
+        private static final long serialVersionUID = 989976207306981770L;
+
+        public HeartBeatAction() {
+    		this.type = Type.HEART_BEAT;
     	}
     }
     
     public class ResponseAction extends Action {
-    	
-    	public enum Move {Rock,Paper,Scissors};
+
+        private static final long serialVersionUID = 9022778930576890264L;
     	public Move move;
     	
     	public ResponseAction(Move move) {
@@ -50,27 +60,29 @@ public abstract class Action implements Serializable {
     }
 
     public class AttackAction extends Action {
-    	
-    	public final int[] sourceLocation;
+
+        private static final long serialVersionUID = 7192637502453282800L;
+        public final int[] sourceLocation;
     	public final int[] attackLocation;
     	
     	public AttackAction(int[] source, int[] attack) {
     		this.sourceLocation = source;
     		this.attackLocation = attack;
-    		this.type = Type.Attack;
+    		this.type = Type.ATTACK;
     	}
     }
     
     public class MoveAction extends Action {
     	
-    	public final int unitID;
+        private static final long serialVersionUID = 8582750212791110715L;
+        public final int unitID;
     	public final int[] destination;
     	public final int rotation;
     	
     	public MoveAction(int ID, int[] destination, int rotation) {
     		this.unitID = ID;
     		this.destination = destination;
-    		this.type = Type.Move;
+    		this.type = Type.MOVE;
     		this.rotation = rotation;
     	}
     }
