@@ -1,5 +1,6 @@
 package run;
 
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -8,6 +9,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import util.Constants;
 import util.Resources;
 
 public class Game extends StateBasedGame {
@@ -27,7 +29,7 @@ public class Game extends StateBasedGame {
 	    
         AppGameContainer app = new AppGameContainer(new Game());
         app.setVerbose(false);
-        app.setDisplayMode(800, 600, false); //TODO: arbitrary width and height
+        app.setDisplayMode(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, Constants.WINDOW_FULLSCREEN);
         app.setVSync(true);
         app.setShowFPS(false);
         app.start();

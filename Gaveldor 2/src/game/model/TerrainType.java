@@ -35,7 +35,6 @@ public enum TerrainType {
     public final char repChar;
     
 
-    // TODO: We need a way for them to map a TerrainType to a tile.  That should be enclosed here.
     public final int tileIndex = -1;
     private Image tile = null;
     

@@ -45,6 +45,7 @@ public class LocalPlayerController extends PlayerController {
 
     @Override
     public void propagateAction(Action action) {
+        //do nothing
     }
 
 }
