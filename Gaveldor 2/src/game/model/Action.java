@@ -13,7 +13,7 @@ public abstract class Action implements Serializable {
     public Type type;
     
     
-    public class ForfeitAction extends Action {
+    public static class ForfeitAction extends Action {
     	
         private static final long serialVersionUID = -1991155911677095030L;
 
@@ -22,7 +22,7 @@ public abstract class Action implements Serializable {
     	}
     }
     
-    public class GameStartAction extends Action {
+    public static class GameStartAction extends Action {
     	
         private static final long serialVersionUID = 6305597468815847402L;
 
@@ -31,7 +31,7 @@ public abstract class Action implements Serializable {
     	}
     }
     
-    public class DisconnectAction extends Action {
+    public static class DisconnectAction extends Action {
     	
         private static final long serialVersionUID = -5895590625354734189L;
 
@@ -40,7 +40,7 @@ public abstract class Action implements Serializable {
     	}
     }
     
-    public class HeartBeatAction extends Action {
+    public static class HeartBeatAction extends Action {
     	
         private static final long serialVersionUID = 989976207306981770L;
 
@@ -49,7 +49,7 @@ public abstract class Action implements Serializable {
     	}
     }
     
-    public class ResponseAction extends Action {
+    public static class ResponseAction extends Action {
 
         private static final long serialVersionUID = 9022778930576890264L;
     	public Move move;
@@ -59,27 +59,27 @@ public abstract class Action implements Serializable {
     	}
     }
 
-    public class AttackAction extends Action {
+    public static class AttackAction extends Action {
 
         private static final long serialVersionUID = 7192637502453282800L;
-        public final int[] sourceLocation;
-    	public final int[] attackLocation;
+        public final Point sourceLocation;
+    	public final Point attackLocation;
     	
-    	public AttackAction(int[] source, int[] attack) {
+    	public AttackAction(Point source, Point attack) {
     		this.sourceLocation = source;
     		this.attackLocation = attack;
     		this.type = Type.ATTACK;
     	}
     }
     
-    public class MoveAction extends Action {
+    public static class MoveAction extends Action {
     	
         private static final long serialVersionUID = 8582750212791110715L;
         public final int unitID;
-    	public final int[] destination;
+    	public final Point destination;
     	public final int rotation;
     	
-    	public MoveAction(int ID, int[] destination, int rotation) {
+    	public MoveAction(int ID, Point destination, int rotation) {
     		this.unitID = ID;
     		this.destination = destination;
     		this.type = Type.MOVE;

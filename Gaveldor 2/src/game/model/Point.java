@@ -1,6 +1,11 @@
 package game.model;
 
-final public class Point {
+import java.io.Serializable;
+
+final public class Point implements Serializable {
+    
+    private static final long serialVersionUID = -2131287867962931619L;
+    
     public final int x, y;
     public Point(int x, int y){
         this.x = x;
