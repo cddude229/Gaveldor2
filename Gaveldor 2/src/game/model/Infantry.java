@@ -14,23 +14,9 @@ public class Infantry extends Piece{
 
     @Override
     public void attack(Piece opponent) {
-        Point p = this.getPosition();
-        int attackDir=-1;
-        Point [] ret = {new Point(p.x,p.y-2), new Point(
-                p.x+1,p.y-1), new Point(p.x+1,p.y+1),
-                new Point(p.x,p.y+2), new Point(p.x-1,p.y+1),
-                new Point(p.x-1,p.y-1)};
-        for(int i=0;i<ret.length;i++)
-        {
-            if(ret[i].equals(opponent.getPosition()))
-                attackDir=i;
-        }
         int power = this.defaultAttackPower();
-        int oppDir=opponent.getDirection();
-        if (attackDir==oppDir || attackDir==(oppDir+1)%6 || attackDir==(oppDir-1)%6)
-        {
+        if (this.isBackAttack(opponent))
             power*=2;
-        }
         opponent.loseHealth(power);
     }
 

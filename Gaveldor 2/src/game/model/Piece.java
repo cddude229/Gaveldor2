@@ -27,6 +27,29 @@ public abstract class Piece {
     }
     
     /**
+     * Return whether or not a back attack
+     */
+    final public boolean isBackAttack(Piece opponent){
+        int attackDir=-1;
+        Point p = this.getPosition();
+        Point [] ret = {new Point(p.x,p.y-2), new Point(
+                p.x+1,p.y-1), new Point(p.x+1,p.y+1),
+                new Point(p.x,p.y+2), new Point(p.x-1,p.y+1),
+                new Point(p.x-1,p.y-1)};
+        for(int i=0;i<ret.length;i++)
+        {
+            if(ret[i].equals(opponent.getPosition()))
+                attackDir=i;
+        }
+        int oppDir=opponent.getDirection();
+        if (attackDir==oppDir || attackDir==(oppDir+1)%6 || attackDir==(oppDir-1)%6)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * Remove health i from the piece.  Min out at 0.
      * @param i
      * @return
