@@ -1,6 +1,8 @@
 package game.run;
 
 import game.model.Action;
+import game.model.Action.DisconnectAction;
+import game.model.Action.GameStartAction;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -51,7 +53,8 @@ public class NetworkingController implements Runnable{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-			//this.sendables.add(new GameStartAction()); // Need an instance?
+			this.sendables.add(new GameStartAction()); 
+			this.receivables.add(new GameStartAction());
 		}
 		
         ObjectInputStream in = null;
@@ -81,7 +84,7 @@ public class NetworkingController implements Runnable{
                     this.receivables.add(line);
                 }
             }
-            //this.receivables.add(new DisconnectAction());
+            this.receivables.add(new DisconnectAction());
             out.close();
             in.close();
             this.socket.close();
