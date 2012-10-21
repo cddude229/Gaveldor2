@@ -2,6 +2,8 @@ package game.model;
 
 import java.io.IOException;
 
+import org.newdawn.slick.Graphics;
+
 
 public class GameModel {
     
@@ -34,5 +36,16 @@ public class GameModel {
     public void applyAction(Action action){
         //TODO: handle various action subclasses
     }
-
+    
+    public void renderMap(Graphics g){
+        for (int i = 0; i < map.length; i++){
+            for (int j = 0; j < map[i].length; j++){
+                TerrainType terrain = map[i][j];
+                if (terrain == null){
+                    continue;
+                }
+                g.drawImage(terrain.tile, i * Constants.TILE_WIDTH_SPACING, j * Constants.TILE_HEIGHT_SPACING);
+            }
+        }
+    }
 }

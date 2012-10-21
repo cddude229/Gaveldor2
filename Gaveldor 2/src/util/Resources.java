@@ -14,11 +14,11 @@ import org.newdawn.slick.Sound;
 
 public class Resources {
     
-    private static URL getResource(String name){
+    public static URL getResource(String name){
         return Resources.class.getResource(name);
     }
     
-    private static InputStream getResourceAsStream(String name){
+    public static InputStream getResourceAsStream(String name){
         return Resources.class.getResourceAsStream(name);
     }
     
@@ -65,18 +65,19 @@ public class Resources {
 //        for (String name : new File(Util.class.getResource(path).toURI()).list()){
         for (String name : LWJGL_NATIVE_NAMES){
             File tmpFile = new File(tmpDir, name);
-
-            InputStream in = getResourceAsStream(path + "/" + name);
-            OutputStream out = new FileOutputStream(tmpFile);
-
-            byte[] buf = new byte[8192];
-            int len;
-            while ((len = in.read(buf)) != -1) {
-                out.write(buf, 0, len);
+            if (!tmpFile.exists()){
+                InputStream in = getResourceAsStream(path + "/" + name);
+                OutputStream out = new FileOutputStream(tmpFile);
+    
+                byte[] buf = new byte[8192];
+                int len;
+                while ((len = in.read(buf)) != -1) {
+                    out.write(buf, 0, len);
+                }
+    
+                in.close();
+                out.close();
             }
-
-            in.close();
-            out.close();
         }
         
         System.setProperty("org.lwjgl.librarypath", tmpDir.getAbsolutePath());

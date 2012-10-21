@@ -2,10 +2,10 @@ package run;
 
 import game.model.Action;
 import game.model.GameModel;
+import game.model.TerrainType;
 import game.run.GameMatch;
 import game.run.GameUI;
 import game.run.LocalPlayerController;
-import game.run.RemotePlayerController.HostRemotePlayerController;
 
 import java.io.IOException;
 
@@ -26,26 +26,30 @@ public class PlayGameState extends BasicGameState {
     @Override
     public void init(GameContainer container, StateBasedGame game)
             throws SlickException {
+        TerrainType.initTiles();
+    }
+    
+    @Override
+    public void enter(GameContainer container, StateBasedGame game){
         //TODO
         GameUI ui = new GameUI();
         GameModel model;
         try {
-            model = new GameModel(null);
+            model = new GameModel("/assets/maps/empty.map");
         } catch (IOException e) {
             // TODO
             throw new RuntimeException(e);
         }
         match = new GameMatch(ui, model,
-                new LocalPlayerController(null, ui, model),
-                new HostRemotePlayerController(null, -1));
-        
+                new LocalPlayerController(model.getCurrentPlayer(), ui, model),
+                new LocalPlayerController(model.getOtherPlayer(), ui, model));
     }
 
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g)
             throws SlickException {
-        // TODO Auto-generated method stub
+        match.getCurrentPC().render(container, game, g);
         
     }
 

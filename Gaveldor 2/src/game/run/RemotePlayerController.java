@@ -5,6 +5,11 @@ import game.model.Player;
 
 import java.io.IOException;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
+
 
 public abstract class RemotePlayerController extends PlayerController {
 
@@ -20,13 +25,17 @@ public abstract class RemotePlayerController extends PlayerController {
 
     @Override
     public Action retrieveAction(){
-        //TODO: get action from the the network
-        return null;
+        return networkingController.getAction();
     }
 
     @Override
     public void propagateAction(Action action) {
-        //TODO: send action along the network
+        networkingController.sendAction(action);
+    }
+    
+
+    public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException{
+        //TODO
     }
     
     public static class HostRemotePlayerController extends RemotePlayerController{

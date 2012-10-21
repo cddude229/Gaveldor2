@@ -3,9 +3,16 @@ package game.run;
 import game.model.Action;
 import game.model.GameModel;
 import game.model.Player;
+import game.model.Point;
 
 import java.util.LinkedList;
 import java.util.Queue;
+
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
 
 
 public class LocalPlayerController extends PlayerController {
@@ -27,6 +34,10 @@ public class LocalPlayerController extends PlayerController {
     }
 
     private void updateActions(){
+        if (ui.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)){
+            Point p = ui.getTileCoords(ui.getInput().getMouseX(), ui.getInput().getMouseY());
+            System.out.println(p.x + ", " + p.y);
+        }
         //TODO: this is where the game logic goes - add actions to queue
     }
 
@@ -46,6 +57,12 @@ public class LocalPlayerController extends PlayerController {
     @Override
     public void propagateAction(Action action) {
         //do nothing
+    }
+
+    @Override
+    public void render(GameContainer container, StateBasedGame game, Graphics g)
+            throws SlickException {
+        model.renderMap(g);
     }
 
 }
