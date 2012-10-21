@@ -15,6 +15,11 @@ public class MainMenuState extends BasicGameState {
 			throws SlickException {
         // TODO Auto-generated method stub
 	}
+	
+	@Override
+	public void enter(GameContainer container, StateBasedGame game){
+	    game.enterState(PlayGameState.STATE_ID);
+	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)

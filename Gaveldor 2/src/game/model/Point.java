@@ -25,4 +25,9 @@ final public class Point implements Serializable {
     public int hashCode(){
         return 10000*y + x;
     }
+    
+    @Override
+    public String toString(){
+        return String.format("<%s, %s>", x, y);
+    }
 }

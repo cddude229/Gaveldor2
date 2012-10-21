@@ -1,6 +1,7 @@
 package game.run;
 
 import game.model.Action;
+import game.model.GameModel;
 import game.model.Player;
 
 import java.io.IOException;
@@ -12,16 +13,13 @@ import org.newdawn.slick.state.StateBasedGame;
 
 
 public abstract class RemotePlayerController extends PlayerController {
-
-    //TODO: establish a network connection and create an action queue
     
     private final NetworkingController networkingController;
     
-    public RemotePlayerController(Player player, NetworkingController networkingController){
-        super(player);
+    public RemotePlayerController(Player player, GameModel model, NetworkingController networkingController){
+        super(player, model);
         this.networkingController = networkingController;
     }
-
 
     @Override
     public Action retrieveAction(){
@@ -35,21 +33,22 @@ public abstract class RemotePlayerController extends PlayerController {
     
 
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException{
-        //TODO
+        model.renderMap(g);
+        //TODO: render the remote player's actions
     }
     
     public static class HostRemotePlayerController extends RemotePlayerController{
 
-        public HostRemotePlayerController(Player player, int port) {
-            super(player, new NetworkingController(port)); 
+        public HostRemotePlayerController(Player player, GameModel model, int port) {
+            super(player, model, new NetworkingController(port)); 
         }
         
     }
     
     public static class ClientRemotePlayerController extends RemotePlayerController{
 
-        public ClientRemotePlayerController(Player player, String host, int port) throws IOException{
-            super(player, new NetworkingController(host, port)); 
+        public ClientRemotePlayerController(Player player, GameModel model, String host, int port) throws IOException{
+            super(player, model, new NetworkingController(host, port)); 
         }
         
     }

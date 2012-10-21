@@ -2,6 +2,7 @@ package game.run;
 
 import game.model.Action;
 import game.model.GameModel;
+import game.model.Piece;
 import game.model.Player;
 import game.model.Point;
 
@@ -20,15 +21,14 @@ public class LocalPlayerController extends PlayerController {
     private final GameUI ui; // for checking user input only (no rendering)
     private int lastUpdateCount;
     
-    private final GameModel model; // for getting game state info only (no updating)
-    
     private final Queue<Action> actionQueue = new LinkedList<Action>();
+    
+    private Piece selectedPiece = null;
 
-    public LocalPlayerController(Player player, GameUI ui, GameModel model) {
-        super(player);
+    public LocalPlayerController(Player player, GameModel model, GameUI ui) {
+        super(player, model);
         this.ui = ui;
         lastUpdateCount = this.ui.getUpdateCount();
-        this.model = model;
         
         
     }
@@ -36,7 +36,14 @@ public class LocalPlayerController extends PlayerController {
     private void updateActions(){
         if (ui.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)){
             Point p = ui.getTileCoords(ui.getInput().getMouseX(), ui.getInput().getMouseY());
-            System.out.println(p.x + ", " + p.y);
+            if (model.isValidCoord(p)){
+                System.out.println(p);
+            }
+            if (selectedPiece == null){
+                //TODO: set selectedPiece to piece at coordinates
+            } else{
+                //TODO: move selectedPiece to coordinates if valid
+            }
         }
         //TODO: this is where the game logic goes - add actions to queue
     }

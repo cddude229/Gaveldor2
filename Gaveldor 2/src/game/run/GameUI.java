@@ -44,7 +44,7 @@ public class GameUI {
         updateCount++;
     }
     
-    public static Point getTileCoords(int pixelX, int pixelY){
+    public Point getTileCoords(int pixelX, int pixelY){
         double x = (1.0 * pixelX + (Constants.TILE_WIDTH - Constants.TILE_WIDTH_SPACING)) / Constants.TILE_WIDTH_SPACING;
         double y = 1.0 * pixelY / Constants.TILE_HEIGHT_SPACING / 2;
         double z = -0.5 * x - y;

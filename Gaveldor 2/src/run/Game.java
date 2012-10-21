@@ -13,14 +13,14 @@ import util.Constants;
 import util.Resources;
 
 public class Game extends StateBasedGame {
-
+    
 	public Game() {
 		super("Gaveldor 2");
 	}
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
-//		addState(new MainMenuState());
+		addState(new MainMenuState());
 		addState(new PlayGameState());
 	}
 	

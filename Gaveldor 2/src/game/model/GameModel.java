@@ -40,6 +40,21 @@ public class GameModel {
         player1IsCurrent ^= true;
     }
     
+    private void endTurn(){
+        switchCurrentAndOtherPlayers();
+        //TODO
+    }
+    
+    public boolean isValidCoord(Point p){
+        if (p.x < 0 || p.x >= map.length){
+            return false;
+        }
+        if (p.y < 0 || p.y >= map[p.x].length){
+            return false;
+        }
+        return true;
+    }
+    
     public void applyAction(Action action){
         switch(action.type) {
         case ATTACK:
@@ -61,7 +76,7 @@ public class GameModel {
             TurnEndAction turnEndPacket = (TurnEndAction) action;
             
         default:
-            DisconnectAction defaultPacket  = (DisconnectAction) action;
+            DisconnectAction defaultPacket  = (DisconnectAction) action; //why?
             
         }
     }

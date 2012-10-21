@@ -41,8 +41,8 @@ public class PlayGameState extends BasicGameState {
             throw new RuntimeException(e);
         }
         match = new GameMatch(ui, model,
-                new LocalPlayerController(model.getCurrentPlayer(), ui, model),
-                new LocalPlayerController(model.getOtherPlayer(), ui, model));
+                new LocalPlayerController(model.getCurrentPlayer(), model, ui),
+                new LocalPlayerController(model.getOtherPlayer(), model, ui));
     }
 
 

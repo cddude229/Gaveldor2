@@ -1,6 +1,7 @@
 package game.run;
 
 import game.model.Action;
+import game.model.GameModel;
 import game.model.Player;
 
 import org.newdawn.slick.GameContainer;
@@ -13,8 +14,11 @@ public abstract class PlayerController {
     
     public final Player player;
     
-    public PlayerController(Player player){
+    public final GameModel model; // for getting game state info only (no updating)
+    
+    public PlayerController(Player player, GameModel model){
         this.player = player;
+        this.model = model;
     }
     
     public abstract Action retrieveAction();
