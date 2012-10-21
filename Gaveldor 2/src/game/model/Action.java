@@ -95,4 +95,14 @@ public abstract class Action implements Serializable {
     	}
     }
     
+    public static class TurnEndAction extends Action {
+
+        private static final long serialVersionUID = -4025822878826670623L;
+
+        public TurnEndAction(int player) {
+            this.type = Type.TURN_END;
+            this.player = player;
+        }
+    }
+    
 }
