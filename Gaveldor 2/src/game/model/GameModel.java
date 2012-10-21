@@ -1,5 +1,12 @@
 package game.model;
 
+import game.model.Action.AttackAction;
+import game.model.Action.DisconnectAction;
+import game.model.Action.ForfeitAction;
+import game.model.Action.GameStartAction;
+import game.model.Action.MoveAction;
+import game.model.Action.TurnEndAction;
+
 import java.io.IOException;
 
 import org.newdawn.slick.Graphics;
@@ -34,7 +41,29 @@ public class GameModel {
     }
     
     public void applyAction(Action action){
-        //TODO: handle various action subclasses
+        switch(action.type) {
+        case ATTACK:
+            AttackAction attackPacket = (AttackAction) action;
+            
+        case DISCONNECT:
+            DisconnectAction disconnectPacket = (DisconnectAction) action;
+           
+        case FORFEIT:
+            ForfeitAction forfeitPacket = (ForfeitAction) action;
+            
+        case GAME_START:
+            GameStartAction gameStartPacket = (GameStartAction) action;
+            
+        case MOVE:
+            MoveAction movePacket = (MoveAction) action;
+            
+        case TURN_END:
+            TurnEndAction turnEndPacket = (TurnEndAction) action;
+            
+        default:
+            DisconnectAction defaultPacket  = (DisconnectAction) action;
+            
+        }
     }
     
     public void renderMap(Graphics g){
