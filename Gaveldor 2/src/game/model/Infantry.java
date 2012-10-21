@@ -6,17 +6,19 @@ public class Infantry extends Piece{
     private int health, attackPower, attackRange, moveRange;
     public Infantry(Player owner, Point p) {
         super(owner, p);
-        this.health=3;
-        this.attackPower=1;
-        this.attackRange=1;
-        this.moveRange=1;
+        this.health = Constants.INFANTRY_HEALTH_POINTS;
+        this.attackPower = Constants.INFANTRY_ATTACK_POWER;
+        this.attackRange = Constants.INFANTRY_ATTACK_RANGE;
+        this.moveRange = Constants.INFANTRY_MOVE_RANGE;
     }
 
     @Override
     public void attack(Piece opponent) {
         int power = this.defaultAttackPower();
+
         if (this.isBackAttack(opponent))
             power*=2;
+
         opponent.loseHealth(power);
     }
 
@@ -32,7 +34,6 @@ public class Infantry extends Piece{
 
     @Override
     public int defaultAttackRange() {
-        // TODO Auto-generated method stub
         return this.attackRange;
     }
 
@@ -45,5 +46,4 @@ public class Infantry extends Piece{
     public Image getSprite() {
         return null;
     }
-
 }

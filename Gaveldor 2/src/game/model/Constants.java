@@ -24,6 +24,12 @@ public class Constants {
     // GameModel.java
     
     // Piece.java
+    // PIECE CONSTANTS
+    public static final int INFANTRY_ATTACK_POWER  = 1;
+    public static final int INFANTRY_ATTACK_RANGE  = 1;
+    public static final int INFANTRY_MOVE_RANGE    = 1;
+    public static final int INFANTRY_HEALTH_POINTS = 1;
+    
     
     // Player.java
     
