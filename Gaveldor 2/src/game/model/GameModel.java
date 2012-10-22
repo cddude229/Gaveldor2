@@ -19,13 +19,13 @@ public class GameModel {
     private final Player player1, player2;
     private boolean player1IsCurrent = true;
     
-    private final TerrainType[][] map;
+    private final Map map;
     
     public GameModel(String mapFileName) throws IOException{
         player1 = new Player(1);
         player2 = new Player(2);
         
-        map = TerrainType.loadMap(mapFileName);
+        map = Map.loadMap(mapFileName);
     }
     
     public Player getCurrentPlayer(){
@@ -46,10 +46,10 @@ public class GameModel {
     }
     
     public boolean isValidCoord(Point p){
-        if (p.x < 0 || p.x >= map.length){
+        if (p.x < 0 || p.x >= map.width){
             return false;
         }
-        if (p.y < 0 || p.y >= map[p.x].length){
+        if (p.y < 0 || p.y >= map.height){
             return false;
         }
         return true;
@@ -82,9 +82,9 @@ public class GameModel {
     }
     
     public void renderMap(Graphics g){
-        for (int i = 0; i < map.length; i++){
-            for (int j = 0; j < map[i].length; j++){
-                TerrainType terrain = map[i][j];
+        for (int i = 0; i < map.width; i++){
+            for (int j = 0; j < map.height; j++){
+                TerrainType terrain = map.terrain[i][j];
                 if (terrain == null){
                     continue;
                 }
