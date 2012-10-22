@@ -1,11 +1,6 @@
 package run;
 
-import game.model.GameModel;
 import game.run.GameMatch;
-import game.run.GameUI;
-import game.run.LocalPlayerController;
-
-import java.io.IOException;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -25,20 +20,7 @@ public class MainMenuState extends BasicGameState {
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame game){
-        //TODO
-        GameUI ui = new GameUI();
-        GameModel model;
-        try {
-            model = new GameModel("/assets/maps/basic");
-        } catch (IOException e) {
-            // TODO
-            throw new RuntimeException(e);
-        }
-        ((Game)game).match = new GameMatch(ui, model,
-                new LocalPlayerController(model.getCurrentPlayer(), model, ui),
-                new LocalPlayerController(model.getOtherPlayer(), model, ui));
-        
-	    game.enterState(PlayGameState.STATE_ID);
+	    ((Game)game).startLocalMatch("/assets/maps/basic");
 	}
 
 	@Override
@@ -51,7 +33,11 @@ public class MainMenuState extends BasicGameState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-		// TODO Auto-generated method stub
+		// TODO
+	    GameMatch match = ((Game)game).match;
+	    if (match.getCurrentPC().isReady() && match.getOtherPC().isReady()){
+	        game.enterState(PlayGameState.STATE_ID);
+	    }
 
 	}
 

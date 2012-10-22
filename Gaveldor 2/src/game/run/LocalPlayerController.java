@@ -34,11 +34,16 @@ public class LocalPlayerController extends PlayerController {
         lastUpdateCount = this.ui.getUpdateCount();
     }
     
+    public boolean isReady(){
+        return true;
+    }
+    
     private void updatePan(){
-        
         double placementX = (double)ui.getInput().getMouseX() / Constants.WINDOW_WIDTH,
                 placementY = (double)ui.getInput().getMouseY() / Constants.WINDOW_HEIGHT;
         //TODO: clean up ALL these constants
+        placementX = Math.max(placementX, 0);
+        placementX = Math.min(placementX, 1);
         if (placementX < .1){
             displayX -= (.1 - placementX) * .25 * Constants.WINDOW_WIDTH;
         } else if (placementX >= .9){
@@ -46,7 +51,9 @@ public class LocalPlayerController extends PlayerController {
         }
         displayX = Math.max(displayX, 0);
         displayX = Math.min(displayX, model.map.getPixelWidth() - Constants.WINDOW_WIDTH);
-        
+
+        placementY = Math.max(placementY, 0);
+        placementY = Math.min(placementY, 1);
         if (placementY < .1){
             displayY -= (.1 - placementY) * .25 * Constants.WINDOW_HEIGHT;
         } else if (placementY >= .9){

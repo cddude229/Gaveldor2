@@ -1,7 +1,10 @@
 package run;
 
 
+import game.model.GameModel;
 import game.run.GameMatch;
+import game.run.GameUI;
+import game.run.LocalPlayerController;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -20,6 +23,20 @@ public class Game extends StateBasedGame {
     
 	public Game() {
 		super("Gaveldor 2");
+	}
+	
+	public boolean startLocalMatch(String mapName){
+        GameUI ui = new GameUI();
+        GameModel model;
+        try {
+            model = new GameModel(mapName);
+        } catch (IOException e) {
+            return false;
+        }
+        match = new GameMatch(ui, model,
+                new LocalPlayerController(model.getCurrentPlayer(), model, ui),
+                new LocalPlayerController(model.getOtherPlayer(), model, ui));
+        return true;
 	}
 
 	@Override
