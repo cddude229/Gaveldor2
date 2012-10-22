@@ -31,9 +31,9 @@ public class Map {
     
     public TerrainType getTerrain(int x, int y){
         TerrainType terrain = terrainMap[x][y];
-//        if (terrain == null){
-//            throw new RuntimeException("An invalid map location has been accessed");
-//        }
+        if (terrain == null){
+            throw new RuntimeException("An invalid map location has been accessed");
+        }
         return terrain;
     }
 
