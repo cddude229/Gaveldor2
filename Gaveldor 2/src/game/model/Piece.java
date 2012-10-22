@@ -5,7 +5,7 @@ import org.newdawn.slick.Image;
 public abstract class Piece {
     private int currentHealth, currentDirection;
     private Point point;
-    private final Player owner;
+    public final Player owner;
     
     /**
      * Only pass in the default position.
@@ -185,4 +185,8 @@ public abstract class Piece {
      */
     abstract public Image getSprite();
     // TODO: Todd, what's the sprite we want to return?
+    
+    public Point getPoint(){
+        return point;
+    }
 }

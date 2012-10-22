@@ -3,8 +3,11 @@ package game.model;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import util.Resources;
 
@@ -22,11 +25,14 @@ public class Map {
     
     private final TerrainType[][] terrainMap;
     
-    private Map(String name, int width, int height, TerrainType[][] terrain){
+    private final Set<Piece> pieces;
+    
+    private Map(String name, int width, int height, TerrainType[][] terrain, Set<Piece> pieces){
         this.name = name;
         this.width = width;
         this.height = height;
         this.terrainMap = terrain;
+        this.pieces = pieces;
     }
     
     public TerrainType getTerrain(int x, int y){
@@ -44,8 +50,44 @@ public class Map {
     public int getPixelHeight(){
         return (Constants.TILE_HEIGHT - Constants.TILE_HEIGHT_SPACING) + Constants.TILE_HEIGHT_SPACING * height;
     }
-
+    
+    public Set<Piece> createPieces(Player player1, Player player2){
+        Set<Piece> piecesNew = new HashSet<Piece>();
+        for (Piece p : pieces){
+            try {
+                piecesNew.add(p.getClass().getConstructor(Player.class, Point.class).newInstance(
+                        p.owner.id == 1 ? player1 : player2, p.getPoint()));
+            } catch (IllegalArgumentException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (SecurityException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return piecesNew;
+    }
+    
     public static Map loadMap(String name) throws IOException{
+        TerrainType[][] terrain = loadTerrain(name);
+        int width = terrain.length, height = terrain[0].length;
+        Set<Piece> pieces = PieceLoader.loadPieces(name, width, height);
+        return new Map(name, width, height, terrain, pieces);
+    }
+
+    private static TerrainType[][] loadTerrain(String name) throws IOException{
         BufferedReader reader = new BufferedReader(new InputStreamReader(Resources.getResourceAsStream(name + ".map")));
         try{
             List<TerrainType[]> rows = new ArrayList<TerrainType[]>();
@@ -76,7 +118,7 @@ public class Map {
                     terrain[i][j] = terrainFlipped[j][i];
                 }
             }
-            return new Map(name, terrain.length, terrain[0].length, terrain);
+            return terrain;
         } finally{
             reader.close();
         }

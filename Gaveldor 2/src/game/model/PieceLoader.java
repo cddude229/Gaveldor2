@@ -3,17 +3,19 @@ package game.model;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import util.Resources;
 
 public class PieceLoader {
 
-    public static ArrayList<Piece> loadPieces(String name, int mapWidth, int mapHeight, Player p1, Player p2) throws IOException{
+    public static Set<Piece> loadPieces(String name, int mapWidth, int mapHeight) throws IOException{
+        Player p1 = new Player(1), p2 = new Player(2);
         BufferedReader reader = new BufferedReader(new InputStreamReader(Resources.getResourceAsStream(name + ".pieces")));
         try{
 
-            ArrayList<Piece> pieces = new ArrayList<Piece> ();
+            Set<Piece> pieces = new HashSet<Piece> ();
             
             String rowLine;
 
@@ -60,7 +62,6 @@ public class PieceLoader {
                     }
                 }                           
             }
-                        
             return pieces;
             
             
