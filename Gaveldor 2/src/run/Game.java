@@ -2,6 +2,7 @@ package run;
 
 
 import game.model.GameModel;
+import game.run.GameException;
 import game.run.GameMatch;
 import game.run.GameUI;
 import game.run.LocalPlayerController;
@@ -25,18 +26,13 @@ public class Game extends StateBasedGame {
 		super("Gaveldor 2");
 	}
 	
-	public boolean startLocalMatch(String mapName){
+	public void startLocalMatch(String mapName) throws GameException{
         GameUI ui = new GameUI();
         GameModel model;
-        try {
-            model = new GameModel(mapName);
-        } catch (IOException e) {
-            return false;
-        }
+        model = new GameModel(mapName);
         match = new GameMatch(ui, model,
                 new LocalPlayerController(model.getCurrentPlayer(), model, ui),
                 new LocalPlayerController(model.getOtherPlayer(), model, ui));
-        return true;
 	}
 
 	@Override

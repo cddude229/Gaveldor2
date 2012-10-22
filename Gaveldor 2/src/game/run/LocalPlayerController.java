@@ -1,7 +1,6 @@
 package game.run;
 
 import game.model.Action;
-import game.model.Constants;
 import game.model.GameModel;
 import game.model.Piece;
 import game.model.Player;
@@ -15,6 +14,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+
+import util.Constants;
 
 
 public class LocalPlayerController extends PlayerController {

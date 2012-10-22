@@ -6,11 +6,13 @@ import game.model.Action.ForfeitAction;
 import game.model.Action.GameStartAction;
 import game.model.Action.MoveAction;
 import game.model.Action.TurnEndAction;
+import game.run.GameException;
 
-import java.io.IOException;
 import java.util.Set;
 
 import org.newdawn.slick.Graphics;
+
+import util.Constants;
 
 
 public class GameModel {
@@ -23,7 +25,7 @@ public class GameModel {
     public final Map map;
     private final Set<Piece> pieces;
     
-    public GameModel(String name) throws IOException{
+    public GameModel(String name) throws GameException{
         player1 = new Player(1);
         player2 = new Player(2);
         

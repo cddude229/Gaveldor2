@@ -1,5 +1,6 @@
 package run;
 
+import game.run.GameException;
 import game.run.GameMatch;
 
 import org.newdawn.slick.GameContainer;
@@ -20,7 +21,12 @@ public class MainMenuState extends BasicGameState {
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame game){
-	    ((Game)game).startLocalMatch("/assets/maps/basic");
+	    try {
+            ((Game)game).startLocalMatch("/assets/maps/basic");
+        } catch (GameException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 	}
 
 	@Override
