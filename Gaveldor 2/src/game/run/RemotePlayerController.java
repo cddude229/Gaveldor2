@@ -20,6 +20,10 @@ public abstract class RemotePlayerController extends PlayerController {
         super(player, model);
         this.networkingController = networkingController;
     }
+    
+    public boolean isReady(){
+        return networkingController.isStarting();
+    }
 
     @Override
     public Action retrieveAction(){

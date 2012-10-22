@@ -15,9 +15,9 @@ import java.util.ArrayDeque;
 public class NetworkingController implements Runnable{
     private ArrayDeque<Action> sendables;
 	private ArrayDeque<Action> receivables;
-    public Socket socket = null;
-	public int port;
-	public final boolean isHosting;
+    private Socket socket = null;
+	private final int port;
+	private final boolean isHosting;
     
 	/**
 	 *Constructor for non-hosting player.
@@ -109,5 +109,9 @@ public class NetworkingController implements Runnable{
         synchronized(this.sendables) {
             this.sendables.add(input);
         }
+    }
+    
+    public boolean isStarting(){
+        return socket == null;
     }
 }

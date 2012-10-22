@@ -5,7 +5,7 @@ import org.newdawn.slick.Image;
 public abstract class Piece {
     private int currentHealth, currentDirection;
     private Point point;
-    private final Player owner;
+    public final Player owner;
     
     /**
      * Only pass in the default position.
@@ -187,4 +187,11 @@ public abstract class Piece {
      * @return
      */
     abstract public Image getSprite();
+    // TODO: Todd, what's the sprite we want to return?
+    // It's hard to now before the formalize the graphics assets storage conventions
+    // with Lane; probably we'll need to store some file reference in a PieceType enum
+    
+    public Point getPoint(){
+        return point;
+    }
 }

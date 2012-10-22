@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.newdawn.slick.Image;
@@ -14,12 +13,20 @@ import org.newdawn.slick.Sound;
 
 public class Resources {
     
-    public static URL getResource(String name){
-        return Resources.class.getResource(name);
+    public static URL getResource(String name) {
+        URL ret = Resources.class.getResource(name);
+        if (ret == null){
+            throw new RuntimeException("Resource not found");
+        }
+        return ret;
     }
     
     public static InputStream getResourceAsStream(String name){
-        return Resources.class.getResourceAsStream(name);
+        InputStream ret = Resources.class.getResourceAsStream(name);
+        if (ret == null){
+            throw new RuntimeException("Resource not found");
+        }
+        return ret;
     }
     
     public static Image getImage(String name) throws SlickException{
@@ -53,33 +60,36 @@ public class Resources {
         "OpenAL64.dll",
     };
     
-    public static void setupLWJGLNatives(String path) throws IOException, URISyntaxException{
-        File tmpDir = new File(System.getProperty("java.io.tmpdir"), path);
-        if (!tmpDir.exists()){
-            boolean success = tmpDir.mkdirs();
-            if (!success){
-                throw new IOException("Temporary directory path could not be made");
-            }
-        }
-        
-//        for (String name : new File(Util.class.getResource(path).toURI()).list()){
-        for (String name : LWJGL_NATIVE_NAMES){
-            File tmpFile = new File(tmpDir, name);
-            if (!tmpFile.exists()){
-                InputStream in = getResourceAsStream(path + "/" + name);
-                OutputStream out = new FileOutputStream(tmpFile);
-    
-                byte[] buf = new byte[8192];
-                int len;
-                while ((len = in.read(buf)) != -1) {
-                    out.write(buf, 0, len);
+    public static void setupLWJGLNatives(String path){
+        try{
+            File tmpDir = new File(System.getProperty("java.io.tmpdir"), path);
+            if (!tmpDir.exists()){
+                boolean success = tmpDir.mkdirs();
+                if (!success){
+                    throw new IOException("Temporary directory path could not be made");
                 }
-    
-                in.close();
-                out.close();
             }
-        }
+            
+            for (String name : LWJGL_NATIVE_NAMES){
+                File tmpFile = new File(tmpDir, name);
+                if (!tmpFile.exists()){
+                    InputStream in = getResourceAsStream(path + "/" + name);
+                    OutputStream out = new FileOutputStream(tmpFile);
         
-        System.setProperty("org.lwjgl.librarypath", tmpDir.getAbsolutePath());
+                    byte[] buf = new byte[8192];
+                    int len;
+                    while ((len = in.read(buf)) != -1) {
+                        out.write(buf, 0, len);
+                    }
+        
+                    in.close();
+                    out.close();
+                }
+            }
+            
+            System.setProperty("org.lwjgl.librarypath", tmpDir.getAbsolutePath());
+        } catch (Exception e){
+            throw new RuntimeException("LWJGL native files could not be set up", e);
+        }
     }
 }

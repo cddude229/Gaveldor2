@@ -2,6 +2,8 @@ package game.model;
 
 import org.newdawn.slick.Image;
 
+import util.Constants;
+
 public class Infantry extends Piece{
     private int health, attackPower, attackRange, moveRange;
     public Infantry(Player owner, Point p) {
