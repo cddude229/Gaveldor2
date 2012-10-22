@@ -83,11 +83,8 @@ public class GameModel {
     
     public void renderMap(Graphics g){
         for (int i = 0; i < map.width; i++){
-            for (int j = 0; j < map.height; j++){
-                TerrainType terrain = map.terrain[i][j];
-                if (terrain == null){
-                    continue;
-                }
+            for (int j = i % 2; j < map.height; j += 2){
+                TerrainType terrain = map.getTerrain(i, j);
                 g.drawImage(terrain.tile, i * Constants.TILE_WIDTH_SPACING, j * Constants.TILE_HEIGHT_SPACING);
             }
         }
