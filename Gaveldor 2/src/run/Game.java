@@ -1,6 +1,8 @@
 package run;
 
 
+import game.run.GameMatch;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -13,6 +15,8 @@ import util.Constants;
 import util.Resources;
 
 public class Game extends StateBasedGame {
+    
+    public GameMatch match = null;
     
 	public Game() {
 		super("Gaveldor 2");

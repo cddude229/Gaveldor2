@@ -33,8 +33,9 @@ public class LocalPlayerController extends PlayerController {
         this.ui = ui;
         lastUpdateCount = this.ui.getUpdateCount();
     }
-
-    private void update(){
+    
+    private void updatePan(){
+        
         double placementX = (double)ui.getInput().getMouseX() / Constants.WINDOW_WIDTH,
                 placementY = (double)ui.getInput().getMouseY() / Constants.WINDOW_HEIGHT;
         //TODO: clean up ALL these constants
@@ -53,9 +54,14 @@ public class LocalPlayerController extends PlayerController {
         }
         displayY = Math.max(displayY, 0);
         displayY = Math.min(displayY, model.map.getPixelHeight() - Constants.WINDOW_HEIGHT);
+    }
+
+    private void update(){
+        
+        updatePan();
         
         if (ui.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)){
-            Point p = GameUI.getTileCoords(ui.getInput().getMouseX() - displayX, ui.getInput().getMouseY() - displayY);
+            Point p = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY() + displayY);
             if (model.isValidCoord(p)){
                 System.out.println(p);
             }

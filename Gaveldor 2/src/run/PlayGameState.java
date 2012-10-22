@@ -1,13 +1,8 @@
 package run;
 
 import game.model.Action;
-import game.model.GameModel;
 import game.model.TerrainType;
 import game.run.GameMatch;
-import game.run.GameUI;
-import game.run.LocalPlayerController;
-
-import java.io.IOException;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -22,7 +17,6 @@ public class PlayGameState extends BasicGameState {
     
     private GameMatch match = null;
 
-
     @Override
     public void init(GameContainer container, StateBasedGame game)
             throws SlickException {
@@ -31,18 +25,7 @@ public class PlayGameState extends BasicGameState {
     
     @Override
     public void enter(GameContainer container, StateBasedGame game){
-        //TODO
-        GameUI ui = new GameUI();
-        GameModel model;
-        try {
-            model = new GameModel("/assets/maps/basic");
-        } catch (IOException e) {
-            // TODO
-            throw new RuntimeException(e);
-        }
-        match = new GameMatch(ui, model,
-                new LocalPlayerController(model.getCurrentPlayer(), model, ui),
-                new LocalPlayerController(model.getOtherPlayer(), model, ui));
+        match = ((Game)game).match;
     }
 
 
