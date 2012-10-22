@@ -49,3 +49,4 @@ public enum TerrainType {
         OPEN_LAND.tile = Resources.getImage("/assets/graphics/test.png");
     }
 }
+

@@ -35,7 +35,7 @@ public class PlayGameState extends BasicGameState {
         GameUI ui = new GameUI();
         GameModel model;
         try {
-            model = new GameModel("/assets/maps/empty.map");
+            model = new GameModel("/assets/maps/basic");
         } catch (IOException e) {
             // TODO
             throw new RuntimeException(e);

@@ -8,6 +8,7 @@ import game.model.Action.MoveAction;
 import game.model.Action.TurnEndAction;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.newdawn.slick.Graphics;
 
@@ -20,12 +21,16 @@ public class GameModel {
     private boolean player1IsCurrent = true;
     
     public final Map map;
+    private final ArrayList<Piece> pieces;
     
-    public GameModel(String mapFileName) throws IOException{
+    public GameModel(String name) throws IOException{
         player1 = new Player(1);
         player2 = new Player(2);
         
-        map = Map.loadMap(mapFileName);
+        map = Map.loadMap(name);
+        
+        pieces = PieceLoader.loadPieces(name, map.width, map.height, player1, player2);
+        
     }
     
     public Player getCurrentPlayer(){

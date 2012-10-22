@@ -45,8 +45,8 @@ public class Map {
         return (Constants.TILE_HEIGHT - Constants.TILE_HEIGHT_SPACING) + Constants.TILE_HEIGHT_SPACING * height;
     }
 
-    public static Map loadMap(String fileName) throws IOException{
-        BufferedReader reader = new BufferedReader(new InputStreamReader(Resources.getResourceAsStream(fileName)));
+    public static Map loadMap(String name) throws IOException{
+        BufferedReader reader = new BufferedReader(new InputStreamReader(Resources.getResourceAsStream(name + ".map")));
         try{
             List<TerrainType[]> rows = new ArrayList<TerrainType[]>();
             String rowLine;
@@ -76,7 +76,7 @@ public class Map {
                     terrain[i][j] = terrainFlipped[j][i];
                 }
             }
-            return new Map(fileName, terrain.length, terrain[0].length, terrain);
+            return new Map(name, terrain.length, terrain[0].length, terrain);
         } finally{
             reader.close();
         }
