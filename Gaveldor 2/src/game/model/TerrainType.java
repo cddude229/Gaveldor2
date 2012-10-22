@@ -17,14 +17,6 @@ public enum TerrainType {
     //TODO
     ;
     
-    static{
-        try {
-            OPEN_LAND.tile = Resources.getImage("/assets/graphics/test.png");
-        } catch (SlickException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
     
     private static final Map<Character, TerrainType> byRepChar = new HashMap<Character, TerrainType>();
     static{
