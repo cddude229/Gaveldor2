@@ -19,7 +19,7 @@ public class GameModel {
     private final Player player1, player2;
     private boolean player1IsCurrent = true;
     
-    private final Map map;
+    public final Map map;
     
     public GameModel(String mapFileName) throws IOException{
         player1 = new Player(1);
@@ -81,12 +81,13 @@ public class GameModel {
         }
     }
     
-    public void renderMap(Graphics g){
+    public void renderBoard(Graphics g, int offsetX, int offsetY){
         for (int i = 0; i < map.width; i++){
             for (int j = i % 2; j < map.height; j += 2){
                 TerrainType terrain = map.getTerrain(i, j);
-                g.drawImage(terrain.tile, i * Constants.TILE_WIDTH_SPACING, j * Constants.TILE_HEIGHT_SPACING);
+                g.drawImage(terrain.tile, i * Constants.TILE_WIDTH_SPACING + offsetX, j * Constants.TILE_HEIGHT_SPACING + offsetY);
             }
         }
+        //TODO: render pieces
     }
 }

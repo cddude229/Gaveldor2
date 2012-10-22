@@ -36,6 +36,14 @@ public class Map {
         }
         return terrain;
     }
+    
+    public int getPixelWidth(){
+        return (Constants.TILE_WIDTH - Constants.TILE_WIDTH_SPACING) + Constants.TILE_WIDTH_SPACING * width;
+    }
+    
+    public int getPixelHeight(){
+        return (Constants.TILE_HEIGHT - Constants.TILE_HEIGHT_SPACING) + Constants.TILE_HEIGHT_SPACING * height;
+    }
 
     public static Map loadMap(String fileName) throws IOException{
         BufferedReader reader = new BufferedReader(new InputStreamReader(Resources.getResourceAsStream(fileName)));

@@ -1,6 +1,7 @@
 package game.run;
 
 import game.model.Action;
+import game.model.Constants;
 import game.model.GameModel;
 import game.model.Piece;
 import game.model.Player;
@@ -23,19 +24,38 @@ public class LocalPlayerController extends PlayerController {
     
     private final Queue<Action> actionQueue = new LinkedList<Action>();
     
+    private int displayX = 0, displayY = 0;
+    
     private Piece selectedPiece = null;
 
     public LocalPlayerController(Player player, GameModel model, GameUI ui) {
         super(player, model);
         this.ui = ui;
         lastUpdateCount = this.ui.getUpdateCount();
-        
-        
     }
 
-    private void updateActions(){
+    private void update(){
+        double placementX = (double)ui.getInput().getMouseX() / Constants.WINDOW_WIDTH,
+                placementY = (double)ui.getInput().getMouseY() / Constants.WINDOW_HEIGHT;
+        //TODO: clean up ALL these constants
+        if (placementX < .1){
+            displayX -= (.1 - placementX) * .25 * Constants.WINDOW_WIDTH;
+        } else if (placementX >= .9){
+            displayX += (placementX - .9) * .25 * Constants.WINDOW_WIDTH;
+        }
+        displayX = Math.max(displayX, 0);
+        displayX = Math.min(displayX, model.map.getPixelWidth() - Constants.WINDOW_WIDTH);
+        
+        if (placementY < .1){
+            displayY -= (.1 - placementY) * .25 * Constants.WINDOW_HEIGHT;
+        } else if (placementY >= .9){
+            displayY += (placementY - .9) * .25 * Constants.WINDOW_HEIGHT;
+        }
+        displayY = Math.max(displayY, 0);
+        displayY = Math.min(displayY, model.map.getPixelHeight() - Constants.WINDOW_HEIGHT);
+        
         if (ui.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)){
-            Point p = ui.getTileCoords(ui.getInput().getMouseX(), ui.getInput().getMouseY());
+            Point p = GameUI.getTileCoords(ui.getInput().getMouseX() - displayX, ui.getInput().getMouseY() - displayY);
             if (model.isValidCoord(p)){
                 System.out.println(p);
             }
@@ -45,7 +65,7 @@ public class LocalPlayerController extends PlayerController {
                 //TODO: move selectedPiece to coordinates if valid
             }
         }
-        //TODO: this is where the game logic goes - add actions to queue
+        //TODO: this is where to add actions to the queue
     }
 
     @Override
@@ -54,7 +74,7 @@ public class LocalPlayerController extends PlayerController {
             if (lastUpdateCount < ui.getUpdateCount() - 1){
                 throw new RuntimeException("Local controller missed an update");
             } else{
-                updateActions();
+                update();
                 lastUpdateCount++;
             }
         }
@@ -69,7 +89,7 @@ public class LocalPlayerController extends PlayerController {
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g)
             throws SlickException {
-        model.renderMap(g);
+        model.renderBoard(g, -displayX, -displayY);
     }
 
 }
