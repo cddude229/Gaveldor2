@@ -84,7 +84,7 @@ public class GameModel {
     public void renderMap(Graphics g){
         for (int i = 0; i < map.width; i++){
             for (int j = 0; j < map.height; j++){
-                TerrainType terrain = map.terrain[i][j];
+                TerrainType terrain = map.getTerrain(i, j);
                 if (terrain == null){
                     continue;
                 }

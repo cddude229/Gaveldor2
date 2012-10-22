@@ -20,13 +20,21 @@ public class Map {
     
     public final int width, height;
     
-    public final TerrainType[][] terrain;
+    private final TerrainType[][] terrainMap;
     
     private Map(String name, int width, int height, TerrainType[][] terrain){
         this.name = name;
         this.width = width;
         this.height = height;
-        this.terrain = terrain;
+        this.terrainMap = terrain;
+    }
+    
+    public TerrainType getTerrain(int x, int y){
+        TerrainType terrain = terrainMap[x][y];
+        if (terrain == null){
+            throw new RuntimeException("An invalid map location has been accessed");
+        }
+        return terrain;
     }
 
     public static Map loadMap(String fileName) throws IOException{
