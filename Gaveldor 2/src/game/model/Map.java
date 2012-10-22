@@ -14,13 +14,16 @@ import util.Resources;
  */
 public class Map {
     
+    public final String name;
+    
     //TODO: handle piece deployment information
     
     public final int width, height;
     
     public final TerrainType[][] terrain;
     
-    private Map(int width, int height, TerrainType[][] terrain){
+    private Map(String name, int width, int height, TerrainType[][] terrain){
+        this.name = name;
         this.width = width;
         this.height = height;
         this.terrain = terrain;
@@ -57,7 +60,7 @@ public class Map {
                     terrain[i][j] = terrainFlipped[j][i];
                 }
             }
-            return new Map(terrain.length, terrain[0].length, terrain);
+            return new Map(fileName, terrain.length, terrain[0].length, terrain);
         } finally{
             reader.close();
         }
