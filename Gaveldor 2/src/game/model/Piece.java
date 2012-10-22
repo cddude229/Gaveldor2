@@ -34,12 +34,12 @@ public abstract class Piece {
         int attackDir = -1;
         Point p = this.getPosition();
         Point[] ret = {
-            new Point(p.x,p.y-2),
-            new Point(p.x+1,p.y-1),
-            new Point(p.x+1,p.y+1),
-            new Point(p.x,p.y+2),
-            new Point(p.x-1,p.y+1),
-            new Point(p.x-1,p.y-1)
+            new Point(p.x,   p.y-2),
+            new Point(p.x+1, p.y-1),
+            new Point(p.x+1, p.y+1),
+            new Point(p.x,   p.y+2),
+            new Point(p.x-1, p.y+1),
+            new Point(p.x-1, p.y-1)
         };
 
         for(int i=0;i<ret.length;i++){
@@ -125,8 +125,17 @@ public abstract class Piece {
      * @return
      */
     final public Point[] getValidMoves(){
-        // TODO
-        throw new RuntimeException("Not yet implemented");
+        // TODO: This only takes into account dist=1, not dist=2.
+        Point p = this.getPosition();
+        Point[] ret = {
+            new Point(p.x,   p.y-2),
+            new Point(p.x+1, p.y-1),
+            new Point(p.x+1, p.y+1),
+            new Point(p.x,   p.y+2),
+            new Point(p.x-1, p.y+1),
+            new Point(p.x-1, p.y-1)
+        };
+        return ret; 
     }
     
     /**
@@ -140,7 +149,7 @@ public abstract class Piece {
                 return true;
             }
         }
-        throw new RuntimeException("Not yet implemented");
+        return false;
     }
     
     /**
@@ -148,8 +157,22 @@ public abstract class Piece {
      * @return
      */
     final public Point[] getValidAttacks(){
-        // TODO
-        throw new RuntimeException("Not yet implemented");
+        // TODO: This only takes into account dist=1, not dist=2.
+        Point p = this.getPosition();
+        int dir = this.getDirection();
+        Point[] ret = {
+            new Point(p.x,   p.y-2),
+            new Point(p.x+1, p.y-1),
+            new Point(p.x+1, p.y+1),
+            new Point(p.x,   p.y+2),
+            new Point(p.x-1, p.y+1),
+            new Point(p.x-1, p.y-1)
+        };
+        return new Point[]{
+            ret[dir],
+            ret[ (dir + 1) % 6 ],
+            ret[ (dir - 1) % 6 ]
+        };
     }
     
     /**
