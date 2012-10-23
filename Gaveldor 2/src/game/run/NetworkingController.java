@@ -18,6 +18,8 @@ public class NetworkingController implements Runnable{
     private Socket socket = null;
 	private final int port;
 	private final boolean isHosting;
+	
+	private GameException threadException = null;
     
 	/**
 	 *Constructor for non-hosting player.
@@ -45,26 +47,22 @@ public class NetworkingController implements Runnable{
     
     @Override
     public void run() {
-	    if (this.isHosting) {
-			ServerSocket serverSocket;
-            try {
-                serverSocket = new ServerSocket(this.port);
-                this.socket = serverSocket.accept();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-			this.sendables.add(new GameStartAction(2)); 
-			this.receivables.add(new GameStartAction(1));
-		}
-		
-        ObjectInputStream in = null;
-        ObjectOutputStream out = null;
+        ObjectInputStream in;
+        ObjectOutputStream out;
         try {
+            if (this.isHosting) {
+        		ServerSocket serverSocket = new ServerSocket(this.port);
+                this.socket = serverSocket.accept();
+        		this.sendables.add(new GameStartAction(2)); 
+        		this.receivables.add(new GameStartAction(1));
+        	}
             in = new ObjectInputStream(this.socket.getInputStream());
             out = new ObjectOutputStream(this.socket.getOutputStream());
         } catch (IOException e) {
-            e.printStackTrace();
+            threadException = new GameException("A connection could not be established", e);
+            return;
         }
+		
         try {
             while (true) {
                 if (this.sendables.size() > 0) {
@@ -75,7 +73,12 @@ public class NetworkingController implements Runnable{
                     }
                     out.flush();
                 }
-                Action line = (Action) in.readObject();
+                Action line;
+                try{
+                    line = (Action) in.readObject();
+                } catch (ClassNotFoundException e){
+                    throw new RuntimeException(e);
+                }
                 System.out.println("Received" + line);
                 if (line.equals(null)) {
                     break;
@@ -93,15 +96,13 @@ public class NetworkingController implements Runnable{
             in.close();
             this.socket.close();
             } catch (IOException e) {
-                e.printStackTrace();
-            } catch (Throwable e) {
-                e.printStackTrace();
+                threadException = new GameException("The connection was lost", e);
             }
     }
     
     public Action getAction() {
         synchronized(this.receivables) {
-            return this.receivables.removeFirst();
+            return this.receivables.poll();
         }
     }
     
@@ -111,7 +112,14 @@ public class NetworkingController implements Runnable{
         }
     }
     
-    public boolean isStarting(){
-        return socket == null;
+    public void throwThreadExceptionIfNecessary() throws GameException{
+        if (threadException != null){
+            throw threadException;
+        }
+    }
+    
+    public boolean isReady() throws GameException{
+        throwThreadExceptionIfNecessary();
+        return socket != null;
     }
 }

@@ -21,8 +21,6 @@ public abstract class PlayerController {
         this.model = model;
     }
     
-    public abstract boolean isReady();
-    
     public abstract Action retrieveAction();
     
     public abstract void propagateAction(Action action);
