@@ -6,6 +6,7 @@ public abstract class Piece {
     private int currentHealth, currentDirection;
     private Point point;
     public final Player owner;
+    private int health, attackPower, attackRange, moveRange;
     
     /**
      * Only pass in the default position.
@@ -152,15 +153,42 @@ public abstract class Piece {
     final public Point[] getValidMoves(){
         // TODO: This only takes into account dist=1, not dist=2.
         Point p = this.getPosition();
-        Point[] ret = {
-            new Point(p.x,   p.y-2),
-            new Point(p.x+1, p.y-1),
-            new Point(p.x+1, p.y+1),
-            new Point(p.x,   p.y+2),
-            new Point(p.x-1, p.y+1),
-            new Point(p.x-1, p.y-1)
-        };
-        return ret; 
+        if (this.moveRange==1)
+        {
+            Point [] ret = {
+                new Point(p.x,   p.y-2),
+                new Point(p.x+1, p.y-1),
+                new Point(p.x+1, p.y+1),
+                new Point(p.x,   p.y+2),
+                new Point(p.x-1, p.y+1),
+                new Point(p.x-1, p.y-1)
+            };
+            return ret;
+        }
+        else
+        {
+            Point [] ret = {
+                    new Point(p.x, p.y-4),  //0
+                    new Point(p.x+1,p.y-3), //.5
+                    new Point(p.x+2,p.y-2), //1
+                    new Point(p.x+2,p.y),   //1.5
+                    new Point(p.x+2,p.y+2), //2
+                    new Point(p.x+1,p.y+3), //2.5
+                    new Point(p.x,p.y+4),   //3
+                    new Point(p.x-1,p.y+3), //3.5
+                    new Point(p.x-2,p.y+2), //4
+                    new Point(p.x-2,p.y),   //5
+                    new Point(p.x-2,p.y-2), //5.5
+                    new Point(p.x-1,p.y-3), //6
+                    new Point(p.x,   p.y-2), //move length 1
+                    new Point(p.x+1, p.y-1),
+                    new Point(p.x+1, p.y+1),
+                    new Point(p.x,   p.y+2),
+                    new Point(p.x-1, p.y+1),
+                    new Point(p.x-1, p.y-1)
+            };
+            return ret;
+        }
     }
     
     /**
