@@ -33,6 +33,7 @@ public class NetworkingController implements Runnable{
         this.sendables = new ArrayDeque<Action>();
         this.receivables = new ArrayDeque<Action>();
 		this.isHosting = false;
+		new Thread(this).start();
     }
 	
     /**
@@ -44,6 +45,7 @@ public class NetworkingController implements Runnable{
         this.sendables = new ArrayDeque<Action>();
         this.receivables = new ArrayDeque<Action>();
 		this.isHosting = true;
+        new Thread(this).start();
     }
     
     @Override

@@ -33,7 +33,6 @@ public class PlayGameState extends BasicGameState {
     public void render(GameContainer container, StateBasedGame game, Graphics g)
             throws SlickException {
         match.getCurrentPC().render(container, game, g);
-        
     }
 
 

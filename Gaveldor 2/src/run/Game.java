@@ -52,8 +52,8 @@ public class Game extends StateBasedGame {
         model = new GameModel(mapName);
         try{
             match = new GameMatch(ui, model,
-                    new ClientRemotePlayerController(model.getOtherPlayer(), model, address, Constants.REMOTE_CONNECTION_PORT),
-                    new LocalPlayerController(model.getCurrentPlayer(), model, ui));
+                    new ClientRemotePlayerController(model.getCurrentPlayer(), model, address, Constants.REMOTE_CONNECTION_PORT),
+                    new LocalPlayerController(model.getOtherPlayer(), model, ui));
         } catch (IOException e){
             throw new GameException("A connection could not be established to that host", e);
         }
