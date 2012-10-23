@@ -36,12 +36,13 @@ public class PieceLoader {
                 
                 
                 for( int i=0; (i < mapWidth) && (i < rowLine.length()); i++){
-                    
+                    int x = i * 2 + j % 2;
+                    int y = j;
                     switch(rowLine.charAt(i)){
                     
                     case '1' :
                         
-                        pieces.add(new Infantry(p1, new Point(i,j)));
+                        pieces.add(new Infantry(p1, new Point(x, y)));
                         break;
                     case '2' :
                         // pieces.put(new Archer(p1, new Point(i,j)), new Point(i,j));
@@ -51,7 +52,7 @@ public class PieceLoader {
                         break;
                     case 'a' :
                         
-                        pieces.add(new Infantry(p2, new Point(i,j)));
+                        pieces.add(new Infantry(p2, new Point(x, y)));
                         break;
                     case 'b' :
                         // pieces.put(new Archer(p2, new Point(i,j)), new Point(i,j));

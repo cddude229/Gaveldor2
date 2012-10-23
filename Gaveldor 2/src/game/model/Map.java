@@ -5,7 +5,6 @@ import game.run.GameException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -59,25 +58,13 @@ public class Map {
         for (Piece p : pieces){
             try {
                 piecesNew.add(p.getClass().getConstructor(Player.class, Point.class).newInstance(
-                        p.owner.id == 1 ? player1 : player2, p.getPoint()));
-            } catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (SecurityException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                        p.owner.id == 1 ? player1 : player2, p.getPosition()));
+            } catch (Exception e){
+                if (e instanceof RuntimeException){
+                    throw (RuntimeException)e;
+                } else{
+                    throw new RuntimeException(e);
+                }
             }
         }
         return piecesNew;

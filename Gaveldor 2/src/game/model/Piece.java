@@ -2,7 +2,7 @@ package game.model;
 
 import org.newdawn.slick.Image;
 
-public abstract class Piece {
+public abstract class Piece{
     private int currentHealth, currentDirection;
     private Point point;
     public final Player owner;
@@ -267,7 +267,4 @@ public abstract class Piece {
     // It's hard to now before the formalize the graphics assets storage conventions
     // with Lane; probably we'll need to store some file reference in a PieceType enum
     
-    public Point getPoint(){
-        return point;
-    }
 }

@@ -11,6 +11,7 @@ import game.run.GameException;
 import java.util.Set;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
 import util.Constants;
 
@@ -95,6 +96,11 @@ public class GameModel {
                 g.drawImage(terrain.tile, i * Constants.TILE_WIDTH_SPACING + offsetX, j * Constants.TILE_HEIGHT_SPACING + offsetY);
             }
         }
-        //TODO: render pieces
+        for (Piece p : pieces){
+            Image sprite = p.getSprite();
+            int x = p.getPosition().x * Constants.TILE_WIDTH_SPACING + (Constants.TILE_WIDTH - sprite.getWidth()) / 2 + offsetX;
+            int y = p.getPosition().y * Constants.TILE_HEIGHT_SPACING + (Constants.TILE_HEIGHT - sprite.getHeight()) + offsetY;
+            g.drawImage(p.getSprite(), x, y);
+        }
     }
 }

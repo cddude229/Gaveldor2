@@ -30,7 +30,7 @@ public class PieceLoaderTest {
         }
         
         Set<Point> expected = new HashSet<Point>(
-                Arrays.asList(new Point[]{new Point(0,0), new Point(1,0), new Point(2,7), new Point(3, 7)}));
+                Arrays.asList(new Point[]{new Point(0,0), new Point(2,0), new Point(5,7), new Point(7, 7)}));
         
         assertEquals(expected, outputPos);
         

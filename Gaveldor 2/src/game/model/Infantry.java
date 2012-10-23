@@ -1,8 +1,10 @@
 package game.model;
 
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 import util.Constants;
+import util.Resources;
 
 public class Infantry extends Piece{
     private int health, attackPower, attackRange, moveRange;
@@ -46,6 +48,10 @@ public class Infantry extends Piece{
 
     @Override
     public Image getSprite() {
-        return null;
+        try {
+            return Resources.getImage("/assets/graphics/test_infantry.jpg");
+        } catch (SlickException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
