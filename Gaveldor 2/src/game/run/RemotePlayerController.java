@@ -21,8 +21,8 @@ public abstract class RemotePlayerController extends PlayerController {
         this.networkingController = networkingController;
     }
     
-    public boolean isReady(){
-        return networkingController.isStarting();
+    public boolean isReady() throws GameException{
+        return networkingController.isReady();
     }
 
     @Override
