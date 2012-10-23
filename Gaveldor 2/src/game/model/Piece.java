@@ -30,21 +30,46 @@ public abstract class Piece {
      * Return whether or not a back attack
      */
     final public boolean isBackAttack(Piece opponent){
-        // TODO: This only takes into account dist=1, not dist=2.
         int attackDir = -1;
         Point p = this.getPosition();
-        Point[] ret = {
-            new Point(p.x,   p.y-2),
-            new Point(p.x+1, p.y-1),
-            new Point(p.x+1, p.y+1),
-            new Point(p.x,   p.y+2),
-            new Point(p.x-1, p.y+1),
-            new Point(p.x-1, p.y-1)
-        };
-
-        for(int i=0;i<ret.length;i++){
-            if(ret[i].equals(opponent.getPosition())){
-                attackDir = i;
+        Point o = opponent.getPosition();
+        if (Math.abs(p.x-o.x)+Math.abs(p.y-o.y)==2||!(Math.abs(p.x-o.x)==2&&p.y==o.y))
+        {
+            Point[] ret = {
+                new Point(p.x,   p.y-2),  //0
+                new Point(p.x+1, p.y-1),  //1
+                new Point(p.x+1, p.y+1),  //2
+                new Point(p.x,   p.y+2),  //3
+                new Point(p.x-1, p.y+1),  //4
+                new Point(p.x-1, p.y-1)   //5
+            };
+    
+            for(int i=0;i<ret.length;i++){
+                if(ret[i].equals(opponent.getPosition())){
+                    attackDir = i;
+                }
+            }
+        }
+        else
+        {
+            Point [] ret = {
+                    new Point(p.x, p.y-4),  //0
+                    new Point(p.x+1,p.y-3), //.5
+                    new Point(p.x+2,p.y-2), //1
+                    new Point(p.x+2,p.y),   //1.5
+                    new Point(p.x+2,p.y+2), //2
+                    new Point(p.x+1,p.y+3), //2.5
+                    new Point(p.x,p.y+4),   //3
+                    new Point(p.x-1,p.y+3), //3.5
+                    new Point(p.x-2,p.y+2), //4
+                    new Point(p.x-2,p.y),   //5
+                    new Point(p.x-2,p.y-2), //5.5
+                    new Point(p.x-1,p.y-3), //6
+            };
+            for (int i=0;i<ret.length;i++)
+            {
+                if (ret[i].equals(opponent.getPosition()))
+                    attackDir = i/2;
             }
         }
 
