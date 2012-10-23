@@ -6,6 +6,7 @@ import game.model.Piece;
 import game.model.Player;
 import game.model.Point;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -69,17 +70,42 @@ public class LocalPlayerController extends PlayerController {
         updatePan();
         
         if (ui.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)){
-            Point p = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY() + displayY);
-            if (model.isValidCoord(p)){
-                System.out.println(p);
-            }
+            Point position = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY() + displayY);
+            Piece piece = model.getPieceByPosition(position);
+            
             if (selectedPiece == null){
-                //TODO: set selectedPiece to piece at coordinates
+                if (piece != null){
+                    selectedPiece = piece;
+                }
             } else{
-                //TODO: move selectedPiece to coordinates if valid
+                switch(selectedPiece.turnState){
+                case MOVING:
+                    if (model.isValidPosition(position) && Arrays.asList(selectedPiece.getValidMoves()).contains(position)
+                            && (piece == null || piece == selectedPiece)){
+                        actionQueue.add(new Action.MoveAction(-1, position, -1, selectedPiece.owner.id)); //TODO: figure out id and rotation args
+                    } else{
+                        //TODO: do nothing?
+                    }
+                    break;
+                case FACING:
+                    //TODO: skip for now?
+                    break;
+                case ATTACKING:
+                    if (model.isValidPosition(position) && Arrays.asList(selectedPiece.getValidMoves()).contains(position)
+                            && piece != null && !piece.owner.equals(selectedPiece.owner)){
+                        actionQueue.add(new Action.AttackAction(selectedPiece.getPosition(), piece.getPosition(), selectedPiece.owner.id));
+                    } else{
+                        //TODO: do nothing?
+                    }
+                    break;
+                case DONE:
+                    //do nothing
+                    break;
+                default:
+                    throw new RuntimeException();
+                }
             }
         }
-        //TODO: this is where to add actions to the queue
     }
 
     @Override

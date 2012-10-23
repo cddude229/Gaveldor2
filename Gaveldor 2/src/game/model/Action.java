@@ -82,9 +82,9 @@ public abstract class Action implements Serializable {
     public static class MoveAction extends Action {
     	
         private static final long serialVersionUID = 8582750212791110715L;
-        public final int unitID;
+        public final int unitID; // pieces don't currently have an id; we need to figure this out
     	public final Point destination;
-    	public final int rotation;
+    	public final int rotation; // we should make this a separate Action
     	
     	public MoveAction(int ID, Point destination, int rotation, int player) {
     		this.unitID = ID;

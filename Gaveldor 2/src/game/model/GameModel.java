@@ -6,6 +6,7 @@ import game.model.Action.ForfeitAction;
 import game.model.Action.GameStartAction;
 import game.model.Action.MoveAction;
 import game.model.Action.TurnEndAction;
+import game.model.Piece.TurnState;
 import game.run.GameException;
 
 import java.util.Set;
@@ -49,11 +50,16 @@ public class GameModel {
     }
     
     private void endTurn(){
+        for (Piece p : pieces){
+            if (p.owner.equals(getCurrentPlayer())){
+                p.turnState = TurnState.MOVING;
+            }
+        }
         switchCurrentAndOtherPlayers();
         //TODO
     }
     
-    public boolean isValidCoord(Point p){
+    public boolean isValidPosition(Point p){
         if (p.x < 0 || p.x >= map.width){
             return false;
         }
@@ -63,29 +69,49 @@ public class GameModel {
         return true;
     }
     
+    public Piece getPieceByPosition(Point p){
+        if (!isValidPosition(p)){
+            return null;
+        }
+        for (Piece piece : pieces){
+            if (piece.getPosition().equals(p)){
+                return piece;
+            }
+        }
+        return null;
+    }
+    
     public void applyAction(Action action){
+        System.out.println(action.type);
         switch(action.type) {
         case ATTACK:
             AttackAction attackPacket = (AttackAction) action;
-            
+            //TODO
+            break;
         case DISCONNECT:
             DisconnectAction disconnectPacket = (DisconnectAction) action;
-           
+            //TODO
+           break;
         case FORFEIT:
             ForfeitAction forfeitPacket = (ForfeitAction) action;
-            
+            //TODO
+            break;
         case GAME_START:
             GameStartAction gameStartPacket = (GameStartAction) action;
-            
+            //TODO
+            break;
         case MOVE:
             MoveAction movePacket = (MoveAction) action;
-            
+            //TODO
+            break;
         case TURN_END:
             TurnEndAction turnEndPacket = (TurnEndAction) action;
-            
+            //TODO
+            break;
         default:
             DisconnectAction defaultPacket  = (DisconnectAction) action; //why?
-            
+            //TODO
+            break;
         }
     }
     

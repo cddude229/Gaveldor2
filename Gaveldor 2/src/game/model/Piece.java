@@ -8,6 +8,14 @@ public abstract class Piece{
     public final Player owner;
     private int health, attackPower, attackRange, moveRange;
     
+    public static enum TurnState{
+        MOVING,
+        FACING,
+        ATTACKING,
+        DONE;
+    }
+    public TurnState turnState = TurnState.MOVING;
+    
     /**
      * Only pass in the default position.
      * @param x
