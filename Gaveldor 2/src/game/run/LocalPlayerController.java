@@ -82,14 +82,18 @@ public class LocalPlayerController extends PlayerController {
                 case MOVING:
                     if (model.isValidPosition(position) && Arrays.asList(selectedPiece.getValidMoves()).contains(position)
                             && (piece == null || piece == selectedPiece)){
-                        actionQueue.add(new Action.MoveAction(-1, position, -1, selectedPiece.owner.id)); //TODO: figure out id and rotation args
+                        actionQueue.add(new Action.MoveAction(selectedPiece.getPosition(), selectedPiece.owner.id, position));
                     } else{
                         //TODO: do nothing?
                     }
                     break;
                 case FACING:
-                    //TODO: skip for now?
-                    break;
+                    int direction = Piece.PointsToDirection(position, selectedPiece.getPosition());
+                    if (direction != -1){
+                        actionQueue.add(new Action.FaceAction(selectedPiece.getPosition(), selectedPiece.owner.id, direction));
+                    } else{
+                        //TODO: do nothing?
+                    }
                 case ATTACKING:
                     if (model.isValidPosition(position) && Arrays.asList(selectedPiece.getValidMoves()).contains(position)
                             && piece != null && !piece.owner.equals(selectedPiece.owner)){

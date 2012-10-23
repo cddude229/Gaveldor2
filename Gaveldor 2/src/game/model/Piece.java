@@ -275,4 +275,39 @@ public abstract class Piece{
     // It's hard to now before the formalize the graphics assets storage conventions
     // with Lane; probably we'll need to store some file reference in a PieceType enum
     
+    public static int PointsToDirection(Point to, Point from){
+        int dx = to.x - from.x, dy = to.y - from.y;
+        int direction = -1;
+        switch (dx){
+        case -1:
+            switch (dy){
+            case -1:
+                direction = 5;
+                break;
+            case 1:
+                direction = 4;
+            }
+            break;
+        case 0:
+            switch (dy){
+            case -1:
+                direction = 0;
+                break;
+            case 1:
+                direction = 3;
+            }
+            break;
+        case 1:
+            switch (dy){
+            case -1:
+                direction = 1;
+                break;
+            case 1:
+                direction = 2;
+            }
+            break;
+        }
+        return direction;
+    }
+    
 }

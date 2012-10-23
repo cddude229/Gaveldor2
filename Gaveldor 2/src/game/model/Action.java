@@ -6,7 +6,7 @@ public abstract class Action implements Serializable {
 
     public static final long serialVersionUID = 1L;
     public enum Type {
-    	FORFEIT,MOVE,ATTACK,TURN_END,GAME_START,DISCONNECT/*,HEART_BEAT,RESPONSE*/
+    	FORFEIT,MOVE,FACE,ATTACK,TURN_END,GAME_START,DISCONNECT/*,HEART_BEAT,RESPONSE*/
     	};
     	
     public int player;
@@ -82,17 +82,29 @@ public abstract class Action implements Serializable {
     public static class MoveAction extends Action {
     	
         private static final long serialVersionUID = 8582750212791110715L;
-        public final int unitID; // pieces don't currently have an id; we need to figure this out
+        public final Point source;
     	public final Point destination;
-    	public final int rotation; // we should make this a separate Action
     	
-    	public MoveAction(int ID, Point destination, int rotation, int player) {
-    		this.unitID = ID;
+    	public MoveAction(Point source, int player, Point destination) {
+    		this.source = source;
+            this.player = player;
     		this.destination = destination;
     		this.type = Type.MOVE;
-    		this.rotation = rotation;
-    		this.player = player;
     	}
+    }
+    
+    public static class FaceAction extends Action {
+        
+        private static final long serialVersionUID = 8582750212791110715L;
+        public final Point source;
+        public final int direction;
+        
+        public FaceAction(Point source, int player, int direction) {
+            this.source = source;
+            this.player = player;
+            this.direction = direction;
+            this.type = Type.FACE;
+        }
     }
     
     public static class TurnEndAction extends Action {
