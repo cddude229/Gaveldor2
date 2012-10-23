@@ -2,6 +2,7 @@ package game.model;
 
 import game.model.Action.AttackAction;
 import game.model.Action.DisconnectAction;
+import game.model.Action.FaceAction;
 import game.model.Action.ForfeitAction;
 import game.model.Action.GameStartAction;
 import game.model.Action.MoveAction;
@@ -102,11 +103,25 @@ public class GameModel {
             break;
         case MOVE:
             MoveAction movePacket = (MoveAction) action;
+            Piece piece = getPieceByPosition(movePacket.source);
+            assert piece.owner.id == movePacket.player;
+            assert piece.turnState == TurnState.MOVING;
+            piece.setPosition(movePacket.destination);
+            piece.turnState = TurnState.FACING;
             //TODO
+            break;
+        case FACE:
+            FaceAction facePacket = (FaceAction) action;
+            piece = getPieceByPosition(facePacket.source);
+            assert piece.owner.id == facePacket.player;
+            assert piece.turnState == TurnState.FACING;
+            piece.setDirection(facePacket.direction);
+            piece.turnState = TurnState.ATTACKING;
             break;
         case TURN_END:
             TurnEndAction turnEndPacket = (TurnEndAction) action;
-            //TODO
+            assert (getCurrentPlayer().id == turnEndPacket.player);
+            endTurn();
             break;
         default:
             DisconnectAction defaultPacket  = (DisconnectAction) action; //why?

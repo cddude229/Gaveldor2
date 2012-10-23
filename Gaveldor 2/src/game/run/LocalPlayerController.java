@@ -73,11 +73,11 @@ public class LocalPlayerController extends PlayerController {
             Point position = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY() + displayY);
             Piece piece = model.getPieceByPosition(position);
             
-            if (selectedPiece == null){
-                if (piece != null){
+            if (piece != null && !piece.equals(selectedPiece)){
+                if (piece.owner.equals(player)){
                     selectedPiece = piece;
                 }
-            } else{
+            } else if (selectedPiece != null){
                 switch(selectedPiece.turnState){
                 case MOVING:
                     if (model.isValidPosition(position) && Arrays.asList(selectedPiece.getValidMoves()).contains(position)
@@ -110,17 +110,17 @@ public class LocalPlayerController extends PlayerController {
                 }
             }
         }
+        
+        if (ui.getInput().isKeyPressed(Input.KEY_E)){
+            actionQueue.add(new Action.TurnEndAction(player.id));
+        }
     }
 
     @Override
     public Action retrieveAction() {
         if (lastUpdateCount < ui.getUpdateCount()){
-            if (lastUpdateCount < ui.getUpdateCount() - 1){
-                throw new RuntimeException("Local controller missed an update");
-            } else{
-                update();
-                lastUpdateCount++;
-            }
+            update();
+            lastUpdateCount = ui.getUpdateCount();
         }
         return actionQueue.poll();
     }
