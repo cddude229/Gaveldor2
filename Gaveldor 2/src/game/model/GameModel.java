@@ -82,6 +82,15 @@ public class GameModel {
         return null;
     }
     
+    public Piece getPieceByID(int id){
+        for (Piece piece : pieces){
+            if (piece.pieceId == id){
+                return piece;
+            }
+        }
+        return null;
+    }
+    
     public void applyAction(Action action){
         System.out.println(action.type);
         switch(action.type) {
@@ -103,8 +112,8 @@ public class GameModel {
             break;
         case MOVE:
             MoveAction movePacket = (MoveAction) action;
-            Piece piece = getPieceByPosition(movePacket.source);
-            assert piece.owner.id == movePacket.player;
+            Piece piece = getPieceByID(movePacket.pieceID);
+            assert piece != null;
             assert piece.turnState == TurnState.MOVING;
             piece.setPosition(movePacket.destination);
             piece.turnState = TurnState.FACING;
@@ -112,15 +121,15 @@ public class GameModel {
             break;
         case FACE:
             FaceAction facePacket = (FaceAction) action;
-            piece = getPieceByPosition(facePacket.source);
-            assert piece.owner.id == facePacket.player;
+            piece = getPieceByID(facePacket.pieceID);
+            assert piece != null;
             assert piece.turnState == TurnState.FACING;
             piece.setDirection(facePacket.direction);
             piece.turnState = TurnState.ATTACKING;
             break;
         case TURN_END:
             TurnEndAction turnEndPacket = (TurnEndAction) action;
-            assert (getCurrentPlayer().id == turnEndPacket.player);
+            assert (getCurrentPlayer().id == turnEndPacket.playerID);
             endTurn();
             break;
         default:

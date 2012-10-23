@@ -9,7 +9,7 @@ public abstract class Action implements Serializable {
     	FORFEIT,MOVE,FACE,ATTACK,TURN_END,GAME_START,DISCONNECT/*,HEART_BEAT,RESPONSE*/
     	};
     	
-    public int player;
+    public int playerID;
     public enum Move {ROCK,PAPER,SCISSORS};
     public Type type;
     
@@ -20,7 +20,7 @@ public abstract class Action implements Serializable {
 
         public ForfeitAction(int player) {
     		this.type = Type.FORFEIT;
-    		this.player = player;
+    		this.playerID = player;
     	}
     }
     
@@ -30,7 +30,7 @@ public abstract class Action implements Serializable {
 
         public GameStartAction(int player) {
     		this.type = Type.GAME_START;
-    		this.player = player;
+    		this.playerID = player;
     	}
     }
     
@@ -40,7 +40,7 @@ public abstract class Action implements Serializable {
 
         public DisconnectAction(int player) {
     		this.type = Type.DISCONNECT;
-    		this.player = player;
+    		this.playerID = player;
     	}
     }
     
@@ -75,19 +75,19 @@ public abstract class Action implements Serializable {
     		this.sourceLocation = source;
     		this.attackLocation = attack;
     		this.type = Type.ATTACK;
-    		this.player = player;
+    		this.playerID = player;
     	}
     }
     
     public static class MoveAction extends Action {
     	
         private static final long serialVersionUID = 8582750212791110715L;
-        public final Point source;
+        public final int pieceID;
     	public final Point destination;
     	
-    	public MoveAction(Point source, int player, Point destination) {
-    		this.source = source;
-            this.player = player;
+    	public MoveAction(Piece piece, Point destination) {
+    		this.pieceID = piece.pieceId;
+            this.playerID = piece.owner.id;
     		this.destination = destination;
     		this.type = Type.MOVE;
     	}
@@ -96,12 +96,12 @@ public abstract class Action implements Serializable {
     public static class FaceAction extends Action {
         
         private static final long serialVersionUID = 8582750212791110715L;
-        public final Point source;
+        public final int pieceID;
         public final int direction;
         
-        public FaceAction(Point source, int player, int direction) {
-            this.source = source;
-            this.player = player;
+        public FaceAction(Piece piece, int direction) {
+            this.pieceID = piece.pieceId;
+            this.playerID = piece.owner.id;
             this.direction = direction;
             this.type = Type.FACE;
         }
@@ -111,9 +111,9 @@ public abstract class Action implements Serializable {
 
         private static final long serialVersionUID = -4025822878826670623L;
 
-        public TurnEndAction(int player) {
+        public TurnEndAction(Player player) {
             this.type = Type.TURN_END;
-            this.player = player;
+            this.playerID = player.id;
         }
     }
     

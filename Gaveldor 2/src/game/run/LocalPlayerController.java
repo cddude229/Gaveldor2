@@ -82,7 +82,7 @@ public class LocalPlayerController extends PlayerController {
                 case MOVING:
                     if (model.isValidPosition(position) && Arrays.asList(selectedPiece.getValidMoves()).contains(position)
                             && (piece == null || piece == selectedPiece)){
-                        actionQueue.add(new Action.MoveAction(selectedPiece.getPosition(), selectedPiece.owner.id, position));
+                        actionQueue.add(new Action.MoveAction(selectedPiece, position));
                     } else{
                         //TODO: do nothing?
                     }
@@ -90,7 +90,7 @@ public class LocalPlayerController extends PlayerController {
                 case FACING:
                     int direction = Piece.PointsToDirection(position, selectedPiece.getPosition());
                     if (direction != -1){
-                        actionQueue.add(new Action.FaceAction(selectedPiece.getPosition(), selectedPiece.owner.id, direction));
+                        actionQueue.add(new Action.FaceAction(selectedPiece, direction));
                     } else{
                         //TODO: do nothing?
                     }
@@ -112,7 +112,7 @@ public class LocalPlayerController extends PlayerController {
         }
         
         if (ui.getInput().isKeyPressed(Input.KEY_E)){
-            actionQueue.add(new Action.TurnEndAction(player.id));
+            actionQueue.add(new Action.TurnEndAction(player));
         }
     }
 

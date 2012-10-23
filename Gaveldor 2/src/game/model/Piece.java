@@ -291,10 +291,10 @@ public abstract class Piece{
             break;
         case 0:
             switch (dy){
-            case -1:
+            case -2:
                 direction = 0;
                 break;
-            case 1:
+            case 2:
                 direction = 3;
             }
             break;
