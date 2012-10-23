@@ -18,9 +18,9 @@ public abstract class Action implements Serializable {
     	
         private static final long serialVersionUID = -1991155911677095030L;
 
-        public ForfeitAction(int player) {
+        public ForfeitAction(Player player) {
     		this.type = Type.FORFEIT;
-    		this.playerID = player;
+    		this.playerID = player.id;
     	}
     }
     
@@ -28,9 +28,9 @@ public abstract class Action implements Serializable {
     	
         private static final long serialVersionUID = 6305597468815847402L;
 
-        public GameStartAction(int player) {
+        public GameStartAction(Player player) {
     		this.type = Type.GAME_START;
-    		this.playerID = player;
+    		this.playerID = player.id;
     	}
     }
     
@@ -38,9 +38,9 @@ public abstract class Action implements Serializable {
     	
         private static final long serialVersionUID = -5895590625354734189L;
 
-        public DisconnectAction(int player) {
+        public DisconnectAction(Player player) {
     		this.type = Type.DISCONNECT;
-    		this.playerID = player;
+    		this.playerID = player.id;
     	}
     }
     
@@ -68,14 +68,13 @@ public abstract class Action implements Serializable {
     public static class AttackAction extends Action {
 
         private static final long serialVersionUID = 7192637502453282800L;
-        public final Point sourceLocation;
-    	public final Point attackLocation;
+        public final int pieceID, targetID;
     	
-    	public AttackAction(Point source, Point attack, int player) {
-    		this.sourceLocation = source;
-    		this.attackLocation = attack;
+    	public AttackAction(Piece piece, Piece target) {
+    	    pieceID = piece.pieceId;
+    	    playerID = piece.owner.id;
+    	    targetID = target.pieceId;
     		this.type = Type.ATTACK;
-    		this.playerID = player;
     	}
     }
     

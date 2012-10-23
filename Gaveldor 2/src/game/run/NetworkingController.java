@@ -3,6 +3,7 @@ package game.run;
 import game.model.Action;
 import game.model.Action.DisconnectAction;
 import game.model.Action.GameStartAction;
+import game.model.Player;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -53,8 +54,8 @@ public class NetworkingController implements Runnable{
             if (this.isHosting) {
         		ServerSocket serverSocket = new ServerSocket(this.port);
                 this.socket = serverSocket.accept();
-        		this.sendables.add(new GameStartAction(2)); 
-        		this.receivables.add(new GameStartAction(1));
+        		this.sendables.add(new GameStartAction(new Player(2))); //TODO: get Players from model
+        		this.receivables.add(new GameStartAction(new Player(1)));
         	}
             in = new ObjectInputStream(this.socket.getInputStream());
             out = new ObjectOutputStream(this.socket.getOutputStream());
@@ -91,7 +92,7 @@ public class NetworkingController implements Runnable{
             if (this.isHosting) {
                 otherPlayer = 2;
             }
-            this.receivables.add(new DisconnectAction(otherPlayer));
+            this.receivables.add(new DisconnectAction(new Player(otherPlayer))); //TODO: get otherPlayer from model
             out.close();
             in.close();
             this.socket.close();

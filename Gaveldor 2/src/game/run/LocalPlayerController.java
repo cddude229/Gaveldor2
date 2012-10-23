@@ -97,7 +97,7 @@ public class LocalPlayerController extends PlayerController {
                 case ATTACKING:
                     if (model.isValidPosition(position) && Arrays.asList(selectedPiece.getValidMoves()).contains(position)
                             && piece != null && !piece.owner.equals(selectedPiece.owner)){
-                        actionQueue.add(new Action.AttackAction(selectedPiece.getPosition(), piece.getPosition(), selectedPiece.owner.id));
+                        actionQueue.add(new Action.AttackAction(selectedPiece, piece));
                     } else{
                         //TODO: do nothing?
                     }
