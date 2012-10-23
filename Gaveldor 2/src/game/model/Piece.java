@@ -6,6 +6,8 @@ public abstract class Piece{
     private int currentHealth, currentDirection;
     private Point point;
     public final Player owner;
+    public final int pieceId;
+    private static int idCounter = 1;
     
     public static enum TurnState{
         MOVING,
@@ -24,6 +26,7 @@ public abstract class Piece{
         this.owner = owner;
         currentHealth = defaultHealth();
         setPosition(p);
+        pieceId = idCounter++;
     }
     
     /**
