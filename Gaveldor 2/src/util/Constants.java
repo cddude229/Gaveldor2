@@ -9,7 +9,7 @@ public class Constants {
     public static final boolean WINDOW_FULLSCREEN = false;
     
     // the actual size of the tiles in-file
-    public static final int TILE_WIDTH = 250, TILE_HEIGHT = 217;
+    public static final int TILE_WIDTH = 196, TILE_HEIGHT = 170;
     // the perspective adjustment, given the natural height-to-width ratio of a regular hexagon
     public static final double TILE_PERSPECTIVE_RATIO = (TILE_HEIGHT / Math.sqrt(3)) / (TILE_WIDTH / 2);
     // the size to be used to get proper tile placement

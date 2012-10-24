@@ -1,6 +1,9 @@
 package game.model;
 
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
+import util.Resources;
 
 public abstract class Piece{
     private int currentHealth, currentDirection;
@@ -248,7 +251,7 @@ public abstract class Piece{
                     new Point(p.x-1, p.y-1),
                     new Point(p.x,   p.y)
                 };
-            return new Point [] {ret[dir],ret[(dir+1)%6],ret[(dir-1)%6]};
+            return new Point [] {ret[dir],ret[(dir+1 + 6)%6],ret[(dir-1 + 6)%6]};
         }
         else{
             Point [] ret = new Point[]{
@@ -307,13 +310,19 @@ public abstract class Piece{
     abstract public int defaultMoveRange();
     
     /**
-     * Return the path to this piece's sprite
+     * Return this piece's sprite
      * @return
      */
-    abstract public Image getSprite();
-    // TODO: Todd, what's the sprite we want to return?
-    // It's hard to now before the formalize the graphics assets storage conventions
-    // with Lane; probably we'll need to store some file reference in a PieceType enum
+    public Image getSprite() {
+        String name = "/assets/graphics/units/player" + owner.id + "/" + getClass().getSimpleName().toLowerCase() + "_p" + owner.id + "_h" + getHealth() + ".png";
+        try {
+            Image im = Resources.getImage(name);
+            im.rotate(360f / 6 * getDirection());
+            return im;
+        } catch (SlickException e) {
+            throw new RuntimeException(e);
+        }
+    }
     
     public static int PointsToDirection(Point to, Point from){
         int dx = to.x - from.x, dy = to.y - from.y;

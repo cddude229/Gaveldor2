@@ -134,11 +134,20 @@ public class LocalPlayerController extends PlayerController {
     public void render(Graphics g)
             throws SlickException {
         renderBoard(g);
+        renderPieces(g);
+        
+        
+        Image im;
+        Point position = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY() + displayY);
+        if (model.isValidPosition(position)){
+            im = Resources.getImage("/assets/graphics/ui/hover.png");
+            renderAtPosition(im, g, position.x, position.y, 0f, 0f);
+        }
         
         if (selectedPiece != null){
             switch(selectedPiece.turnState){
             case MOVING:
-                Image im = Resources.getImage("/assets/graphics/hex_move.png");
+                im = Resources.getImage("/assets/graphics/ui/movable.png");
                 for (Point p : selectedPiece.getValidMoves()){
                     if (model.isValidPosition(p)){
                         renderAtPosition(im, g, p.x, p.y, 0f, 0f);
@@ -146,11 +155,12 @@ public class LocalPlayerController extends PlayerController {
                 }
                 break;
             case TURNING:
-                im = Resources.getImage("/assets/graphics/hex_turn.png");
+                im = Resources.getImage("/assets/graphics/ui/arrows.png");
+                renderAtPosition(im, g, selectedPiece.getPosition().x, selectedPiece.getPosition().y, 0.5f, 0.5f);
                 //TODO
                 break;
             case ATTACKING:
-                im = Resources.getImage("/assets/graphics/hex_attack.png");
+                im = Resources.getImage("/assets/graphics/ui/attackable.png");
                 for (Point p : selectedPiece.getValidAttacks()){
                     if (model.isValidPosition(p)){
                         renderAtPosition(im, g, p.x, p.y, 0f, 0f);
@@ -164,8 +174,6 @@ public class LocalPlayerController extends PlayerController {
                 throw new RuntimeException();
             }
         }
-
-        renderPieces(g);
     }
 
 }

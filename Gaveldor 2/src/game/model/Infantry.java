@@ -1,19 +1,15 @@
 package game.model;
 
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-
 import util.Constants;
-import util.Resources;
 
 public class Infantry extends Piece{
-    private int health, attackPower, attackRange, moveRange;
+//    private int health, attackPower, attackRange, moveRange;
     public Infantry(Player owner, Point p) {
         super(owner, p);
-        this.health = Constants.INFANTRY_HEALTH_POINTS;
-        this.attackPower = Constants.INFANTRY_ATTACK_POWER;
-        this.attackRange = Constants.INFANTRY_ATTACK_RANGE;
-        this.moveRange = Constants.INFANTRY_MOVE_RANGE;
+//        this.health = Constants.INFANTRY_HEALTH_POINTS;
+//        this.attackPower = Constants.INFANTRY_ATTACK_POWER;
+//        this.attackRange = Constants.INFANTRY_ATTACK_RANGE;
+//        this.moveRange = Constants.INFANTRY_MOVE_RANGE;
     }
 
     @Override
@@ -28,30 +24,21 @@ public class Infantry extends Piece{
 
     @Override
     public int defaultHealth() {
-        return this.health;
+        return Constants.INFANTRY_HEALTH_POINTS;
     }
 
     @Override
     public int defaultAttackPower() {
-        return this.attackPower;
+        return Constants.INFANTRY_ATTACK_POWER;
     }
 
     @Override
     public int defaultAttackRange() {
-        return this.attackRange;
+        return Constants.INFANTRY_ATTACK_RANGE;
     }
 
     @Override
     public int defaultMoveRange() {
-        return this.moveRange;
-    }
-
-    @Override
-    public Image getSprite() {
-        try {
-            return Resources.getImage("/assets/graphics/test_infantry.jpg");
-        } catch (SlickException e) {
-            throw new RuntimeException(e);
-        }
+        return Constants.INFANTRY_MOVE_RANGE;
     }
 }

@@ -111,6 +111,9 @@ public class GameModel {
             assert target != null;
             assert !piece.owner.equals(target.owner);
             piece.attack(target);
+            if (!target.isAlive()){
+                pieces.remove(piece);
+            }
             piece.turnState = TurnState.DONE;
             break;
         case DISCONNECT:
