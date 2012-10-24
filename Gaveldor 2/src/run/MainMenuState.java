@@ -6,16 +6,21 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import util.Constants;
 
 public class MainMenuState extends BasicGameState {
 	
 	public static final int STATE_ID = 0;
+	private int buttonCount = 0;
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
+	    Rectangle rect = new Rectangle(0, 0, 0, 0);
         // TODO Auto-generated method stub
 	}
 	
@@ -54,6 +59,21 @@ public class MainMenuState extends BasicGameState {
 	@Override
 	public int getID() {
 		return STATE_ID;
+	}
+	
+	/**
+	 * 
+	 * @param width
+	 * @param height
+	 * @return an int[] containing the screen location of the buttons
+	 */
+	public int[] generateLocation(int width, int height) {
+	    int scnWidth = Constants.WINDOW_WIDTH;
+	    int scnHeight = Constants.WINDOW_HEIGHT;
+	    int locWidth = scnWidth/2-width/2;
+	    int locHeight = scnHeight/2-(height/2 + 20 * this.buttonCount);
+	    this.buttonCount += 1;
+	    return new int[] {locWidth,locHeight};
 	}
 
 }
