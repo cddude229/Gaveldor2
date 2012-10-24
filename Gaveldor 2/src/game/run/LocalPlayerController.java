@@ -73,8 +73,8 @@ public class LocalPlayerController extends PlayerController {
             Point position = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY() + displayY);
             Piece piece = model.getPieceByPosition(position);
             
-            if (piece != null && !piece.equals(selectedPiece)){
-                if (piece.owner.equals(player)){
+            if (ui.getInput().isKeyDown(Input.KEY_LSHIFT)){
+                if (piece != null && piece.owner.equals(player) && !piece.equals(selectedPiece)){
                     selectedPiece = piece;
                 }
             } else if (selectedPiece != null){
@@ -94,6 +94,7 @@ public class LocalPlayerController extends PlayerController {
                     } else{
                         //TODO: do nothing?
                     }
+                    break;
                 case ATTACKING:
                     if (model.isValidPosition(position) && Arrays.asList(selectedPiece.getValidMoves()).contains(position)
                             && piece != null && !piece.owner.equals(selectedPiece.owner)){
@@ -112,6 +113,7 @@ public class LocalPlayerController extends PlayerController {
         }
         
         if (ui.getInput().isKeyPressed(Input.KEY_E)){
+            selectedPiece = null;
             actionQueue.add(new Action.TurnEndAction(player));
         }
     }
