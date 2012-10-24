@@ -107,7 +107,10 @@ public class GameModel {
             Piece piece = getPieceByID(attackPacket.pieceID);
             assert piece != null;
             assert piece.turnState == TurnState.ATTACKING;
-            //TODO
+            Piece target = getPieceByID(attackPacket.targetID);
+            assert target != null;
+            assert !piece.owner.equals(target.owner);
+            piece.attack(target);
             piece.turnState = TurnState.DONE;
             break;
         case DISCONNECT:
