@@ -12,11 +12,6 @@ import game.run.GameException;
 
 import java.util.Set;
 
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-
-import util.Constants;
-
 
 public class GameModel {
     
@@ -27,6 +22,15 @@ public class GameModel {
     
     public final Map map;
     private final Set<Piece> pieces;
+    
+    public static enum GameState{
+        PLAYING,
+        P1_WINS,
+        P2_WINS,
+        DISCONNECTED,
+        ;
+    }
+    private GameState gameState = GameState.PLAYING;
     
     public GameModel(String name) throws GameException{
         player1 = new Player(1);
@@ -68,6 +72,10 @@ public class GameModel {
             return false;
         }
         return true;
+    }
+    
+    public Set<Piece> getPieces(){
+        return pieces;
     }
     
     public Piece getPieceByPosition(Point p){
@@ -140,28 +148,6 @@ public class GameModel {
             DisconnectAction defaultPacket = (DisconnectAction) action; //why?
             //TODO
             break;
-        }
-    }
-    
-    public void renderAtPosition(Image image, Graphics g, int x, int y, float centerX, float centerY, int offsetX, int offsetY){
-        g.drawImage(image, 
-                x * Constants.TILE_WIDTH_SPACING + (Constants.TILE_WIDTH - image.getWidth()) * centerX + offsetX,
-                y * Constants.TILE_HEIGHT_SPACING + (Constants.TILE_HEIGHT - image.getHeight()) * centerY + offsetY);
-    }
-    
-    public void renderBoard(Graphics g, int offsetX, int offsetY){
-        for (int i = 0; i < map.width; i++){
-            for (int j = i % 2; j < map.height; j += 2){
-                TerrainType terrain = map.getTerrain(i, j);
-                renderAtPosition(terrain.tile, g, i, j, 0f, 0f, offsetX, offsetY);
-            }
-        }
-    }
-    
-    public void renderPieces(Graphics g, int offsetX, int offsetY){
-        for (Piece p : pieces){
-            Image sprite = p.getSprite();
-            renderAtPosition(sprite, g, p.getPosition().x, p.getPosition().y, .5f, 1f, offsetX, offsetY);
         }
     }
 }
