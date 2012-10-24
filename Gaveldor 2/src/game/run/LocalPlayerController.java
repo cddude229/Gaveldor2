@@ -10,12 +10,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.StateBasedGame;
 
 import util.Constants;
 import util.Resources;
@@ -27,8 +25,6 @@ public class LocalPlayerController extends PlayerController {
     private int lastUpdateCount;
     
     private final Queue<Action> actionQueue = new LinkedList<Action>();
-    
-    private int displayX = 0, displayY = 0;
     
     private Piece selectedPiece = null;
 
@@ -135,9 +131,9 @@ public class LocalPlayerController extends PlayerController {
     }
 
     @Override
-    public void render(GameContainer container, StateBasedGame game, Graphics g)
+    public void render(Graphics g)
             throws SlickException {
-        model.renderBoard(g, -displayX, -displayY);
+        renderBoard(g);
         
         if (selectedPiece != null){
             switch(selectedPiece.turnState){
@@ -145,7 +141,7 @@ public class LocalPlayerController extends PlayerController {
                 Image im = Resources.getImage("/assets/graphics/hex_move.png");
                 for (Point p : selectedPiece.getValidMoves()){
                     if (model.isValidPosition(p)){
-                        model.renderAtPosition(im, g, p.x, p.y, 0f, 0f, -displayX, -displayY);
+                        renderAtPosition(im, g, p.x, p.y, 0f, 0f);
                     }
                 }
                 break;
@@ -157,7 +153,7 @@ public class LocalPlayerController extends PlayerController {
                 im = Resources.getImage("/assets/graphics/hex_attack.png");
                 for (Point p : selectedPiece.getValidAttacks()){
                     if (model.isValidPosition(p)){
-                        model.renderAtPosition(im, g, p.x, p.y, 0f, 0f, -displayX, -displayY);
+                        renderAtPosition(im, g, p.x, p.y, 0f, 0f);
                     }
                 }
                 break;
@@ -169,7 +165,7 @@ public class LocalPlayerController extends PlayerController {
             }
         }
 
-        model.renderPieces(g, -displayX, -displayY);
+        renderPieces(g);
     }
 
 }

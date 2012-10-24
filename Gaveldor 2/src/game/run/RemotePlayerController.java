@@ -6,10 +6,8 @@ import game.model.Player;
 
 import java.io.IOException;
 
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.StateBasedGame;
 
 
 public abstract class RemotePlayerController extends PlayerController {
@@ -36,9 +34,9 @@ public abstract class RemotePlayerController extends PlayerController {
     }
     
 
-    public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException{
-        model.renderBoard(g, 0, 0);
-        model.renderPieces(g, 0, 0);
+    public void render(Graphics g) throws SlickException{
+        renderBoard(g);
+        renderPieces(g);
         //TODO: render the remote player's actions
     }
     
