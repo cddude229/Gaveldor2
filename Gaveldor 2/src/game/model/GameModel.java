@@ -112,7 +112,7 @@ public class GameModel {
             assert !piece.owner.equals(target.owner);
             piece.attack(target);
             if (!target.isAlive()){
-                pieces.remove(piece);
+                pieces.remove(target);
             }
             piece.turnState = TurnState.DONE;
             break;
