@@ -26,4 +26,5 @@ public abstract class PlayerController {
     public abstract void propagateAction(Action action);
     
     public abstract void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException;
+    
 }

@@ -11,7 +11,7 @@ public abstract class Piece{
     
     public static enum TurnState{
         MOVING,
-        FACING,
+        TURNING,
         ATTACKING,
         DONE;
     }
@@ -196,7 +196,7 @@ public abstract class Piece{
                     new Point(p.x,   p.y)
                 };
             default:
-                throw new RuntimeException("Support for move dist=3 currently not supported");
+                throw new RuntimeException("Support for move dist>2 currently not supported");
         }
     }
     
@@ -232,8 +232,8 @@ public abstract class Piece{
         };
         return new Point[]{
             ret[dir],
-            ret[ (dir + 1) % 6 ],
-            ret[ (dir - 1) % 6 ]
+            ret[ (dir + 1 + 6) % 6 ],
+            ret[ (dir - 1 + 6) % 6 ]
         };
     }
     

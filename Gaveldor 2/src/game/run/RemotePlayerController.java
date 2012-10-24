@@ -38,6 +38,7 @@ public abstract class RemotePlayerController extends PlayerController {
 
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException{
         model.renderBoard(g, 0, 0);
+        model.renderPieces(g, 0, 0);
         //TODO: render the remote player's actions
     }
     

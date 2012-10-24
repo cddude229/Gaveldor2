@@ -12,11 +12,13 @@ import java.util.Queue;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import util.Constants;
+import util.Resources;
 
 
 public class LocalPlayerController extends PlayerController {
@@ -87,7 +89,7 @@ public class LocalPlayerController extends PlayerController {
                         //TODO: do nothing?
                     }
                     break;
-                case FACING:
+                case TURNING:
                     int direction = Piece.PointsToDirection(position, selectedPiece.getPosition());
                     if (direction != -1){
                         actionQueue.add(new Action.FaceAction(selectedPiece, direction));
@@ -136,6 +138,38 @@ public class LocalPlayerController extends PlayerController {
     public void render(GameContainer container, StateBasedGame game, Graphics g)
             throws SlickException {
         model.renderBoard(g, -displayX, -displayY);
+        
+        if (selectedPiece != null){
+            switch(selectedPiece.turnState){
+            case MOVING:
+                Image im = Resources.getImage("/assets/graphics/hex_move.png");
+                for (Point p : selectedPiece.getValidMoves()){
+                    if (model.isValidPosition(p)){
+                        model.renderAtPosition(im, g, p.x, p.y, 0f, 0f, -displayX, -displayY);
+                    }
+                }
+                break;
+            case TURNING:
+                im = Resources.getImage("/assets/graphics/hex_turn.png");
+                //TODO
+                break;
+            case ATTACKING:
+                im = Resources.getImage("/assets/graphics/hex_attack.png");
+                for (Point p : selectedPiece.getValidAttacks()){
+                    if (model.isValidPosition(p)){
+                        model.renderAtPosition(im, g, p.x, p.y, 0f, 0f, -displayX, -displayY);
+                    }
+                }
+                break;
+            case DONE:
+                //do nothing
+                break;
+            default:
+                throw new RuntimeException();
+            }
+        }
+
+        model.renderPieces(g, -displayX, -displayY);
     }
 
 }

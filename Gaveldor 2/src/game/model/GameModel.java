@@ -96,7 +96,11 @@ public class GameModel {
         switch(action.type) {
         case ATTACK:
             AttackAction attackPacket = (AttackAction) action;
+            Piece piece = getPieceByID(attackPacket.pieceID);
+            assert piece != null;
+            assert piece.turnState == TurnState.ATTACKING;
             //TODO
+            piece.turnState = TurnState.DONE;
             break;
         case DISCONNECT:
             DisconnectAction disconnectPacket = (DisconnectAction) action;
@@ -112,18 +116,18 @@ public class GameModel {
             break;
         case MOVE:
             MoveAction movePacket = (MoveAction) action;
-            Piece piece = getPieceByID(movePacket.pieceID);
+            piece = getPieceByID(movePacket.pieceID);
             assert piece != null;
             assert piece.turnState == TurnState.MOVING;
             piece.setPosition(movePacket.destination);
-            piece.turnState = TurnState.FACING;
+            piece.turnState = TurnState.TURNING;
             //TODO
             break;
         case FACE:
             FaceAction facePacket = (FaceAction) action;
             piece = getPieceByID(facePacket.pieceID);
             assert piece != null;
-            assert piece.turnState == TurnState.FACING;
+            assert piece.turnState == TurnState.TURNING;
             piece.setDirection(facePacket.direction);
             piece.turnState = TurnState.ATTACKING;
             break;
@@ -133,24 +137,31 @@ public class GameModel {
             endTurn();
             break;
         default:
-            DisconnectAction defaultPacket  = (DisconnectAction) action; //why?
+            DisconnectAction defaultPacket = (DisconnectAction) action; //why?
             //TODO
             break;
         }
+    }
+    
+    public void renderAtPosition(Image image, Graphics g, int x, int y, float centerX, float centerY, int offsetX, int offsetY){
+        g.drawImage(image, 
+                x * Constants.TILE_WIDTH_SPACING + (Constants.TILE_WIDTH - image.getWidth()) * centerX + offsetX,
+                y * Constants.TILE_HEIGHT_SPACING + (Constants.TILE_HEIGHT - image.getHeight()) * centerY + offsetY);
     }
     
     public void renderBoard(Graphics g, int offsetX, int offsetY){
         for (int i = 0; i < map.width; i++){
             for (int j = i % 2; j < map.height; j += 2){
                 TerrainType terrain = map.getTerrain(i, j);
-                g.drawImage(terrain.tile, i * Constants.TILE_WIDTH_SPACING + offsetX, j * Constants.TILE_HEIGHT_SPACING + offsetY);
+                renderAtPosition(terrain.tile, g, i, j, 0f, 0f, offsetX, offsetY);
             }
         }
+    }
+    
+    public void renderPieces(Graphics g, int offsetX, int offsetY){
         for (Piece p : pieces){
             Image sprite = p.getSprite();
-            int x = p.getPosition().x * Constants.TILE_WIDTH_SPACING + (Constants.TILE_WIDTH - sprite.getWidth()) / 2 + offsetX;
-            int y = p.getPosition().y * Constants.TILE_HEIGHT_SPACING + (Constants.TILE_HEIGHT - sprite.getHeight()) + offsetY;
-            g.drawImage(p.getSprite(), x, y);
+            renderAtPosition(sprite, g, p.getPosition().x, p.getPosition().y, .5f, 1f, offsetX, offsetY);
         }
     }
 }
