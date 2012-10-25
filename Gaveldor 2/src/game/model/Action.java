@@ -71,8 +71,8 @@ public abstract class Action implements Serializable {
         public final int pieceID, targetID;
     	
     	public AttackAction(Piece piece, Piece target) {
-    	    pieceID = piece.pieceId;
-    	    targetID = target.pieceId;
+    	    pieceID = piece.id;
+    	    targetID = target.id;
     		this.type = Type.ATTACK;
     	}
     }
@@ -84,7 +84,7 @@ public abstract class Action implements Serializable {
     	public final Point destination;
     	
     	public MoveAction(Piece piece, Point destination) {
-    		this.pieceID = piece.pieceId;
+    		this.pieceID = piece.id;
     		this.destination = destination;
     		this.type = Type.MOVE;
     	}
@@ -97,7 +97,7 @@ public abstract class Action implements Serializable {
         public final int direction;
         
         public FaceAction(Piece piece, int direction) {
-            this.pieceID = piece.pieceId;
+            this.pieceID = piece.id;
             this.direction = direction;
             this.type = Type.FACE;
         }

@@ -1,6 +1,5 @@
 package run;
 
-
 import game.model.GameModel;
 import game.run.GameException;
 import game.run.GameMatch;
@@ -21,67 +20,64 @@ import util.Constants;
 import util.Resources;
 
 public class Game extends StateBasedGame {
-    
+
     public GameMatch match = null;
-    
-	public Game() {
-		super("Gaveldor 2");
-	}
-	
-	private static int nextStateID = 0;
-	public static int allocateStateID(){
-	    nextStateID++;
-	    return nextStateID - 1;
-	}
-	
-	public void startLocalMatch(String mapName) throws GameException{
+
+    public Game() {
+        super("Gaveldor 2");
+    }
+
+    private static int nextStateID = 0;
+
+    public static int allocateStateID() {
+        return nextStateID++;
+    }
+
+    public void startLocalMatch(String mapName) throws GameException {
         GameUI ui = new GameUI();
         GameModel model;
         model = new GameModel(mapName);
-        match = new GameMatch(ui, model,
-                new LocalPlayerController(model.getCurrentPlayer(), model, ui),
+        match = new GameMatch(ui, model, new LocalPlayerController(model.getCurrentPlayer(), model, ui),
                 new LocalPlayerController(model.getOtherPlayer(), model, ui));
-	}
-	
-	public void startHostRemoteMatch(String mapName) throws GameException{
+    }
+
+    public void startHostRemoteMatch(String mapName) throws GameException {
         GameUI ui = new GameUI();
         GameModel model;
         model = new GameModel(mapName);
-        match = new GameMatch(ui, model,
-                new LocalPlayerController(model.getCurrentPlayer(), model, ui),
+        match = new GameMatch(ui, model, new LocalPlayerController(model.getCurrentPlayer(), model, ui),
                 new HostRemotePlayerController(model.getOtherPlayer(), model, Constants.REMOTE_CONNECTION_PORT));
-	}
-    
-    public void startClientRemoteMatch(String mapName, String address) throws GameException{
+    }
+
+    public void startClientRemoteMatch(String mapName, String address) throws GameException {
         GameUI ui = new GameUI();
         GameModel model;
         model = new GameModel(mapName);
-        try{
-            match = new GameMatch(ui, model,
-                    new ClientRemotePlayerController(model.getCurrentPlayer(), model, address, Constants.REMOTE_CONNECTION_PORT),
-                    new LocalPlayerController(model.getOtherPlayer(), model, ui));
-        } catch (IOException e){
+        try {
+            match = new GameMatch(ui, model, new ClientRemotePlayerController(model.getCurrentPlayer(), model, address,
+                    Constants.REMOTE_CONNECTION_PORT), new LocalPlayerController(model.getOtherPlayer(), model, ui));
+        } catch (IOException e) {
             throw new GameException("A connection could not be established to that host", e);
         }
     }
 
-	@Override
-	public void initStatesList(GameContainer container) throws SlickException {
-		addState(new MainMenuState());
-		addState(new HostGameState());
+    @Override
+    public void initStatesList(GameContainer container) throws SlickException {
+        addState(new MainMenuState());
+        addState(new HostGameState());
         addState(new JoinGameState());
-		addState(new PlayGameState());
-	}
-	
-	public static void main(String[] args) throws SlickException, IOException, URISyntaxException{
-	    Resources.setupLWJGLNatives("/lwjgl_natives");
-	    
+        addState(new PlayGameState());
+    }
+
+    public static void main(String[] args) throws SlickException, IOException, URISyntaxException {
+        Resources.setupLWJGLNatives("/lwjgl_natives");
+
         AppGameContainer app = new AppGameContainer(new Game());
         app.setVerbose(false);
         app.setDisplayMode(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, Constants.WINDOW_FULLSCREEN);
         app.setVSync(true);
         app.setShowFPS(false);
         app.start();
-	}
+    }
 
 }

@@ -88,10 +88,8 @@ public class GameModel {
     }
 
     public Piece getPieceByID(int id) {
-        System.out.println(id);
         for (Piece piece : pieces) {
-            System.out.println(piece.pieceId);
-            if (piece.pieceId == id) {
+            if (piece.id == id) {
                 return piece;
             }
         }
