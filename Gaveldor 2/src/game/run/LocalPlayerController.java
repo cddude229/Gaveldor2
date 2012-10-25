@@ -33,7 +33,7 @@ public class LocalPlayerController extends PlayerController {
         this.ui = ui;
         lastUpdateCount = this.ui.getUpdateCount();
         if (player.equals(model.getCurrentPlayer())){
-            actionQueue.add(new Action.GameStartAction(player));
+            actionQueue.add(new Action.GameStartAction());
         }
     }
     

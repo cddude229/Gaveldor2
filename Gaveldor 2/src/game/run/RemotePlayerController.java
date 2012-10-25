@@ -17,16 +17,11 @@ public abstract class RemotePlayerController extends PlayerController {
     public RemotePlayerController(Player player, GameModel model, NetworkingController networkingController){
         super(player, model);
         this.networkingController = networkingController;
+        this.networkingController.start();
     }
 
     @Override
     public Action retrieveAction(){
-        //TODO: actually handle exceptions from here
-        try {
-            networkingController.throwThreadExceptionIfNecessary();
-        } catch (GameException e) {
-            e.printStackTrace();
-        }
         return networkingController.getAction();
     }
 

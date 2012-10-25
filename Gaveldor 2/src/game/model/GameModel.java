@@ -12,106 +12,104 @@ import game.run.GameException;
 
 import java.util.Set;
 
-
 public class GameModel {
-    
-    //TODO
-    
+
+    // TODO
+
     private final Player player1, player2;
     private boolean player1IsCurrent = true;
-    
+
     public final Map map;
     private Set<Piece> pieces;
-    
-    public static enum GameState{
-        SETTING_UP,
-        PLAYING,
-        WON,
-        DISCONNECTED,
-        ;
+
+    public static enum GameState {
+        SETTING_UP, PLAYING, WON, DISCONNECTED, ;
     }
+
     public GameState gameState = GameState.SETTING_UP;
-    
-    public GameModel(String name) throws GameException{
+
+    public GameModel(String name) throws GameException {
         player1 = new Player(1);
         player2 = new Player(2);
-        
+
         map = Map.loadMap(name);
     }
-    
-    public void setup(){
+
+    public void setup() {
         pieces = map.createPieces(player1, player2);
     }
-    
-    public Player getCurrentPlayer(){
+
+    public Player getCurrentPlayer() {
         return player1IsCurrent ? player1 : player2;
     }
-    
-    public Player getOtherPlayer(){
+
+    public Player getOtherPlayer() {
         return player1IsCurrent ? player2 : player1;
     }
-    
-    private void switchCurrentAndOtherPlayers(){
+
+    private void switchCurrentAndOtherPlayers() {
         player1IsCurrent ^= true;
     }
-    
-    private void endTurn(){
-        for (Piece p : pieces){
-            if (p.owner.equals(getCurrentPlayer())){
+
+    private void endTurn() {
+        for (Piece p : pieces) {
+            if (p.owner.equals(getCurrentPlayer())) {
                 p.turnState = TurnState.MOVING;
             }
         }
         switchCurrentAndOtherPlayers();
-        //TODO
+        // TODO
     }
-    
-    public boolean isValidPosition(Point p){
-        if (p.x < 0 || p.x >= map.width){
+
+    public boolean isValidPosition(Point p) {
+        if (p.x < 0 || p.x >= map.width) {
             return false;
         }
-        if (p.y < 0 || p.y >= map.height){
+        if (p.y < 0 || p.y >= map.height) {
             return false;
         }
         return true;
     }
-    
-    public Set<Piece> getPieces(){
+
+    public Set<Piece> getPieces() {
         return pieces;
     }
-    
-    public Piece getPieceByPosition(Point p){
-        if (!isValidPosition(p)){
+
+    public Piece getPieceByPosition(Point p) {
+        if (!isValidPosition(p)) {
             return null;
         }
-        for (Piece piece : pieces){
-            if (piece.getPosition().equals(p)){
+        for (Piece piece : pieces) {
+            if (piece.getPosition().equals(p)) {
                 return piece;
             }
         }
         return null;
     }
-    
-    public Piece getPieceByID(int id){
-        for (Piece piece : pieces){
-            if (piece.pieceId == id){
+
+    public Piece getPieceByID(int id) {
+        System.out.println(id);
+        for (Piece piece : pieces) {
+            System.out.println(piece.pieceId);
+            if (piece.pieceId == id) {
                 return piece;
             }
         }
         return null;
     }
-    
-    public boolean hasAnyPieces(Player player){
-        for (Piece p : pieces){
-            if (p.owner.equals(player)){
+
+    public boolean hasAnyPieces(Player player) {
+        for (Piece p : pieces) {
+            if (p.owner.equals(player)) {
                 return true;
             }
         }
         return false;
     }
-    
-    public void applyAction(Action action){
+
+    public void applyAction(Action action) {
         System.out.println(action.type);
-        switch(action.type) {
+        switch (action.type) {
         case ATTACK:
             AttackAction attackPacket = (AttackAction) action;
             Piece piece = getPieceByID(attackPacket.pieceID);
@@ -121,11 +119,11 @@ public class GameModel {
             assert target != null;
             assert !piece.owner.equals(target.owner);
             piece.attack(target);
-            if (!target.isAlive()){
+            if (!target.isAlive()) {
                 pieces.remove(target);
             }
             piece.turnState = TurnState.DONE;
-            if (!hasAnyPieces(target.owner)){
+            if (!hasAnyPieces(target.owner)) {
                 player1IsCurrent = !target.owner.equals(player1);
                 gameState = GameState.WON;
             }
@@ -133,7 +131,7 @@ public class GameModel {
         case DISCONNECT:
             DisconnectAction disconnectPacket = (DisconnectAction) action;
             gameState = GameState.DISCONNECTED;
-           break;
+            break;
         case FORFEIT:
             ForfeitAction forfeitPacket = (ForfeitAction) action;
             player1IsCurrent = forfeitPacket.playerID != player1.id;
@@ -149,9 +147,10 @@ public class GameModel {
             piece = getPieceByID(movePacket.pieceID);
             assert piece != null;
             assert piece.turnState == TurnState.MOVING;
+            System.out.println(piece);
             piece.setPosition(movePacket.destination);
             piece.turnState = TurnState.TURNING;
-            //TODO
+            // TODO
             break;
         case FACE:
             FaceAction facePacket = (FaceAction) action;
@@ -167,8 +166,8 @@ public class GameModel {
             endTurn();
             break;
         default:
-            DisconnectAction defaultPacket = (DisconnectAction) action; //why?
-            //TODO
+            DisconnectAction defaultPacket = (DisconnectAction) action; // why?
+            // TODO
             break;
         }
     }
