@@ -38,7 +38,7 @@ public enum TerrainType {
     }
     
     public static void initTiles() throws SlickException{
-        OPEN_LAND.tile = Resources.getImage("/assets/graphics/test.png");
+        OPEN_LAND.tile = Resources.getImage("/assets/graphics/terrain/blank.png");
     }
 }
 

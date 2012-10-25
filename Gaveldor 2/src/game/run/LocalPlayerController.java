@@ -32,13 +32,16 @@ public class LocalPlayerController extends PlayerController {
         super(player, model);
         this.ui = ui;
         lastUpdateCount = this.ui.getUpdateCount();
+        if (player.equals(model.getCurrentPlayer())){
+            actionQueue.add(new Action.GameStartAction(player));
+        }
     }
     
     public boolean isReady(){
         return true;
     }
     
-    private void updatePan(){
+    private void updateMousePan(){
         double placementX = (double)ui.getInput().getMouseX() / Constants.WINDOW_WIDTH,
                 placementY = (double)ui.getInput().getMouseY() / Constants.WINDOW_HEIGHT;
         //TODO: clean up ALL these constants
@@ -64,9 +67,21 @@ public class LocalPlayerController extends PlayerController {
     }
 
     private void update(){
-        
-        updatePan();
-        
+        switch (model.gameState){
+        case PLAYING:
+            updatePlaying();
+            break;
+        case DISCONNECTED:
+            //TODO
+            break;
+        case WON:
+            //TODO
+            break;
+        }
+    }
+    
+    private void updatePlaying(){
+        updateMousePan();
         if (ui.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)){
             Point position = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY() + displayY);
             Piece piece = model.getPieceByPosition(position);
@@ -131,14 +146,18 @@ public class LocalPlayerController extends PlayerController {
     }
 
     @Override
-    public void render(Graphics g)
-            throws SlickException {
-        renderBoard(g);
+    public void renderControllerPlaying(Graphics g) throws SlickException {
+        Image im;
+        Point position = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY() + displayY);
+        if (model.isValidPosition(position)){
+            im = Resources.getImage("/assets/graphics/ui/hover.png");
+            renderAtPosition(im, g, position.x, position.y, 0f, 0f);
+        }
         
         if (selectedPiece != null){
             switch(selectedPiece.turnState){
             case MOVING:
-                Image im = Resources.getImage("/assets/graphics/hex_move.png");
+                im = Resources.getImage("/assets/graphics/ui/movable.png");
                 for (Point p : selectedPiece.getValidMoves()){
                     if (model.isValidPosition(p)){
                         renderAtPosition(im, g, p.x, p.y, 0f, 0f);
@@ -146,11 +165,12 @@ public class LocalPlayerController extends PlayerController {
                 }
                 break;
             case TURNING:
-                im = Resources.getImage("/assets/graphics/hex_turn.png");
+                im = Resources.getImage("/assets/graphics/ui/arrows.png");
+                renderAtPosition(im, g, selectedPiece.getPosition().x, selectedPiece.getPosition().y, 0.5f, 0.5f);
                 //TODO
                 break;
             case ATTACKING:
-                im = Resources.getImage("/assets/graphics/hex_attack.png");
+                im = Resources.getImage("/assets/graphics/ui/attackable.png");
                 for (Point p : selectedPiece.getValidAttacks()){
                     if (model.isValidPosition(p)){
                         renderAtPosition(im, g, p.x, p.y, 0f, 0f);
@@ -164,8 +184,6 @@ public class LocalPlayerController extends PlayerController {
                 throw new RuntimeException();
             }
         }
-
-        renderPieces(g);
     }
 
 }

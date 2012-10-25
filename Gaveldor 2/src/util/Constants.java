@@ -1,5 +1,14 @@
 package util;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.util.List;
+
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
+import org.newdawn.slick.font.effects.Effect;
+
 /*
  * Global constants file
  */
@@ -9,7 +18,7 @@ public class Constants {
     public static final boolean WINDOW_FULLSCREEN = false;
     
     // the actual size of the tiles in-file
-    public static final int TILE_WIDTH = 250, TILE_HEIGHT = 217;
+    public static final int TILE_WIDTH = 196, TILE_HEIGHT = 170;
     // the perspective adjustment, given the natural height-to-width ratio of a regular hexagon
     public static final double TILE_PERSPECTIVE_RATIO = (TILE_HEIGHT / Math.sqrt(3)) / (TILE_WIDTH / 2);
     // the size to be used to get proper tile placement
@@ -43,4 +52,16 @@ public class Constants {
     
     // Player.java
     
+    @SuppressWarnings("unchecked")
+    public static UnicodeFont loadFont(String name, int style, int size, Color color){
+        try{
+            UnicodeFont font = new UnicodeFont(new Font(name, style, size));
+            font.addAsciiGlyphs();
+            ((List<Effect>) font.getEffects()).add(new ColorEffect(color));
+            font.loadGlyphs();
+            return font;
+        } catch (SlickException e){
+            throw new RuntimeException(e);
+        }
+    }
 }

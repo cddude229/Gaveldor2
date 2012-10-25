@@ -21,25 +21,26 @@ public class GameModel {
     private boolean player1IsCurrent = true;
     
     public final Map map;
-    private final Set<Piece> pieces;
+    private Set<Piece> pieces;
     
     public static enum GameState{
+        STARTING,
         PLAYING,
-        P1_WINS,
-        P2_WINS,
+        WON,
         DISCONNECTED,
         ;
     }
-    private GameState gameState = GameState.PLAYING;
+    public GameState gameState = GameState.PLAYING;
     
     public GameModel(String name) throws GameException{
         player1 = new Player(1);
         player2 = new Player(2);
         
         map = Map.loadMap(name);
-        
+    }
+    
+    public void setup(){
         pieces = map.createPieces(player1, player2);
-        
     }
     
     public Player getCurrentPlayer(){
@@ -99,6 +100,15 @@ public class GameModel {
         return null;
     }
     
+    public boolean hasAnyPieces(Player player){
+        for (Piece p : pieces){
+            if (p.owner.equals(player)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public void applyAction(Action action){
         System.out.println(action.type);
         switch(action.type) {
@@ -107,20 +117,32 @@ public class GameModel {
             Piece piece = getPieceByID(attackPacket.pieceID);
             assert piece != null;
             assert piece.turnState == TurnState.ATTACKING;
-            //TODO
+            Piece target = getPieceByID(attackPacket.targetID);
+            assert target != null;
+            assert !piece.owner.equals(target.owner);
+            piece.attack(target);
+            if (!target.isAlive()){
+                pieces.remove(target);
+            }
             piece.turnState = TurnState.DONE;
+            if (!hasAnyPieces(target.owner)){
+                player1IsCurrent = !target.owner.equals(player1);
+                gameState = GameState.WON;
+            }
             break;
         case DISCONNECT:
             DisconnectAction disconnectPacket = (DisconnectAction) action;
-            //TODO
+            gameState = GameState.DISCONNECTED;
            break;
         case FORFEIT:
             ForfeitAction forfeitPacket = (ForfeitAction) action;
-            //TODO
+            player1IsCurrent = forfeitPacket.playerID != player1.id;
+            gameState = GameState.WON;
             break;
         case GAME_START:
             GameStartAction gameStartPacket = (GameStartAction) action;
-            //TODO
+            gameState = GameState.PLAYING;
+            setup();
             break;
         case MOVE:
             MoveAction movePacket = (MoveAction) action;

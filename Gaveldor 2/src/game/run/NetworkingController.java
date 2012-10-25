@@ -77,17 +77,19 @@ public class NetworkingController implements Runnable{
                     out.flush();
                 }
                 Action line;
-                try{
-                    line = (Action) in.readObject();
-                } catch (ClassNotFoundException e){
-                    throw new RuntimeException(e);
-                }
-                System.out.println("Received" + line);
-                if (line.equals(null)) {
-                    break;
-                }
-                else {
-                    this.receivables.add(line);
+                if (in.available() > 0) {
+                    try{
+                        line = (Action) in.readObject();
+                    } catch (ClassNotFoundException e){
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println("Received" + line);
+                    if (line.equals(null)) {
+                        break;
+                    }
+                    else {
+                        this.receivables.add(line);
+                    }
                 }
             }
             int otherPlayer = 1;
