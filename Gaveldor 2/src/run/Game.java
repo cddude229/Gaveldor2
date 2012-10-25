@@ -28,6 +28,12 @@ public class Game extends StateBasedGame {
 		super("Gaveldor 2");
 	}
 	
+	private static int nextStateID = 0;
+	public static int allocateStateID(){
+	    nextStateID++;
+	    return nextStateID - 1;
+	}
+	
 	public void startLocalMatch(String mapName) throws GameException{
         GameUI ui = new GameUI();
         GameModel model;
@@ -63,6 +69,7 @@ public class Game extends StateBasedGame {
 	public void initStatesList(GameContainer container) throws SlickException {
 		addState(new MainMenuState());
 		addState(new HostGameState());
+        addState(new JoinGameState());
 		addState(new PlayGameState());
 	}
 	

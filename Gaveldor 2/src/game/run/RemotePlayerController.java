@@ -18,13 +18,15 @@ public abstract class RemotePlayerController extends PlayerController {
         super(player, model);
         this.networkingController = networkingController;
     }
-    
-    public boolean isReady() throws GameException{
-        return networkingController.isReady();
-    }
 
     @Override
     public Action retrieveAction(){
+        //TODO: actually handle exceptions from here
+        try {
+            networkingController.throwThreadExceptionIfNecessary();
+        } catch (GameException e) {
+            e.printStackTrace();
+        }
         return networkingController.getAction();
     }
 

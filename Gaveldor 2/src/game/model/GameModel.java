@@ -24,13 +24,13 @@ public class GameModel {
     private Set<Piece> pieces;
     
     public static enum GameState{
-        STARTING,
+        SETTING_UP,
         PLAYING,
         WON,
         DISCONNECTED,
         ;
     }
-    public GameState gameState = GameState.PLAYING;
+    public GameState gameState = GameState.SETTING_UP;
     
     public GameModel(String name) throws GameException{
         player1 = new Player(1);
@@ -141,8 +141,8 @@ public class GameModel {
             break;
         case GAME_START:
             GameStartAction gameStartPacket = (GameStartAction) action;
-            gameState = GameState.PLAYING;
             setup();
+            gameState = GameState.PLAYING;
             break;
         case MOVE:
             MoveAction movePacket = (MoveAction) action;

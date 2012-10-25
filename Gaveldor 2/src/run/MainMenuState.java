@@ -14,7 +14,7 @@ import util.Constants;
 
 public class MainMenuState extends BasicGameState {
 	
-	public static final int STATE_ID = 0;
+	public static final int STATE_ID = Game.allocateStateID();
 	private int buttonCount = 0;
 
 	@Override
@@ -48,7 +48,7 @@ public class MainMenuState extends BasicGameState {
                 game.enterState(HostGameState.STATE_ID);
             } else if (container.getInput().isKeyPressed(Input.KEY_C)){
                 ((Game)game).startClientRemoteMatch("/assets/maps/basic", "localhost");
-                game.enterState(PlayGameState.STATE_ID);
+                game.enterState(JoinGameState.STATE_ID);
             }
         } catch (GameException e) {
             // TODO: display in window

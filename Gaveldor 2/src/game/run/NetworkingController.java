@@ -62,6 +62,7 @@ public class NetworkingController implements Runnable{
             in = new ObjectInputStream(this.socket.getInputStream());
             out = new ObjectOutputStream(this.socket.getOutputStream());
         } catch (IOException e) {
+            e.printStackTrace();
             threadException = new GameException("A connection could not be established", e);
             return;
         }
@@ -100,9 +101,11 @@ public class NetworkingController implements Runnable{
             out.close();
             in.close();
             this.socket.close();
-            } catch (IOException e) {
-                threadException = new GameException("The connection was lost", e);
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            threadException = new GameException("The connection was lost", e);
+        }
+        
     }
     
     public Action getAction() {
@@ -121,10 +124,5 @@ public class NetworkingController implements Runnable{
         if (threadException != null){
             throw threadException;
         }
-    }
-    
-    public boolean isReady() throws GameException{
-        throwThreadExceptionIfNecessary();
-        return socket != null;
     }
 }

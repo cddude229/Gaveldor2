@@ -13,7 +13,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class PlayGameState extends BasicGameState {
     
-    public static final int STATE_ID = 1;
+    public static final int STATE_ID = Game.allocateStateID();
     
     private GameMatch match = null;
 

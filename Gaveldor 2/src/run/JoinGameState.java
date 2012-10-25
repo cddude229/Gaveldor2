@@ -8,7 +8,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class HostGameState extends BasicGameState {
+public class JoinGameState extends BasicGameState {
     
     public static final int STATE_ID = Game.allocateStateID();
 
@@ -28,6 +28,7 @@ public class HostGameState extends BasicGameState {
     public void update(GameContainer container, StateBasedGame game, int delta)
             throws SlickException {
         if (((Game)game).match.model.gameState != GameState.SETTING_UP){
+            System.out.println(((Game)game).match.model.gameState);
             game.enterState(PlayGameState.STATE_ID);
         }
     }
