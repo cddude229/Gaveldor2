@@ -59,8 +59,9 @@ public class NetworkingController implements Runnable{
         		this.sendables.add(new GameStartAction(new Player(2))); //TODO: get Players from model
         		this.receivables.add(new GameStartAction(new Player(1)));
         	}
-            in = new ObjectInputStream(this.socket.getInputStream());
             out = new ObjectOutputStream(this.socket.getOutputStream());
+            out.flush();
+            in = new ObjectInputStream(this.socket.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
             threadException = new GameException("A connection could not be established", e);
