@@ -29,7 +29,7 @@ public class GameModel {
         DISCONNECTED,
         ;
     }
-    private GameState gameState = GameState.PLAYING;
+    public GameState gameState = GameState.PLAYING;
     
     public GameModel(String name) throws GameException{
         player1 = new Player(1);

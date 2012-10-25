@@ -38,7 +38,7 @@ public class LocalPlayerController extends PlayerController {
         return true;
     }
     
-    private void updatePan(){
+    private void updateMousePan(){
         double placementX = (double)ui.getInput().getMouseX() / Constants.WINDOW_WIDTH,
                 placementY = (double)ui.getInput().getMouseY() / Constants.WINDOW_HEIGHT;
         //TODO: clean up ALL these constants
@@ -64,9 +64,21 @@ public class LocalPlayerController extends PlayerController {
     }
 
     private void update(){
-        
-        updatePan();
-        
+        switch (model.gameState){
+        case PLAYING:
+            updatePlaying();
+            break;
+        case DISCONNECTED:
+            //TODO
+            break;
+        case WON:
+            //TODO
+            break;
+        }
+    }
+    
+    private void updatePlaying(){
+        updateMousePan();
         if (ui.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)){
             Point position = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY() + displayY);
             Piece piece = model.getPieceByPosition(position);
@@ -131,12 +143,7 @@ public class LocalPlayerController extends PlayerController {
     }
 
     @Override
-    public void render(Graphics g)
-            throws SlickException {
-        renderBoard(g);
-        renderPieces(g);
-        
-        
+    public void renderControllerPlaying(Graphics g) throws SlickException {
         Image im;
         Point position = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY() + displayY);
         if (model.isValidPosition(position)){

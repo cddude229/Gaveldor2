@@ -1,5 +1,14 @@
 package util;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.util.List;
+
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
+import org.newdawn.slick.font.effects.Effect;
+
 /*
  * Global constants file
  */
@@ -43,4 +52,16 @@ public class Constants {
     
     // Player.java
     
+    @SuppressWarnings("unchecked")
+    public static UnicodeFont loadFont(String name, int style, int size, Color color){
+        try{
+            UnicodeFont font = new UnicodeFont(new Font(name, style, size));
+            font.addAsciiGlyphs();
+            ((List<Effect>) font.getEffects()).add(new ColorEffect(color));
+            font.loadGlyphs();
+            return font;
+        } catch (SlickException e){
+            throw new RuntimeException(e);
+        }
+    }
 }

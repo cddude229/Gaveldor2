@@ -34,9 +34,7 @@ public abstract class RemotePlayerController extends PlayerController {
     }
     
 
-    public void render(Graphics g) throws SlickException{
-        renderBoard(g);
-        renderPieces(g);
+    public void renderControllerPlaying(Graphics g) throws SlickException{
         //TODO: render the remote player's actions
     }
     
