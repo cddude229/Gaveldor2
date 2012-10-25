@@ -2,6 +2,8 @@ package run;
 
 import game.run.GameException;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -12,16 +14,38 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import util.Constants;
 
+import com.aem.sticky.button.SimpleButton;
+
 public class MainMenuState extends BasicGameState {
 	
 	public static final int STATE_ID = Game.allocateStateID();
 	private int buttonCount = 0;
+	private SimpleButton playBtn;
+	private SimpleButton instructBtn;
+	private SimpleButton connectBtn;
+	private SimpleButton creditBtn;
+	private SimpleButton exitBtn;
+	private static final int bWidth = 100;
+	private static final int bHeight = 100;
+	private ArrayList<int[]> locations = new ArrayList<int[]>();
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-	    Rectangle rect = new Rectangle(0, 0, 0, 0);
-        // TODO Auto-generated method stub
+	    for (int i = 0; i <5; i++){
+	        locations.add(this.getLocation(bWidth,bHeight));
+	    }
+	    Rectangle playRect = new Rectangle(locations.get(0)[0], locations.get(0)[1], bWidth, bHeight);
+	    Rectangle instructRect = new Rectangle(locations.get(1)[0], locations.get(1)[1], bWidth, bHeight);
+	    Rectangle connectRect = new Rectangle(locations.get(2)[0], locations.get(2)[1], bWidth, bHeight);
+	    Rectangle creditRect = new Rectangle(locations.get(3)[0], locations.get(3)[1], bWidth, bHeight);
+	    Rectangle exitRect = new Rectangle(locations.get(4)[0], locations.get(4)[1], bWidth, bHeight);
+	    
+	    playBtn = new SimpleButton(playRect,null,null,null);
+	    instructBtn = new SimpleButton(instructRect,null,null,null);
+	    connectBtn = new SimpleButton(connectRect,null,null,null);
+	    creditBtn = new SimpleButton(creditRect,null,null,null);
+	    exitBtn = new SimpleButton(exitRect,null,null,null);
 	}
 	
 	@Override
@@ -67,12 +91,11 @@ public class MainMenuState extends BasicGameState {
 	 * @param height
 	 * @return an int[] containing the screen location of the buttons
 	 */
-	public int[] generateLocation(int width, int height) {
+	public int[] getLocation(int width, int height) {
 	    int scnWidth = Constants.WINDOW_WIDTH;
 	    int scnHeight = Constants.WINDOW_HEIGHT;
 	    int locWidth = scnWidth/2-width/2;
-	    int locHeight = scnHeight/2-(height/2 + 20 * this.buttonCount);
-	    this.buttonCount += 1;
+	    int locHeight = scnHeight/2-(height/2 + 20 * this.locations.size());
 	    return new int[] {locWidth,locHeight};
 	}
 

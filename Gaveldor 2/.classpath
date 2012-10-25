@@ -11,5 +11,6 @@
 			<attribute name="javadoc_location" value="http://slick.cokeandcode.com/javadoc/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="sticky.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
