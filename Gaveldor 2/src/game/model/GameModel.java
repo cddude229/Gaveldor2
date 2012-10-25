@@ -21,9 +21,10 @@ public class GameModel {
     private boolean player1IsCurrent = true;
     
     public final Map map;
-    private final Set<Piece> pieces;
+    private Set<Piece> pieces;
     
     public static enum GameState{
+        STARTING,
         PLAYING,
         WON,
         DISCONNECTED,
@@ -36,9 +37,10 @@ public class GameModel {
         player2 = new Player(2);
         
         map = Map.loadMap(name);
-        
+    }
+    
+    public void setup(){
         pieces = map.createPieces(player1, player2);
-        
     }
     
     public Player getCurrentPlayer(){
@@ -139,7 +141,8 @@ public class GameModel {
             break;
         case GAME_START:
             GameStartAction gameStartPacket = (GameStartAction) action;
-            //TODO
+            gameState = GameState.PLAYING;
+            setup();
             break;
         case MOVE:
             MoveAction movePacket = (MoveAction) action;

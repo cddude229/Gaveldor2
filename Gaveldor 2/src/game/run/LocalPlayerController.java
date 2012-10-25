@@ -32,6 +32,9 @@ public class LocalPlayerController extends PlayerController {
         super(player, model);
         this.ui = ui;
         lastUpdateCount = this.ui.getUpdateCount();
+        if (player.equals(model.getCurrentPlayer())){
+            actionQueue.add(new Action.GameStartAction(player));
+        }
     }
     
     public boolean isReady(){
