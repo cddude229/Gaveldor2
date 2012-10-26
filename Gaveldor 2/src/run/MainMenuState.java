@@ -44,8 +44,7 @@ public class MainMenuState extends BasicGameState {
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
 
         listener = new StickyListener();
-        // container.getInput().addListener(listener); -This line breaks the
-        // build
+        container.getInput().addListener(listener); // - This line breaks the build
         buttons = this.buildButtons();
         for (SimpleButton button : buttons) {
             listener.add(button);
@@ -60,7 +59,7 @@ public class MainMenuState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        g.drawString("Welcome to Galvedor 2: The Engaveling of Ambidextria", 0, 0);
+        g.drawString("Welcome to Gaveldor 2: The Engaveling of Ambidextria", 0, 0);
         g.drawString("Press L to begin", 0, 50);
         g.drawString("Press H to host match.", 0, 100);
         g.drawString("Press C to connect to localhost.", 0, 150);

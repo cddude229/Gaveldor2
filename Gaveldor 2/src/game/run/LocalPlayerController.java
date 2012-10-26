@@ -71,7 +71,9 @@ public class LocalPlayerController extends PlayerController {
             // do nothing?
             break;
         case PLAYING:
-            updatePlaying();
+            if (model.getCurrentPlayer().equals(player)){
+                updatePlayingCurrent();
+            }
             break;
         case DISCONNECTED:
             // TODO
@@ -84,7 +86,7 @@ public class LocalPlayerController extends PlayerController {
         }
     }
 
-    private void updatePlaying() {
+    private void updatePlayingCurrent() {
         updateMousePan();
         if (ui.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
             Point position = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY()
