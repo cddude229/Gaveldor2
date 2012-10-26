@@ -35,13 +35,20 @@ public abstract class PlayerController {
     public abstract void propagateAction(Action action);
 
     public void render(Graphics g) throws SlickException {
-        renderBoard(g);
-        renderPieces(g);
         switch (model.gameState) {
-        case PLAYING:
-            renderControllerPlaying(g);
+        case SETTING_UP:
+            throw new RuntimeException();
+        case PLAYING_BOARD:
+            renderBoard(g);
+            renderPieces(g);
+            renderControllerPlayingBoard(g);
+            break;
+        case PLAYING_MINIGAME:
+            renderPlayingMinigame(g);
             break;
         case WON:
+            renderBoard(g);
+            renderPieces(g);
             renderControllerWon(g);
             break;
         case DISCONNECTED:
@@ -50,10 +57,14 @@ public abstract class PlayerController {
         }
     }
 
-    public abstract void renderControllerPlaying(Graphics g) throws SlickException;
+    public abstract void renderControllerPlayingBoard(Graphics g) throws SlickException;
 
     private static UnicodeFont f = Constants.loadFont("Arial Monospaced", Font.PLAIN, 40, Color.WHITE);
 
+    public void renderPlayingMinigame(Graphics g){
+        
+    }
+    
     public void renderControllerWon(Graphics g) throws SlickException {
         g.setFont(f);
         g.drawString("Player " + model.getCurrentPlayer().id + " Wins!", 0, 0);

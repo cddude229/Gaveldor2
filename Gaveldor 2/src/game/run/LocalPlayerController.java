@@ -70,7 +70,7 @@ public class LocalPlayerController extends PlayerController {
         case SETTING_UP:
             // do nothing?
             break;
-        case PLAYING:
+        case PLAYING_BOARD:
             if (model.getCurrentPlayer().equals(player)){
                 updatePlayingCurrent();
             }
@@ -91,7 +91,6 @@ public class LocalPlayerController extends PlayerController {
         if (ui.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
             Point position = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY()
                     + displayY);
-            System.out.println(position);
             Piece piece = model.getPieceByPosition(position);
 
             if (ui.getInput().isKeyDown(Input.KEY_LSHIFT)) {
@@ -156,7 +155,7 @@ public class LocalPlayerController extends PlayerController {
     }
 
     @Override
-    public void renderControllerPlaying(Graphics g) throws SlickException {
+    public void renderControllerPlayingBoard(Graphics g) throws SlickException {
         Image im;
         Point position = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY()
                 + displayY);

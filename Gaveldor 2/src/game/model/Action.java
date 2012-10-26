@@ -9,9 +9,7 @@ public abstract class Action implements Serializable {
     	FORFEIT,MOVE,FACE,ATTACK,TURN_END,GAME_START,DISCONNECT/*,HEART_BEAT,RESPONSE*/
     	};
     	
-//    public int playerID;
-    public enum Move {ROCK,PAPER,SCISSORS};
-    public Type type;
+public Type type;
     
     
     public static class ForfeitAction extends Action {

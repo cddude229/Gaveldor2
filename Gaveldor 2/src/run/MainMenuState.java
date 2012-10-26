@@ -44,7 +44,6 @@ public class MainMenuState extends BasicGameState {
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
 
         listener = new StickyListener();
-        container.getInput().addListener(listener); // - This line breaks the build
         buttons = this.buildButtons();
         for (SimpleButton button : buttons) {
             listener.add(button);
@@ -54,7 +53,12 @@ public class MainMenuState extends BasicGameState {
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) {
-
+        container.getInput().addListener(listener);
+    }
+    
+    @Override
+    public void leave(GameContainer container, StateBasedGame game){
+        container.getInput().removeListener(listener);
     }
 
     @Override

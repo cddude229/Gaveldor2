@@ -1,10 +1,8 @@
 package game.model;
 
 import game.model.Action.AttackAction;
-import game.model.Action.DisconnectAction;
 import game.model.Action.FaceAction;
 import game.model.Action.ForfeitAction;
-import game.model.Action.GameStartAction;
 import game.model.Action.MoveAction;
 import game.model.Action.TurnEndAction;
 import game.model.Piece.TurnState;
@@ -23,8 +21,15 @@ public class GameModel {
     private Set<Piece> pieces;
 
     public static enum GameState {
-        SETTING_UP, PLAYING, WON, DISCONNECTED, ;
+        SETTING_UP, PLAYING_BOARD, PLAYING_MINIGAME, WON, DISCONNECTED, ;
     }
+
+    private Piece attackingPiece = null, defendingPiece = null;
+
+    public static enum MinigameMove {
+        ROCK,PAPER,SCISSORS;
+    }
+    private MinigameMove attackingMove = null, defendingMove = null;
 
     public GameState gameState = GameState.SETTING_UP;
 
@@ -37,6 +42,14 @@ public class GameModel {
 
     public void setup() {
         pieces = map.createPieces(player1, player2);
+    }
+    
+    private void startMinigame(Piece attacking, Piece defending){
+        gameState = GameState.PLAYING_MINIGAME;
+        attackingPiece = attacking;
+        defendingPiece = defending;
+        attackingMove = null;
+        defendingMove = null;
     }
 
     public Player getCurrentPlayer() {
@@ -116,6 +129,8 @@ public class GameModel {
             Piece target = getPieceByID(attackPacket.targetID);
             assert target != null;
             assert !piece.owner.equals(target.owner);
+            startMinigame(piece, target);
+            gameState = GameState.PLAYING_BOARD;
             piece.attack(target);
             if (!target.isAlive()) {
                 pieces.remove(target);
@@ -127,7 +142,7 @@ public class GameModel {
             }
             break;
         case DISCONNECT:
-            DisconnectAction disconnectPacket = (DisconnectAction) action;
+//            DisconnectAction disconnectPacket = (DisconnectAction) action;
             gameState = GameState.DISCONNECTED;
             break;
         case FORFEIT:
@@ -136,9 +151,9 @@ public class GameModel {
             gameState = GameState.WON;
             break;
         case GAME_START:
-            GameStartAction gameStartPacket = (GameStartAction) action;
+//            GameStartAction gameStartPacket = (GameStartAction) action;
             setup();
-            gameState = GameState.PLAYING;
+            gameState = GameState.PLAYING_BOARD;
             break;
         case MOVE:
             MoveAction movePacket = (MoveAction) action;
@@ -163,7 +178,7 @@ public class GameModel {
             endTurn();
             break;
         default:
-            DisconnectAction defaultPacket = (DisconnectAction) action; // why?
+//            DisconnectAction defaultPacket = (DisconnectAction) action; // why?
             // TODO
             break;
         }

@@ -15,8 +15,8 @@ public class PieceLoaderTest {
     @Test
     public void basicTest(){
         try {
-        Player player1 = new Player(1);
-        Player player2 = new Player(2);
+//        Player player1 = new Player(1);
+//        Player player2 = new Player(2);
 
         int MAP_WIDTH = 8;
         int MAP_HEIGHT = 8;
