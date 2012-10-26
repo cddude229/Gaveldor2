@@ -27,12 +27,18 @@ public class PieceTest {
 
         BackAttack[] backAttacksToCheck = new BackAttack[] {
                 // Create 'em
-                // Check them at 2,2
+                // Check opponent at d=0
                 new BackAttack(new int[] { 5, 0, 1 }, new Point(2, 2), new int[] { 5, 0, 1 }, new int[] { 2, 3, 4 }),
-                // Check them at 1,3
-                new BackAttack(new int[] { 5, 0, 1 }, new Point(1, 3), new int[] { 4, 5, 0 }, new int[] { 1, 2, 3 }),
-                // Check them at 1,5
-                new BackAttack(new int[] { 5, 0, 1 }, new Point(3, 3), new int[] { 0, 1, 2 }, new int[] { 3, 4, 5 })
+                // Check opponent at d=1
+                new BackAttack(new int[] { 0, 1, 2 }, new Point(3, 3), new int[] { 0, 1, 2 }, new int[] { 3, 4, 5 }),
+                // Check opponent at d=2
+                new BackAttack(new int[] { 1, 2, 3 }, new Point(3, 5), new int[] { 1, 2, 3 }, new int[] { 4, 5, 0 }),
+                // Check opponent at d=3
+                new BackAttack(new int[] { 2, 3, 4 }, new Point(2, 6), new int[] { 2, 3, 4 }, new int[] { 5, 0, 1 }),
+                // Check opponent at d=4
+                new BackAttack(new int[] { 3, 4, 5 }, new Point(1, 5), new int[] { 3, 4, 5 }, new int[] { 0, 1, 2 }),
+                // Check opponent at d=5
+                new BackAttack(new int[] { 4, 5, 0 }, new Point(1, 3), new int[] { 4, 5, 0 }, new int[] { 1, 2, 3 })
         // Done
         };
 
