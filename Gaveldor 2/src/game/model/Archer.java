@@ -12,8 +12,14 @@ public class Archer extends Piece {
     public void attack(Piece opponent) {
         int power = this.defaultAttackPower();
 
+        // Do double damage for back attack
         if (this.isBackAttack(opponent))
             power *= 2;
+
+        // Archers do double damage to cavalry
+        if (opponent.pieceType == PieceType.CAVALRY) {
+            power *= 2;
+        }
 
         opponent.loseHealth(power);
 
