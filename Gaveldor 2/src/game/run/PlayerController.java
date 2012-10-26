@@ -66,8 +66,8 @@ public abstract class PlayerController {
     }
 
     public void renderBoard(Graphics g) {
-        for (int i = 0; i < model.map.width; i++) {
-            for (int j = i % 2; j < model.map.height; j += 2) {
+        for (int j = 0; j < model.map.height; j++) {
+            for (int i = j % 2; i < model.map.width; i += 2) {
                 TerrainType terrain = model.map.getTerrain(i, j);
                 renderAtPosition(terrain.tile, g, i, j, 0f, 0f);
             }

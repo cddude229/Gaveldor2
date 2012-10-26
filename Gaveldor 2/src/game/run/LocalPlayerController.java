@@ -91,6 +91,7 @@ public class LocalPlayerController extends PlayerController {
         if (ui.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
             Point position = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY()
                     + displayY);
+            System.out.println(position);
             Piece piece = model.getPieceByPosition(position);
 
             if (ui.getInput().isKeyDown(Input.KEY_LSHIFT)) {
