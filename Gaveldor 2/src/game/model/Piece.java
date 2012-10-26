@@ -251,9 +251,9 @@ public abstract class Piece {
                     new Point(p.x, p.y + 4), // 3
                     new Point(p.x - 1, p.y + 3), // 3.5
                     new Point(p.x - 2, p.y + 2), // 4
-                    new Point(p.x - 2, p.y), // 5
-                    new Point(p.x - 2, p.y - 2), // 5.5
-                    new Point(p.x - 1, p.y - 3), // 6
+                    new Point(p.x - 2, p.y), // 4.5
+                    new Point(p.x - 2, p.y - 2), // 5
+                    new Point(p.x - 1, p.y - 3), // 5.5
                     // Dist=1:
                     new Point(p.x, p.y - 2), // 0
                     new Point(p.x + 1, p.y - 1), // 1
@@ -262,9 +262,17 @@ public abstract class Piece {
                     new Point(p.x - 1, p.y + 1), // 4
                     new Point(p.x - 1, p.y - 1) // 5
             };
-            return new Point[] { ret[(dir * 2) % 12], ret[(dir * 2 - 2) % 12], ret[(dir * 2 - 1) % 12],
-                    ret[(dir * 2 + 2) % 12], ret[(dir * 2 + 1) % 12], ret[dir + 12], ret[(dir + 1) % 6 + 12],
-                    ret[(dir - 1) % 6 + 12] };
+            return new Point[] {//
+            ret[(dir * 2) % 12], //
+                    // We need to shift by + 12 first because (-2 % 12) == -2
+                    ret[(dir * 2 - 2 + 12) % 12], //
+                    ret[(dir * 2 - 1 + 12) % 12],//
+                    ret[(dir * 2 + 2) % 12],//
+                    ret[(dir * 2 + 1) % 12],//
+                    ret[dir + 12],//
+                    ret[(dir + 1) % 6 + 12],//
+                    ret[(dir - 1) % 6 + 12] //
+            };
         default:
             throw new RuntimeException("Not yet implemented for d >= 3");
         }
