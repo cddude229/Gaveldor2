@@ -5,7 +5,7 @@ import util.Constants;
 public class Archer extends Piece {
 
     public Archer(Player owner, Point p, int id) {
-        super(owner, p, id);
+        super(owner, p, id, PieceType.ARCHER);
     }
 
     @Override

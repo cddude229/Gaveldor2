@@ -10,9 +10,14 @@ public abstract class Piece {
     private Point point;
     public final Player owner;
     public final int id;
+    public final PieceType pieceType;
 
     public static enum TurnState {
         MOVING, TURNING, ATTACKING, DONE;
+    }
+
+    public static enum PieceType {
+        ARCHER, CAVALRY, INFANTRY
     }
 
     public TurnState turnState = TurnState.MOVING;
@@ -23,12 +28,13 @@ public abstract class Piece {
      * @param x
      * @param y
      */
-    public Piece(Player owner, Point p, int id) {
+    public Piece(Player owner, Point p, int id, PieceType pieceType) {
         this.owner = owner;
         currentHealth = defaultHealth();
         setPosition(p);
         // pieceId = idCounter++;
         this.id = id;
+        this.pieceType = pieceType;
     }
 
     /**

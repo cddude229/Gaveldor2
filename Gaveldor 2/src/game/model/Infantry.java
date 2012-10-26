@@ -4,7 +4,7 @@ import util.Constants;
 
 public class Infantry extends Piece {
     public Infantry(Player owner, Point p, int id) {
-        super(owner, p, id);
+        super(owner, p, id, PieceType.INFANTRY);
     }
 
     @Override
