@@ -273,7 +273,7 @@ public abstract class Piece {
                     ret[(dir * 2 + 1) % 12],//
                     ret[dir + 12],//
                     ret[(dir + 1) % 6 + 12],//
-                    ret[(dir - 1) % 6 + 12] //
+                    ret[(dir - 1 + 6) % 6 + 12] //
             };
         default:
             throw new RuntimeException("Not yet implemented for d >= 3");
