@@ -54,6 +54,7 @@ public abstract class Piece {
         Point p = this.getPosition();
         Point o = opponent.getPosition();
         if (Math.abs(p.x - o.x) + Math.abs(p.y - o.y) == 2 || !(Math.abs(p.x - o.x) == 2 && p.y == o.y)) {
+            System.out.println("dist1");
             Point[] ret = { new Point(p.x, p.y - 2), // 0
                     new Point(p.x + 1, p.y - 1), // 1
                     new Point(p.x + 1, p.y + 1), // 2
@@ -68,6 +69,7 @@ public abstract class Piece {
                 }
             }
         } else {
+            System.out.println("dist2");
             Point[] ret = { new Point(p.x, p.y - 4), // 0
                     new Point(p.x + 1, p.y - 3), // .5
                     new Point(p.x + 2, p.y - 2), // 1
@@ -88,7 +90,7 @@ public abstract class Piece {
         }
 
         int oppDir = opponent.getDirection();
-        return attackDir == oppDir || attackDir == ((oppDir + 1) % 6) || attackDir == ((oppDir - 1) % 6);
+        return attackDir == oppDir || attackDir == ((oppDir + 1) % 6) || attackDir == ((oppDir - 1 + 6) % 6);
     }
 
     /**
