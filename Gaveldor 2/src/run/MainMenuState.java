@@ -29,14 +29,16 @@ public class MainMenuState extends BasicGameState {
     private SimpleButton connectBtn;
     private SimpleButton creditBtn;
     private SimpleButton exitBtn;
-    private static final int bWidth = 100;
-    private static final int bHeight = 100;
+    private static final int bWidth = 200;
+    private static final int bHeight = 50;
     private ArrayList<int[]> locations = new ArrayList<int[]>();
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
+        int yLoc = 75;
         for (int i = 0; i < 5; i++) {
-            locations.add(this.getLocation(bWidth, bHeight));
+            locations.add(new int[] { this.getxLoc(bWidth), yLoc });
+            yLoc += 100;
         }
         Rectangle playRect = new Rectangle(locations.get(0)[0], locations.get(0)[1], bWidth, bHeight);
         Rectangle instructRect = new Rectangle(locations.get(1)[0], locations.get(1)[1], bWidth, bHeight);
@@ -45,7 +47,7 @@ public class MainMenuState extends BasicGameState {
         Rectangle exitRect = new Rectangle(locations.get(4)[0], locations.get(4)[1], bWidth, bHeight);
 
         Sound s = Resources.getSound("/assets/audio/swordSlash.ogg");
-        Image im = new Image(10, 10);
+        Image im = new Image(bWidth, bHeight);
         im.getGraphics().setColor(Color.blue);
         im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
         im.getGraphics().flush();
@@ -58,11 +60,17 @@ public class MainMenuState extends BasicGameState {
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) {
+
     }
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        // TODO
+        g.drawString("Welcome to Galvedor 2: The Engaveling of Ambidextria", 0, 0);
+        playBtn.render(container, g);
+        instructBtn.render(container, g);
+        connectBtn.render(container, g);
+        creditBtn.render(container, g);
+        exitBtn.render(container, g);
     }
 
     @Override
@@ -96,12 +104,10 @@ public class MainMenuState extends BasicGameState {
      * @param height
      * @return an int[] containing the screen location of the buttons
      */
-    public int[] getLocation(int width, int height) {
+    public int getxLoc(int width) {
         int scnWidth = Constants.WINDOW_WIDTH;
-        int scnHeight = Constants.WINDOW_HEIGHT;
-        int locWidth = scnWidth / 2 - width / 2;
-        int locHeight = scnHeight / 2 - (height / 2 + 20 * this.locations.size());
-        return new int[] { locWidth, locHeight };
+        int xLoc = scnWidth / 2 - width / 2;
+        return xLoc;
     }
 
 }
