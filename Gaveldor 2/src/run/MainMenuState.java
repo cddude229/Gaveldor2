@@ -38,6 +38,9 @@ public class MainMenuState extends BasicGameState {
     ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
 
     @Override
+    /**
+     * Builds buttons and adds listeners to game. This isn't fully functional.
+     */
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
 
         listener = new StickyListener();
@@ -109,6 +112,13 @@ public class MainMenuState extends BasicGameState {
         return xLoc;
     }
 
+    /**
+     * This function builds the buttons and adds the listeners. returning them
+     * in an arrayList. The arrayList is useful for update iterations.
+     * 
+     * @return an arrayList of the five buttons
+     * @throws SlickException
+     */
     public ArrayList<SimpleButton> buildButtons() throws SlickException {
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
@@ -160,6 +170,10 @@ public class MainMenuState extends BasicGameState {
         return buttons;
     }
 
+    /**
+     * Adds the listeners to the system. Currently only the playbutton is
+     * implemented.
+     */
     private void createListeners() {
         playBtn.addListener(new ClickListener() {
 
