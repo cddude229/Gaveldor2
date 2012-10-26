@@ -3,13 +3,8 @@ package game.model;
 import util.Constants;
 
 public class Infantry extends Piece {
-    // private int health, attackPower, attackRange, moveRange;
     public Infantry(Player owner, Point p, int id) {
         super(owner, p, id);
-        // this.health = Constants.INFANTRY_HEALTH_POINTS;
-        // this.attackPower = Constants.INFANTRY_ATTACK_POWER;
-        // this.attackRange = Constants.INFANTRY_ATTACK_RANGE;
-        // this.moveRange = Constants.INFANTRY_MOVE_RANGE;
     }
 
     @Override

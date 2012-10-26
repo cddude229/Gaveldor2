@@ -1,18 +1,11 @@
 package game.model;
 
-import org.newdawn.slick.Image;
-
 import util.Constants;
 
 public class Archer extends Piece {
-    private int health, attackPower, attackRange, moveRange;
 
     public Archer(Player owner, Point p, int id) {
         super(owner, p, id);
-        this.health = Constants.ARCHER_HEALTH_POINTS;
-        this.attackPower = Constants.ARCHER_ATTACK_POWER;
-        this.attackRange = Constants.ARCHER_ATTACK_RANGE;
-        this.moveRange = Constants.ARCHER_MOVE_RANGE;
     }
 
     @Override
@@ -28,28 +21,22 @@ public class Archer extends Piece {
 
     @Override
     public int defaultHealth() {
-        return this.health;
+        return Constants.ARCHER_HEALTH_POINTS;
     }
 
     @Override
     public int defaultAttackPower() {
-        return this.attackPower;
+        return Constants.ARCHER_ATTACK_POWER;
     }
 
     @Override
     public int defaultAttackRange() {
-        return this.attackRange;
+        return Constants.ARCHER_ATTACK_RANGE;
     }
 
     @Override
     public int defaultMoveRange() {
-        return this.moveRange;
-    }
-
-    @Override
-    public Image getSprite() {
-        // TODO Auto-generated method stub
-        return null;
+        return Constants.ARCHER_MOVE_RANGE;
     }
 
 }

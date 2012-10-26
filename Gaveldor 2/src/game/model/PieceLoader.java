@@ -41,12 +41,10 @@ public class PieceLoader {
                     switch (rowLine.charAt(i)) {
 
                     case '1':
-
                         pieces.add(new Infantry(p1, new Point(x, y), idCounter++));
                         break;
                     case '2':
-                        // pieces.put(new Archer(p1, new Point(i,j)), new
-                        // Point(i,j));
+                        pieces.add(new Archer(p1, new Point(x, y), idCounter++));
                         break;
                     case '3':
                         // pieces.put(new Cavalry(p1, new Point(i,j)), new
@@ -57,8 +55,7 @@ public class PieceLoader {
                         pieces.add(new Infantry(p2, new Point(x, y), idCounter++));
                         break;
                     case 'b':
-                        // pieces.put(new Archer(p2, new Point(i,j)), new
-                        // Point(i,j));
+                        pieces.add(new Archer(p2, new Point(x, y), idCounter++));
                         break;
                     case 'c':
                         // pieces.put(new Cavalry(p1, new Point(i,j)), new

@@ -145,7 +145,6 @@ public class GameModel {
             piece = getPieceByID(movePacket.pieceID);
             assert piece != null;
             assert piece.turnState == TurnState.MOVING;
-            System.out.println(piece);
             piece.setPosition(movePacket.destination);
             piece.turnState = TurnState.TURNING;
             // TODO
