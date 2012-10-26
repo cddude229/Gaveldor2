@@ -222,7 +222,7 @@ public abstract class Piece {
     final public Point[] getValidFacings() {
         Point p = this.point;
         return new Point[] { new Point(p.x, p.y - 2), new Point(p.x + 1, p.y - 1), new Point(p.x + 1, p.y + 1),
-                new Point(p.x, p.y + 2), new Point(p.x - 1, p.y + 1), new Point(p.x - 1, p.y - 1), new Point(p.x, p.y) };
+                new Point(p.x, p.y + 2), new Point(p.x - 1, p.y + 1), new Point(p.x - 1, p.y - 1) };
     }
 
     /**
@@ -231,16 +231,17 @@ public abstract class Piece {
      * @return
      */
     final public Point[] getValidAttacks() {
-        // TODO: This only takes into account dist=1, not dist=2.
         Point p = this.getPosition();
         int dir = this.getDirection();
-        if (defaultAttackRange() == 1) {
-            Point[] ret = new Point[] { new Point(p.x, p.y - 2), new Point(p.x + 1, p.y - 1),
-                    new Point(p.x + 1, p.y + 1), new Point(p.x, p.y + 2), new Point(p.x - 1, p.y + 1),
-                    new Point(p.x - 1, p.y - 1), new Point(p.x, p.y) };
+        Point[] ret;
+        switch (defaultAttackRange()) {
+        case 1:
+            ret = new Point[] { new Point(p.x, p.y - 2), new Point(p.x + 1, p.y - 1), new Point(p.x + 1, p.y + 1),
+                    new Point(p.x, p.y + 2), new Point(p.x - 1, p.y + 1), new Point(p.x - 1, p.y - 1) };
             return new Point[] { ret[dir], ret[(dir + 1 + 6) % 6], ret[(dir - 1 + 6) % 6] };
-        } else {
-            Point[] ret = new Point[] {
+        case 2:
+            ret = new Point[] {
+                    // Dist=2:
                     new Point(p.x, p.y - 4), // 0
                     new Point(p.x + 1, p.y - 3), // .5
                     new Point(p.x + 2, p.y - 2), // 1
@@ -253,12 +254,19 @@ public abstract class Piece {
                     new Point(p.x - 2, p.y), // 5
                     new Point(p.x - 2, p.y - 2), // 5.5
                     new Point(p.x - 1, p.y - 3), // 6
-                    new Point(p.x, p.y - 2), // move length 1
-                    new Point(p.x + 1, p.y - 1), new Point(p.x + 1, p.y + 1), new Point(p.x, p.y + 2),
-                    new Point(p.x - 1, p.y + 1), new Point(p.x - 1, p.y - 1), new Point(p.x, p.y) };
+                    // Dist=1:
+                    new Point(p.x, p.y - 2), // 0
+                    new Point(p.x + 1, p.y - 1), // 1
+                    new Point(p.x + 1, p.y + 1), // 2
+                    new Point(p.x, p.y + 2), // 3
+                    new Point(p.x - 1, p.y + 1), // 4
+                    new Point(p.x - 1, p.y - 1) // 5
+            };
             return new Point[] { ret[(dir * 2) % 12], ret[(dir * 2 - 2) % 12], ret[(dir * 2 - 1) % 12],
                     ret[(dir * 2 + 2) % 12], ret[(dir * 2 + 1) % 12], ret[dir + 12], ret[(dir + 1) % 6 + 12],
                     ret[(dir - 1) % 6 + 12] };
+        default:
+            throw new RuntimeException("Not yet implemented for d >= 3");
         }
     }
 
