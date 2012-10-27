@@ -29,7 +29,8 @@ public class MainMenuState extends BasicGameState {
     public static final int STATE_ID = Game.allocateStateID();
     private SimpleButton playBtn;
     private SimpleButton instructBtn;
-    private SimpleButton connectBtn;
+    private SimpleButton hostBtn;
+    private SimpleButton joinBtn;
     private SimpleButton creditBtn;
     private SimpleButton exitBtn;
     private StickyListener listener;
@@ -45,6 +46,7 @@ public class MainMenuState extends BasicGameState {
 
         listener = new StickyListener();
         buttons = this.buildButtons();
+        container.getInput().addListener(listener);
         for (SimpleButton button : buttons) {
             listener.add(button);
         }
@@ -69,8 +71,9 @@ public class MainMenuState extends BasicGameState {
         g.drawString("Press C to connect to localhost.", 0, 150);
         g.drawString("Close the window to exit.", 0, 200);
         playBtn.render(container, g);
-        instructBtn.render(container, g);
-        connectBtn.render(container, g);
+        hostBtn.render(container, g);
+        joinBtn.render(container, g);
+        instructBtn.render(container,g);
         creditBtn.render(container, g);
         exitBtn.render(container, g);
     }
@@ -125,40 +128,31 @@ public class MainMenuState extends BasicGameState {
     public ArrayList<SimpleButton> buildButtons() throws SlickException {
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
+            System.out.println(yLoc);
             locations.add(new int[] { this.getxLoc(bWidth), yLoc });
             yLoc += 100;
         }
         // create rectangles for buttons
         Rectangle playRect = new Rectangle(locations.get(0)[0], locations.get(0)[1], bWidth, bHeight);
-        Rectangle instructRect = new Rectangle(locations.get(1)[0], locations.get(1)[1], bWidth, bHeight);
-        Rectangle connectRect = new Rectangle(locations.get(2)[0], locations.get(2)[1], bWidth, bHeight);
-        Rectangle creditRect = new Rectangle(locations.get(3)[0], locations.get(3)[1], bWidth, bHeight);
-        Rectangle exitRect = new Rectangle(locations.get(4)[0], locations.get(4)[1], bWidth, bHeight);
+        Rectangle hostRect = new Rectangle(locations.get(1)[0], locations.get(1)[1], bWidth, bHeight);
+        Rectangle joinRect = new Rectangle(locations.get(2)[0], locations.get(2)[1], bWidth, bHeight);
+        Rectangle instructRect = new Rectangle(locations.get(3)[0], locations.get(3)[1], bWidth, bHeight);
+        Rectangle creditRect = new Rectangle(locations.get(4)[0], locations.get(4)[1], bWidth, bHeight);
+        Rectangle exitRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
 
-        // create unclicked image
+        // create play Image
         Sound s = Resources.getSound("/assets/audio/swordSlash.ogg");
-        Image im = new Image(bWidth, bHeight);
-        im.getGraphics().setColor(Color.blue);
-        im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-        im.getGraphics().setColor(Color.white);
-        im.getGraphics().drawString("Press L to begin", 0, 0);
-        im.getGraphics().flush();
-
-        // the image that appears if the game is clicked
-        Image clickIm = new Image(bWidth, bHeight);
-        clickIm.getGraphics().setColor(Color.green);
-        clickIm.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-        clickIm.getGraphics().setColor(Color.white);
-        clickIm.getGraphics().drawString("Press L to begin", 0, 0);
-        clickIm.getGraphics().flush();
+        ArrayList<Image> images = this.makeImages();
+        System.out.println(images.size());
 
         // add buttons
-        playBtn = new SimpleButton(playRect, im, clickIm, s);
-        instructBtn = new SimpleButton(instructRect, im, clickIm, s);
-        connectBtn = new SimpleButton(connectRect, im, clickIm, s);
-        creditBtn = new SimpleButton(creditRect, im, clickIm, s);
-        exitBtn = new SimpleButton(exitRect, im, clickIm, s);
+        playBtn = new SimpleButton(playRect, images.get(0), images.get(1), s);
+        hostBtn = new SimpleButton(hostRect, images.get(2), images.get(3), s);
+        joinBtn = new SimpleButton(joinRect, images.get(4), images.get(5), s);
+        instructBtn = new SimpleButton(instructRect, images.get(6), images.get(7), s);
+        creditBtn = new SimpleButton(creditRect, images.get(8), images.get(9), s);
+        exitBtn = new SimpleButton(exitRect, images.get(10), images.get(11), s);
 
         // create listeners
         createListeners();
@@ -166,8 +160,9 @@ public class MainMenuState extends BasicGameState {
         // add to array of buttons
         ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
         buttons.add(playBtn);
+        buttons.add(hostBtn);
+        buttons.add(joinBtn);
         buttons.add(instructBtn);
-        buttons.add(connectBtn);
         buttons.add(creditBtn);
         buttons.add(exitBtn);
         return buttons;
@@ -205,6 +200,51 @@ public class MainMenuState extends BasicGameState {
             }
 
         });
+    }
+    
+    public ArrayList<Image> makeImages() throws SlickException {
+        ArrayList<Image> images = new ArrayList<Image>();
+        for (int i = 0; i <6; i++){
+            Image im = new Image(bWidth, bHeight);
+            im.getGraphics().setColor(Color.blue);
+            im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+            im.getGraphics().setColor(Color.white);
+            Image clickPlay = new Image(bWidth, bHeight);
+            clickPlay.getGraphics().setColor(Color.green);
+            clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+            clickPlay.getGraphics().setColor(Color.white);
+            switch (i){
+            case 0:
+                im.getGraphics().drawString("Play Local Match", 0, 0);
+                clickPlay.getGraphics().drawString("Play Local Match", 0, 0);
+                break;
+            case 1:
+                im.getGraphics().drawString("Host a Match", 0, 0);
+                clickPlay.getGraphics().drawString("Host a Match", 0, 0);
+                break;
+            case 2:
+                im.getGraphics().drawString("Join a Match", 0, 0);
+                clickPlay.getGraphics().drawString("Join a Match", 0, 0);
+                break;
+            case 3:
+                im.getGraphics().drawString("Instructions", 0, 0);
+                clickPlay.getGraphics().drawString("Instructions", 0, 0);
+                break;
+            case 4:
+                im.getGraphics().drawString("Credits", 0, 0);
+                clickPlay.getGraphics().drawString("Credits", 0, 0);
+                break;
+            case 5:
+                im.getGraphics().drawString("Exit", 0, 0);
+                clickPlay.getGraphics().drawString("Exit", 0, 0);
+                break;
+            }
+            im.getGraphics().flush();
+            clickPlay.getGraphics().flush();
+            images.add(im);
+            images.add(clickPlay);
+        }
+        return images;
     }
 
 }
