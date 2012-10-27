@@ -21,7 +21,6 @@ import util.Resources;
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
 import com.aem.sticky.button.SimpleButton;
-import com.aem.sticky.button.events.ButtonListener;
 import com.aem.sticky.button.events.ClickListener;
 
 public class MainMenuState extends BasicGameState {
@@ -45,7 +44,7 @@ public class MainMenuState extends BasicGameState {
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
 
         listener = new StickyListener();
-        buttons = this.buildButtons();
+        buttons = this.buildButtons(container, game);
         container.getInput().addListener(listener);
         for (SimpleButton button : buttons) {
             listener.add(button);
@@ -66,10 +65,10 @@ public class MainMenuState extends BasicGameState {
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         g.drawString("Welcome to Gaveldor 2: The Engaveling of Ambidextria", 0, 0);
-        g.drawString("Press L to begin", 0, 50);
-        g.drawString("Press H to host match.", 0, 100);
-        g.drawString("Press C to connect to localhost.", 0, 150);
-        g.drawString("Close the window to exit.", 0, 200);
+        g.drawString("Press H to host match.", 0, 50);
+        g.drawString("Press C to connect to localhost.", 0, 100);
+        g.drawString("In game shift + click moves characters", 0, 150);
+        g.drawString("Close the window or click 'exit' to exit.", 0, 200);
         playBtn.render(container, g);
         hostBtn.render(container, g);
         joinBtn.render(container, g);
@@ -125,7 +124,7 @@ public class MainMenuState extends BasicGameState {
      * @return an arrayList of the five buttons
      * @throws SlickException
      */
-    public ArrayList<SimpleButton> buildButtons() throws SlickException {
+    public ArrayList<SimpleButton> buildButtons(GameContainer container, StateBasedGame game) throws SlickException {
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
         for (int i = 0; i < 6; i++) {
@@ -155,7 +154,7 @@ public class MainMenuState extends BasicGameState {
         exitBtn = new SimpleButton(exitRect, images.get(10), images.get(11), s);
 
         // create listeners
-        createListeners();
+        createListeners(container,game);
 
         // add to array of buttons
         ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
@@ -172,33 +171,30 @@ public class MainMenuState extends BasicGameState {
      * Adds the listeners to the system. Currently only the playbutton is
      * implemented.
      */
-    private void createListeners() {
+    private void createListeners(final GameContainer container, final StateBasedGame game) {
         playBtn.addListener(new ClickListener() {
 
             public void onClick(Button clicked, float mx, float my) {
-                System.out.println("Button clicked");
+                System.out.println("true");
+                try {
+                    ((Game) game).startLocalMatch("/assets/maps/basic");
+                } catch (GameException e) {
+                    e.printStackTrace();
+                }
+                game.enterState(PlayGameState.STATE_ID);
             }
 
-            public void onDoubleClick(Button clicked, float mx, float my) {
-                System.out.println("Button double clicked");
-            }
-
-            public void onRightClick(Button clicked, float mx, float my) {
-                System.out.println("Button right clicked");
-            }
-
+            public void onDoubleClick(Button clicked, float mx, float my) {}
+            public void onRightClick(Button clicked, float mx, float my) {}
         });
-
-        playBtn.addListener(new ButtonListener() {
-
-            public void onMouseEnter(Button b) {
-                System.out.println("Button occupied");
+        exitBtn.addListener(new ClickListener(){
+            public void onClick(Button clicked, float mx, float my) {
+                container.exit();
+                System.exit(0);
             }
 
-            public void onMouseExit(Button b) {
-                System.out.println("Button empty");
-            }
-
+            public void onDoubleClick(Button clicked, float mx, float my) {}
+            public void onRightClick(Button clicked, float mx, float my) {}
         });
     }
     
