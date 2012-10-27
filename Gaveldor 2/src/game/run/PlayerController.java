@@ -62,7 +62,11 @@ public abstract class PlayerController {
     private static UnicodeFont f = Constants.loadFont("Arial Monospaced", Font.PLAIN, 40, Color.WHITE);
 
     public void renderPlayingMinigame(Graphics g){
-        
+        //TODO, obviously
+        g.setFont(f);
+        g.drawString("MINIGAME", 0, 0);
+        g.drawString(String.valueOf(model.getMinigame().attackingMove), 0, 100);
+        g.drawString(String.valueOf(model.getMinigame().defendingMove), 400, 100);
     }
     
     public void renderControllerWon(Graphics g) throws SlickException {

@@ -1,15 +1,21 @@
 package game.model;
 
+import game.model.GameModel.MinigameModel.MinigameMove;
+
 import java.io.Serializable;
 
 public abstract class Action implements Serializable {
 
     public static final long serialVersionUID = 1L;
-    public enum Type {
-    	FORFEIT,MOVE,FACE,ATTACK,TURN_END,GAME_START,DISCONNECT/*,HEART_BEAT,RESPONSE*/
-    	};
+    public enum ActionType {
+    	FORFEIT,MOVE,FACE,ATTACK,TURN_END,GAME_START,DISCONNECT, MAKE_MINIGAME_MOVE;/*,HEART_BEAT,RESPONSE*/
+    	}
     	
-public Type type;
+    	public final ActionType type;
+    	
+    	public Action(ActionType type){
+    	    this.type = type;
+    	}
     
     
     public static class ForfeitAction extends Action {
@@ -19,7 +25,7 @@ public Type type;
         public final int playerID;
         
         public ForfeitAction(Player player) {
-    		this.type = Type.FORFEIT;
+    		super(ActionType.FORFEIT);
     		this.playerID = player.id;
     	}
     }
@@ -29,7 +35,7 @@ public Type type;
         private static final long serialVersionUID = 6305597468815847402L;
 
         public GameStartAction() {
-    		this.type = Type.GAME_START;
+    		super(ActionType.GAME_START);
     	}
     }
     
@@ -38,7 +44,7 @@ public Type type;
         private static final long serialVersionUID = -5895590625354734189L;
 
         public DisconnectAction() {
-    		this.type = Type.DISCONNECT;
+    		super(ActionType.DISCONNECT);
     	}
     }
     
@@ -62,6 +68,20 @@ public Type type;
     		this.player = player;
     	}
     } */
+    
+    public static class MakeMinigameMoveAction extends Action{
+
+        private static final long serialVersionUID = 9022778930576890264L;
+        
+        public final int playerID;
+        public final MinigameMove move;
+        
+        public MakeMinigameMoveAction(MinigameMove move, Player player) {
+            super(ActionType.MAKE_MINIGAME_MOVE);
+            this.move = move;
+            this.playerID = player.id;
+        }
+    }
 
     public static class AttackAction extends Action {
 
@@ -69,9 +89,9 @@ public Type type;
         public final int pieceID, targetID;
     	
     	public AttackAction(Piece piece, Piece target) {
+            super(ActionType.ATTACK);
     	    pieceID = piece.id;
     	    targetID = target.id;
-    		this.type = Type.ATTACK;
     	}
     }
     
@@ -82,9 +102,9 @@ public Type type;
     	public final Point destination;
     	
     	public MoveAction(Piece piece, Point destination) {
+            super(ActionType.MOVE);
     		this.pieceID = piece.id;
     		this.destination = destination;
-    		this.type = Type.MOVE;
     	}
     }
     
@@ -95,9 +115,9 @@ public Type type;
         public final int direction;
         
         public FaceAction(Piece piece, int direction) {
+            super(ActionType.FACE);
             this.pieceID = piece.id;
             this.direction = direction;
-            this.type = Type.FACE;
         }
     }
     
@@ -108,7 +128,7 @@ public Type type;
         public final int playerID;
         
         public TurnEndAction(Player player) {
-            this.type = Type.TURN_END;
+            super(ActionType.TURN_END);
             this.playerID = player.id;
         }
     }

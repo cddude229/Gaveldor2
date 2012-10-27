@@ -1,7 +1,9 @@
 package game.run;
 
 import game.model.Action;
+import game.model.Action.MakeMinigameMoveAction;
 import game.model.GameModel;
+import game.model.GameModel.MinigameModel.MinigameMove;
 import game.model.Piece;
 import game.model.Player;
 import game.model.Point;
@@ -52,7 +54,9 @@ public class LocalPlayerController extends PlayerController {
             displayX += (placementX - .9) * .25 * Constants.WINDOW_WIDTH;
         }
         displayX = Math.max(displayX, 0);
-        displayX = Math.min(displayX, model.map.getPixelWidth() - Constants.WINDOW_WIDTH);
+        int maxX = model.map.getPixelWidth() - Constants.WINDOW_WIDTH;
+        maxX = Math.max(maxX, maxX / 2);
+        displayX = Math.min(displayX, maxX);
 
         placementY = Math.max(placementY, 0);
         placementY = Math.min(placementY, 1);
@@ -62,7 +66,9 @@ public class LocalPlayerController extends PlayerController {
             displayY += (placementY - .9) * .25 * Constants.WINDOW_HEIGHT;
         }
         displayY = Math.max(displayY, 0);
-        displayY = Math.min(displayY, model.map.getPixelHeight() - Constants.WINDOW_HEIGHT);
+        int maxY = model.map.getPixelHeight() - Constants.WINDOW_HEIGHT;
+        maxY = Math.max(maxY, maxY / 2);
+        displayY = Math.min(displayY, maxY);
     }
 
     private void update() {
@@ -72,8 +78,16 @@ public class LocalPlayerController extends PlayerController {
             break;
         case PLAYING_BOARD:
             if (model.getCurrentPlayer().equals(player)){
-                updatePlayingCurrent();
+                updatePlayingBoardCurrent();
             }
+            break;
+        case PLAYING_MINIGAME:
+            if (model.getCurrentPlayer().equals(player)){
+                updatePlayingMinigameAttack();
+            } else{
+                updatePlayingMinigameDefend();
+            }
+            //TODO
             break;
         case DISCONNECTED:
             // TODO
@@ -86,11 +100,12 @@ public class LocalPlayerController extends PlayerController {
         }
     }
 
-    private void updatePlayingCurrent() {
+    private void updatePlayingBoardCurrent() {
         updateMousePan();
         if (ui.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
             Point position = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY()
                     + displayY);
+            System.out.println(position);
             Piece piece = model.getPieceByPosition(position);
 
             if (ui.getInput().isKeyDown(Input.KEY_LSHIFT)) {
@@ -137,6 +152,26 @@ public class LocalPlayerController extends PlayerController {
         if (ui.getInput().isKeyPressed(Input.KEY_E)) {
             selectedPiece = null;
             actionQueue.add(new Action.TurnEndAction(player));
+        }
+    }
+    
+    public void updatePlayingMinigameAttack(){
+        if (ui.getInput().isKeyDown(Input.KEY_A)){
+            actionQueue.add(new MakeMinigameMoveAction(MinigameMove.HIGH, player));
+        } else if (ui.getInput().isKeyDown(Input.KEY_S)){
+            actionQueue.add(new MakeMinigameMoveAction(MinigameMove.MID, player));
+        } else if (ui.getInput().isKeyDown(Input.KEY_D)){
+            actionQueue.add(new MakeMinigameMoveAction(MinigameMove.LOW, player));
+        }
+    }
+    
+    public void updatePlayingMinigameDefend(){
+        if (ui.getInput().isKeyDown(Input.KEY_J)){
+            actionQueue.add(new MakeMinigameMoveAction(MinigameMove.HIGH, player));
+        } else if (ui.getInput().isKeyDown(Input.KEY_K)){
+            actionQueue.add(new MakeMinigameMoveAction(MinigameMove.MID, player));
+        } else if (ui.getInput().isKeyDown(Input.KEY_L)){
+            actionQueue.add(new MakeMinigameMoveAction(MinigameMove.LOW, player));
         }
     }
 
