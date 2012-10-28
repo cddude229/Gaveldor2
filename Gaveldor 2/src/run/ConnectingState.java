@@ -5,12 +5,14 @@ import game.run.GameException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -22,15 +24,12 @@ import com.aem.sticky.button.Button;
 import com.aem.sticky.button.SimpleButton;
 import com.aem.sticky.button.events.ClickListener;
 
-public class MainMenuState extends BasicGameState {
+public class ConnectingState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
-    private SimpleButton playBtn;
-    private SimpleButton instructBtn;
-    private SimpleButton hostBtn;
-    private SimpleButton joinBtn;
-    private SimpleButton creditBtn;
-    private SimpleButton exitBtn;
+    private SimpleButton connectBtn;
+    private SimpleButton backBtn;
+    private TextField ipBox;
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
@@ -44,7 +43,6 @@ public class MainMenuState extends BasicGameState {
 
         listener = new StickyListener();
         buttons = this.buildButtons(container, game);
-        game.enterState(MainMenuState.STATE_ID);
         container.getInput().addListener(listener);
         for (SimpleButton button : buttons) {
             listener.add(button);
@@ -64,17 +62,9 @@ public class MainMenuState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        g.drawString("Welcome to Gaveldor 2: The Engaveling of Ambidextria", 0, 0);
-        g.drawString("Press H to host match.", 0, 50);
-        g.drawString("Press C to connect to localhost.", 0, 100);
-        g.drawString("In game shift + click moves characters", 0, 150);
-        g.drawString("Close the window or click 'exit' to exit.", 0, 200);
-        playBtn.render(container, g);
-        hostBtn.render(container, g);
-        joinBtn.render(container, g);
-        instructBtn.render(container,g);
-        creditBtn.render(container, g);
-        exitBtn.render(container, g);
+        backBtn.render(container, g);
+        connectBtn.render(container, g);
+        ipBox.render(container, g);
     }
 
     @Override
@@ -118,37 +108,29 @@ public class MainMenuState extends BasicGameState {
             yLoc += 100;
         }
         // create rectangles for buttons
-        Rectangle playRect = new Rectangle(locations.get(0)[0], locations.get(0)[1], bWidth, bHeight);
-        Rectangle hostRect = new Rectangle(locations.get(1)[0], locations.get(1)[1], bWidth, bHeight);
-        Rectangle joinRect = new Rectangle(locations.get(2)[0], locations.get(2)[1], bWidth, bHeight);
-        Rectangle instructRect = new Rectangle(locations.get(3)[0], locations.get(3)[1], bWidth, bHeight);
-        Rectangle creditRect = new Rectangle(locations.get(4)[0], locations.get(4)[1], bWidth, bHeight);
-        Rectangle exitRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
+        Rectangle backRect = new Rectangle(locations.get(5)[0] - 300, locations.get(5)[1], bWidth, bHeight);
+        Rectangle connectRect = new Rectangle(locations.get(3)[0], locations.get(3)[1], bWidth, bHeight);
 
         // create play Image
         Sound s = Resources.getSound("/assets/audio/swordSlash.ogg");
         ArrayList<Image> images = this.makeImages();
         System.out.println(images.size());
-
+        Font defaultFont = images.get(0).getGraphics().getFont();
+        ipBox = new TextField(container,defaultFont,locations.get(2)[0],locations.get(2)[1],bWidth,bHeight);
+        ipBox.setBackgroundColor(Color.white);
+        ipBox.setTextColor(Color.black);
+        
         // add buttons
-        playBtn = new SimpleButton(playRect, images.get(0), images.get(1), s);
-        hostBtn = new SimpleButton(hostRect, images.get(2), images.get(3), s);
-        joinBtn = new SimpleButton(joinRect, images.get(4), images.get(5), s);
-        instructBtn = new SimpleButton(instructRect, images.get(6), images.get(7), s);
-        creditBtn = new SimpleButton(creditRect, images.get(8), images.get(9), s);
-        exitBtn = new SimpleButton(exitRect, images.get(10), images.get(11), s);
+        backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
+        connectBtn = new SimpleButton(connectRect, images.get(2), images.get(3), s);
 
         // create listeners
         createListeners(container,game);
 
         // add to array of buttons
         ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
-        buttons.add(playBtn);
-        buttons.add(hostBtn);
-        buttons.add(joinBtn);
-        buttons.add(instructBtn);
-        buttons.add(creditBtn);
-        buttons.add(exitBtn);
+        buttons.add(connectBtn);
+        buttons.add(backBtn);
         return buttons;
     }
 
@@ -157,54 +139,27 @@ public class MainMenuState extends BasicGameState {
      * implemented.
      */
     private void createListeners(final GameContainer container, final StateBasedGame game) {
-        playBtn.addListener(new ClickListener() {
+        backBtn.addListener(new ClickListener() {
 
+            public void onClick(Button clicked, float mx, float my) {
+                System.out.println("true");
+                game.enterState(MainMenuState.STATE_ID);
+            }
+
+            public void onDoubleClick(Button clicked, float mx, float my) {}
+            public void onRightClick(Button clicked, float mx, float my) {}
+        });
+        connectBtn.addListener(new ClickListener(){
             public void onClick(Button clicked, float mx, float my) {
                 System.out.println("true");
                 try {
-                    ((Game) game).startLocalMatch("/assets/maps/basic");
+                    ((Game) game).startClientRemoteMatch("/assets/maps/basic",ipBox.getText());
+                    game.enterState(JoinGameState.STATE_ID);
                 } catch (GameException e) {
-                    e.printStackTrace();
-                }
-                game.enterState(PlayGameState.STATE_ID);
-            }
-
-            public void onDoubleClick(Button clicked, float mx, float my) {}
-            public void onRightClick(Button clicked, float mx, float my) {}
-        });
-        exitBtn.addListener(new ClickListener(){
-            public void onClick(Button clicked, float mx, float my) {
-                container.exit();
-                System.exit(0);
-            }
-
-            public void onDoubleClick(Button clicked, float mx, float my) {}
-            public void onRightClick(Button clicked, float mx, float my) {}
-        });
-        
-        hostBtn.addListener(new ClickListener() {
-
-            public void onClick(Button clicked, float mx, float my) {
-                System.out.println("true");
-                try {
-                    ((Game) game).startHostRemoteMatch("/assets/maps/basic");
-                    game.enterState(HostGameState.STATE_ID);
-                } catch (GameException e) {
-                    e.printStackTrace();
+                    ipBox.setText(e.getMessage());
                 }
             }
-            
-            public void onDoubleClick(Button clicked, float mx, float my) {}
-            public void onRightClick(Button clicked, float mx, float my) {}
-        });
-        
-        joinBtn.addListener(new ClickListener() {
 
-            public void onClick(Button clicked, float mx, float my) {
-                System.out.println("true");
-                game.enterState(ConnectingState.STATE_ID);
-            }
-            
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });
@@ -224,28 +179,12 @@ public class MainMenuState extends BasicGameState {
             clickPlay.getGraphics().setColor(Color.white);
             switch (i){
             case 0:
-                im.getGraphics().drawString("Play Local Match", 0, 0);
-                clickPlay.getGraphics().drawString("Play Local Match", 0, 0);
+                im.getGraphics().drawString("Back", 0, 0);
+                clickPlay.getGraphics().drawString("Back", 0, 0);
                 break;
             case 1:
-                im.getGraphics().drawString("Host a Match", 0, 0);
-                clickPlay.getGraphics().drawString("Host a Match", 0, 0);
-                break;
-            case 2:
-                im.getGraphics().drawString("Join a Match", 0, 0);
-                clickPlay.getGraphics().drawString("Join a Match", 0, 0);
-                break;
-            case 3:
-                im.getGraphics().drawString("Instructions", 0, 0);
-                clickPlay.getGraphics().drawString("Instructions", 0, 0);
-                break;
-            case 4:
-                im.getGraphics().drawString("Credits", 0, 0);
-                clickPlay.getGraphics().drawString("Credits", 0, 0);
-                break;
-            case 5:
-                im.getGraphics().drawString("Exit", 0, 0);
-                clickPlay.getGraphics().drawString("Exit", 0, 0);
+                im.getGraphics().drawString("Connect", 0, 0);
+                clickPlay.getGraphics().drawString("Connect", 0, 0);
                 break;
             }
             im.getGraphics().flush();

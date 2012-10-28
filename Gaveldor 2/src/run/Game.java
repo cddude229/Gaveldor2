@@ -65,14 +65,16 @@ public class Game extends StateBasedGame {
     public void initStatesList(GameContainer container) throws SlickException {
         addState(new MainMenuState());
         addState(new HostGameState());
-        addState(new JoinGameState());
         addState(new PlayGameState());
+        addState(new ConnectingState());
+        addState(new JoinGameState());
     }
 
     public static void main(String[] args) throws SlickException, IOException, URISyntaxException {
         Resources.setupLWJGLNatives("/lwjgl_natives");
 
-        AppGameContainer app = new AppGameContainer(new Game());
+        Game start = new Game();
+        AppGameContainer app = new AppGameContainer(start);
         app.setVerbose(false);
         app.setDisplayMode(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, Constants.WINDOW_FULLSCREEN);
         app.setVSync(true);
