@@ -51,7 +51,15 @@ public class InstructionState extends BasicGameState {
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         backBtn.render(container, g);
-        g.drawString("Shift + click moves characters", 250, 150);
+        g.drawString("Gaveldor is a turn-based strategy game. Last one standing wins.There are three types of pieces:", 50, 50);
+        g.drawString("• Infantry (3 health, 1 move range, 1 attack range)", 100, 100);
+        g.drawString("• Archers (2 health, 1 move range, 2 attack range)", 100, 150);
+        g.drawString("• Cavalry (4 health, 2 move range, 1 attack range)", 100, 200);
+        g.drawString("Archers do 2x damage to Cavalry. Likewise, any piece attacking your opponent's back deals double damage.", 50, 250);
+        g.drawString("You can move three pieces per turn. After moving, you can pick a direction.", 50, 300);
+        g.drawString("You can only attack pieces in the spots in front of you.", 50, 350);
+        g.drawString("Because of this and back attacks, direction is important.", 50, 400);
+        g.drawString("Shift + click moves characters", 50, 450);
     }
 
 
