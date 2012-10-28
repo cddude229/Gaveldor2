@@ -286,10 +286,10 @@ public abstract class Piece {
         }
     }
 
-    public static int PointsToDirection(Point to, Point from) {
+    public static int pointsToDirection(Point to, Point from) {
         // NOTE: Only takes into account distance = 1
         // Mostly used for facing direction
-
+    
         int dx = to.x - from.x, dy = to.y - from.y;
         int direction = -1;
         switch (dy) {

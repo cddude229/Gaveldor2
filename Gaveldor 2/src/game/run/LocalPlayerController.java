@@ -124,7 +124,7 @@ public class LocalPlayerController extends PlayerController {
                     }
                     break;
                 case TURNING:
-                    int direction = Piece.PointsToDirection(position, selectedPiece.getPosition());
+                    int direction = Piece.pointsToDirection(position, selectedPiece.getPosition());
                     if (direction != -1) {
                         actionQueue.add(new Action.FaceAction(selectedPiece, direction));
                     } else {

@@ -43,7 +43,6 @@ public class ConnectingState extends BasicGameState {
 
         listener = new StickyListener();
         buttons = this.buildButtons(container, game);
-        container.getInput().addListener(listener);
         for (SimpleButton button : buttons) {
             listener.add(button);
         }
