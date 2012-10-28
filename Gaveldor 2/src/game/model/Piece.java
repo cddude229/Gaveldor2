@@ -3,7 +3,6 @@ package game.model;
 import org.newdawn.slick.Image;
 
 import util.Helpful;
-import util.Resources;
 
 public abstract class Piece {
     private int currentHealth, currentDirection;
@@ -14,10 +13,6 @@ public abstract class Piece {
 
     public static enum TurnState {
         MOVING, TURNING, ATTACKING, DONE;
-    }
-
-    public static enum PieceType {
-        ARCHER, CAVALRY, INFANTRY
     }
 
     public TurnState turnState = TurnState.MOVING;
@@ -245,7 +240,9 @@ public abstract class Piece {
      * 
      * @return
      */
-    abstract public int defaultHealth();
+    public int defaultHealth(){
+        return pieceType.defaultHealth;
+    }
 
     /**
      * What's their default attack power?
@@ -274,11 +271,7 @@ public abstract class Piece {
      * @return
      */
     public Image getSprite() {
-        String name = "/assets/graphics/units/player" + owner.id + "/" + getClass().getSimpleName().toLowerCase()
-                + "_p" + owner.id + "_h" + getHealth() + ".png";
-        Image im = Resources.getImage(name);
-        im.rotate(360f / 6 * ((getDirection()) % 6));
-        return im;
+        return pieceType.getSprite(owner.id, getHealth(), getDirection());
     }
 
     public static int pointsToDirection(Point to, Point from) {
