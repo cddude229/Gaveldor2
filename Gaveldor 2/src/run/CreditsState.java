@@ -1,8 +1,10 @@
 package run;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -24,25 +26,33 @@ public class CreditsState extends BasicGameState {
     public static final int STATE_ID = Game.allocateStateID();
     private SimpleButton backBtn;
     private StickyListener listener;
+    private GameContainer container;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
     ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
+    String[] credits;
+    HashMap<String,int[]> nameLocations = new HashMap<String,int[]>();
     
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
+        this.container = container;
         listener = new StickyListener();
         buttons = this.buildButtons(container, game);
         container.getInput().addListener(listener);
         for (SimpleButton button : buttons) {
             listener.add(button);
         }
-       
+        credits = new String[] {"Credits","Chris Dessonville: Co-Producer","Ben Greenberg: Co-Producer","Lane Pertusi: Artists","Calvin Lewis: Sound","Todd Layton: Slick Master","Andres Romero: Networking", "Jeremy Sharpe: Game Logic","Kevin White: Menu"};
+        generateLocations(credits);
+        
     }
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         backBtn.render(container, g);
-        g.drawString("Awesome People made this game!", 0, 150);
+        for (String line: this.nameLocations.keySet()){
+            g.drawString(line, nameLocations.get(line)[0], nameLocations.get(line)[1]);
+        }
     }
 
 
@@ -142,6 +152,16 @@ public class CreditsState extends BasicGameState {
             images.add(clickPlay);
         }
         return images;
+    }
+    
+    private void generateLocations(String[] credits){
+        Font defFont = container.getDefaultFont();
+        int yLoc = 50;
+        for (String line : credits){
+            int width = defFont.getWidth(line);
+            this.nameLocations.put(line, new int[] {(Constants.WINDOW_WIDTH-width)/2,yLoc});
+            yLoc += 50;
+        }
     }
 
 }
