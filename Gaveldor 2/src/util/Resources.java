@@ -46,15 +46,23 @@ public class Resources {
         return ret;
     }
     
-    public static Image getImage(String ref) throws SlickException{
-        return new Image(getResourceAsStream(ref), ref, false);
+    public static Image getImage(String ref){
+        try {
+            return new Image(getResourceAsStream(ref), ref, false);
+        } catch (SlickException e) {
+            throw new RuntimeException(e);
+        }
     }
     
-    public static Sound getSound(String ref) throws SlickException{
+    public static Sound getSound(String ref){
     	if (ref.endsWith(".wav")){
     		throw new IllegalArgumentException("We can't use WAVs, because it breaks the JAR when deployed");
     	}
-        return new Sound(getResource(ref));
+        try {
+            return new Sound(getResource(ref));
+        } catch (SlickException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     private static final String[] LWJGL_NATIVE_NAMES = new String[]{

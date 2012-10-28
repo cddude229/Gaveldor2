@@ -1,7 +1,6 @@
 package game.model;
 
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 
 import util.Resources;
 
@@ -323,13 +322,9 @@ public abstract class Piece {
     public Image getSprite() {
         String name = "/assets/graphics/units/player" + owner.id + "/" + getClass().getSimpleName().toLowerCase()
                 + "_p" + owner.id + "_h" + getHealth() + ".png";
-        try {
-            Image im = Resources.getImage(name);
-            im.rotate(360f / 6 * getDirection());
-            return im;
-        } catch (SlickException e) {
-            throw new RuntimeException(e);
-        }
+        Image im = Resources.getImage(name);
+        im.rotate(360f / 6 * getDirection());
+        return im;
     }
 
     public static int pointsToDirection(Point to, Point from) {

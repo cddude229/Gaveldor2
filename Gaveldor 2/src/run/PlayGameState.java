@@ -1,6 +1,7 @@
 package run;
 
 import game.model.Action;
+import game.model.PieceType;
 import game.model.TerrainType;
 import game.run.GameMatch;
 
@@ -19,6 +20,7 @@ public class PlayGameState extends BasicGameState {
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         TerrainType.initTiles();
+        PieceType.initSprites();
     }
 
     @Override
