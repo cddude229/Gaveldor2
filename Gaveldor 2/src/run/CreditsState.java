@@ -38,13 +38,22 @@ public class CreditsState extends BasicGameState {
         this.container = container;
         listener = new StickyListener();
         buttons = this.buildButtons(container, game);
-        container.getInput().addListener(listener);
         for (SimpleButton button : buttons) {
             listener.add(button);
         }
         credits = new String[] {"Credits","Chris Dessonville: Co-Producer","Ben Greenberg: Co-Producer","Lane Pertusi: Artists","Calvin Lewis: Sound","Todd Layton: Slick Master","Andres Romero: Networking", "Jeremy Sharpe: Game Logic","Kevin White: Menu"};
         generateLocations(credits);
         
+    }
+    
+    @Override
+    public void enter(GameContainer container, StateBasedGame game) {
+        container.getInput().addListener(listener);
+    }
+    
+    @Override
+    public void leave(GameContainer container, StateBasedGame game){
+        container.getInput().removeListener(listener);
     }
 
     @Override
