@@ -44,7 +44,6 @@ public class MainMenuState extends BasicGameState {
         listener = new StickyListener();
         buttons = this.buildButtons(container, game);
         game.enterState(MainMenuState.STATE_ID);
-        container.getInput().addListener(listener);
         for (SimpleButton button : buttons) {
             listener.add(button);
         }

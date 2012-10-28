@@ -2,6 +2,7 @@ package game.model;
 
 import org.newdawn.slick.Image;
 
+import util.Helpful;
 import util.Resources;
 
 public abstract class Piece {
@@ -31,7 +32,6 @@ public abstract class Piece {
         this.owner = owner;
         currentHealth = defaultHealth();
         setPosition(p);
-        // pieceId = idCounter++;
         this.id = id;
         this.pieceType = pieceType;
     }
@@ -53,14 +53,7 @@ public abstract class Piece {
         Point p = this.getPosition();
         Point o = opponent.getPosition();
         if (Math.abs(p.x - o.x) + Math.abs(p.y - o.y) == 2 || !(Math.abs(p.x - o.x) == 2 && p.y == o.y)) {
-            System.out.println("dist1");
-            Point[] ret = { new Point(p.x, p.y - 2), // 0
-                    new Point(p.x + 1, p.y - 1), // 1
-                    new Point(p.x + 1, p.y + 1), // 2
-                    new Point(p.x, p.y + 2), // 3
-                    new Point(p.x - 1, p.y + 1), // 4
-                    new Point(p.x - 1, p.y - 1) // 5
-            };
+            Point[] ret = Piece.getPointsFromPoint(p, 1);
 
             for (int i = 0; i < ret.length; i++) {
                 if (ret[i].equals(opponent.getPosition())) {
@@ -68,20 +61,7 @@ public abstract class Piece {
                 }
             }
         } else {
-            System.out.println("dist2");
-            Point[] ret = { new Point(p.x, p.y - 4), // 0
-                    new Point(p.x + 1, p.y - 3), // .5
-                    new Point(p.x + 2, p.y - 2), // 1
-                    new Point(p.x + 2, p.y), // 1.5
-                    new Point(p.x + 2, p.y + 2), // 2
-                    new Point(p.x + 1, p.y + 3), // 2.5
-                    new Point(p.x, p.y + 4), // 3
-                    new Point(p.x - 1, p.y + 3), // 3.5
-                    new Point(p.x - 2, p.y + 2), // 4
-                    new Point(p.x - 2, p.y), // 5
-                    new Point(p.x - 2, p.y - 2), // 5.5
-                    new Point(p.x - 1, p.y - 3), // 6
-            };
+            Point[] ret = Piece.getPointsFromPoint(p, 2);
             for (int i = 0; i < ret.length; i++) {
                 if (ret[i].equals(opponent.getPosition()))
                     attackDir = i / 2;
@@ -119,7 +99,7 @@ public abstract class Piece {
      * Set the new direction.
      * 
      * @param newDir
-     *            Must be in range 0-5 (0 = north, go clockwise)
+     *            Must be in range 0-5 (0 = east, go clockwise)
      */
     final public void setDirection(int newDir) {
         assert (newDir >= 0 && newDir < 6);
@@ -177,26 +157,16 @@ public abstract class Piece {
         Point p = this.getPosition();
         switch (defaultMoveRange()) {
         case 1:
-            return new Point[] { new Point(p.x, p.y - 2), new Point(p.x + 1, p.y - 1), new Point(p.x + 1, p.y + 1),
-                    new Point(p.x, p.y + 2), new Point(p.x - 1, p.y + 1), new Point(p.x - 1, p.y - 1),
-                    new Point(p.x, p.y) };
+            return Helpful.arrayConcatAll(
+                    Piece.getPointsFromPoint(p, 1),
+                    Piece.getPointsFromPoint(p, 0)
+            );
         case 2:
-            return new Point[] {
-                    new Point(p.x, p.y - 4), // 0
-                    new Point(p.x + 1, p.y - 3), // .5
-                    new Point(p.x + 2, p.y - 2), // 1
-                    new Point(p.x + 2, p.y), // 1.5
-                    new Point(p.x + 2, p.y + 2), // 2
-                    new Point(p.x + 1, p.y + 3), // 2.5
-                    new Point(p.x, p.y + 4), // 3
-                    new Point(p.x - 1, p.y + 3), // 3.5
-                    new Point(p.x - 2, p.y + 2), // 4
-                    new Point(p.x - 2, p.y), // 5
-                    new Point(p.x - 2, p.y - 2), // 5.5
-                    new Point(p.x - 1, p.y - 3), // 6
-                    new Point(p.x, p.y - 2), // move length 1
-                    new Point(p.x + 1, p.y - 1), new Point(p.x + 1, p.y + 1), new Point(p.x, p.y + 2),
-                    new Point(p.x - 1, p.y + 1), new Point(p.x - 1, p.y - 1), new Point(p.x, p.y) };
+            return Helpful.arrayConcatAll(
+                    Piece.getPointsFromPoint(p, 2),
+                    Piece.getPointsFromPoint(p, 1),
+                    Piece.getPointsFromPoint(p, 0)
+            );
         default:
             throw new RuntimeException("Support for move dist>2 currently not supported");
         }
@@ -221,9 +191,7 @@ public abstract class Piece {
      * Return list of valid locations that piece can face
      */
     final public Point[] getValidFacings() {
-        Point p = this.point;
-        return new Point[] { new Point(p.x, p.y - 2), new Point(p.x + 1, p.y - 1), new Point(p.x + 1, p.y + 1),
-                new Point(p.x, p.y + 2), new Point(p.x - 1, p.y + 1), new Point(p.x - 1, p.y - 1) };
+        return Piece.getPointsFromPoint(this.point, 1);
     }
 
     /**
@@ -237,39 +205,25 @@ public abstract class Piece {
         Point[] ret;
         switch (defaultAttackRange()) {
         case 1:
-            ret = new Point[] { new Point(p.x, p.y - 2), new Point(p.x + 1, p.y - 1), new Point(p.x + 1, p.y + 1),
-                    new Point(p.x, p.y + 2), new Point(p.x - 1, p.y + 1), new Point(p.x - 1, p.y - 1) };
-            return new Point[] { ret[dir], ret[(dir + 1 + 6) % 6], ret[(dir - 1 + 6) % 6] };
-        case 2:
-            ret = new Point[] {
-                    // Dist=2:
-                    new Point(p.x, p.y - 4), // 0
-                    new Point(p.x + 1, p.y - 3), // .5
-                    new Point(p.x + 2, p.y - 2), // 1
-                    new Point(p.x + 2, p.y), // 1.5
-                    new Point(p.x + 2, p.y + 2), // 2
-                    new Point(p.x + 1, p.y + 3), // 2.5
-                    new Point(p.x, p.y + 4), // 3
-                    new Point(p.x - 1, p.y + 3), // 3.5
-                    new Point(p.x - 2, p.y + 2), // 4
-                    new Point(p.x - 2, p.y), // 4.5
-                    new Point(p.x - 2, p.y - 2), // 5
-                    new Point(p.x - 1, p.y - 3), // 5.5
-                    // Dist=1:
-                    new Point(p.x, p.y - 2), // 0
-                    new Point(p.x + 1, p.y - 1), // 1
-                    new Point(p.x + 1, p.y + 1), // 2
-                    new Point(p.x, p.y + 2), // 3
-                    new Point(p.x - 1, p.y + 1), // 4
-                    new Point(p.x - 1, p.y - 1) // 5
+            ret = Piece.getPointsFromPoint(p, 1);
+            return new Point[] {
+                    ret[dir],
+                    ret[(dir + 1 + 6) % 6],
+                    ret[(dir - 1 + 6) % 6]
             };
-            return new Point[] {//
-            ret[(dir * 2) % 12], //
+        case 2:
+            ret = Helpful.arrayConcatAll(
+                    Piece.getPointsFromPoint(p, 2),
+                    Piece.getPointsFromPoint(p, 1)
+            );
+            return new Point[] {
+                    ret[(dir * 2) % 12], //
                     // We need to shift by + 12 first because (-2 % 12) == -2
                     ret[(dir * 2 - 2 + 12) % 12], //
                     ret[(dir * 2 - 1 + 12) % 12],//
                     ret[(dir * 2 + 2) % 12],//
                     ret[(dir * 2 + 1) % 12],//
+                    // Dist = 1 attacks
                     ret[dir + 12],//
                     ret[(dir + 1) % 6 + 12],//
                     ret[(dir - 1 + 6) % 6 + 12] //
@@ -323,43 +277,85 @@ public abstract class Piece {
         String name = "/assets/graphics/units/player" + owner.id + "/" + getClass().getSimpleName().toLowerCase()
                 + "_p" + owner.id + "_h" + getHealth() + ".png";
         Image im = Resources.getImage(name);
-        im.rotate(360f / 6 * getDirection());
+        im.rotate(360f / 6 * ((getDirection()) % 6));
         return im;
     }
 
     public static int pointsToDirection(Point to, Point from) {
+        // NOTE: Only takes into account distance = 1
+        // Mostly used for facing direction
+    
         int dx = to.x - from.x, dy = to.y - from.y;
         int direction = -1;
-        switch (dx) {
+        switch (dy) {
         case -1:
-            switch (dy) {
+            switch (dx) {
             case -1:
-                direction = 5;
+                direction = 4;
                 break;
             case 1:
-                direction = 4;
+                direction = 5;
             }
             break;
         case 0:
-            switch (dy) {
+            switch (dx) {
             case -2:
-                direction = 0;
+                direction = 3;
                 break;
             case 2:
-                direction = 3;
+                direction = 0;
             }
             break;
         case 1:
-            switch (dy) {
+            switch (dx) {
             case -1:
-                direction = 1;
+                direction = 2;
                 break;
             case 1:
-                direction = 2;
+                direction = 1;
             }
             break;
         }
         return direction;
+    }
+    
+    /**
+     * Given a point and dist d, return all points dist d from point
+     * @param p
+     * @param dist
+     * @return List of points. No guarantee that they are valid.  They will be in order (0-5)
+     */
+    public static Point[] getPointsFromPoint(Point p, int dist){
+        if(dist == 0){
+            return new Point[]{
+                p
+            };
+        } else if(dist == 1){
+            return new Point[]{
+                new Point(p.x + 2, p.y), // 0
+                new Point(p.x + 1, p.y + 1), // 1
+                new Point(p.x - 1, p.y + 1), // 2
+                new Point(p.x - 2, p.y), // 3
+                new Point(p.x - 1, p.y - 1), // 4
+                new Point(p.x + 1, p.y - 1) // 5
+            };
+        } else if(dist == 2){
+            return new Point[]{
+                new Point(p.x + 4, p.y), // 0
+                new Point(p.x + 3, p.y + 1), // 0.5
+                new Point(p.x + 2, p.y + 2), // 1
+                new Point(p.x, p.y + 2), // 1.5
+                new Point(p.x - 2, p.y + 2), // 2
+                new Point(p.x - 3, p.y + 1), // 2.5
+                new Point(p.x - 4, p.y), // 3
+                new Point(p.x - 3, p.y - 1), // 3.5
+                new Point(p.x - 2, p.y - 2), // 4
+                new Point(p.x, p.y - 2), // 4.5
+                new Point(p.x + 2, p.y - 2), // 5
+                new Point(p.x + 3, p.y - 1) // 5.5
+            };
+        }
+        throw new RuntimeException("Piece.getPointsFromPoint() not yet implemented for d >= 3");
     }
 
 }

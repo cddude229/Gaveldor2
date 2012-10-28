@@ -32,11 +32,20 @@ public class InstructionState extends BasicGameState {
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         listener = new StickyListener();
         buttons = this.buildButtons(container, game);
-        container.getInput().addListener(listener);
         for (SimpleButton button : buttons) {
             listener.add(button);
         }
        
+    }
+    
+    @Override
+    public void enter(GameContainer container, StateBasedGame game) {
+        container.getInput().addListener(listener);
+    }
+    
+    @Override
+    public void leave(GameContainer container, StateBasedGame game){
+        container.getInput().removeListener(listener);
     }
 
     @Override
