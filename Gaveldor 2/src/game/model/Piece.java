@@ -332,7 +332,7 @@ public abstract class Piece {
         }
     }
 
-    public static int PointsToDirection(Point to, Point from) {
+    public static int pointsToDirection(Point to, Point from) {
         int dx = to.x - from.x, dy = to.y - from.y;
         int direction = -1;
         switch (dx) {
