@@ -3,6 +3,7 @@ package game.run;
 import game.model.Action;
 import game.model.GameModel;
 import game.model.Piece;
+import game.model.Piece.TurnState;
 import game.model.Player;
 import game.model.TerrainType;
 
@@ -92,6 +93,14 @@ public abstract class PlayerController {
     public void renderPieces(Graphics g) {
         for (Piece p : model.getPieces()) {
             Image sprite = p.getSprite();
+            if (p.turnState == TurnState.DONE){
+                try {
+                    sprite.setFilter(0xFFFFFFFF);
+                } catch (SlickException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
             renderAtPosition(sprite, g, p.getPosition().x, p.getPosition().y, .5f, 1f);
         }
     }

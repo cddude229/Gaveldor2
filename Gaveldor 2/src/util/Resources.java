@@ -10,34 +10,51 @@ import java.net.URL;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.util.ResourceLoader;
+import org.newdawn.slick.util.ResourceLocation;
 
 public class Resources {
     
-    public static URL getResource(String name) {
-        URL ret = Resources.class.getResource(name);
+
+    public static class ActualClasspathLocation implements ResourceLocation {
+        public URL getResource(String ref) {
+            return this.getClass().getResource(ref);
+        }
+        
+        public InputStream getResourceAsStream(String ref) {
+            return this.getClass().getResourceAsStream(ref);
+        }
+    }
+    
+    static{
+        ResourceLoader.addResourceLocation(new ActualClasspathLocation());
+    }
+    
+    public static URL getResource(String ref) {
+        URL ret = ResourceLoader.getResource(ref);
         if (ret == null){
             throw new RuntimeException("Resource not found");
         }
         return ret;
     }
     
-    public static InputStream getResourceAsStream(String name){
-        InputStream ret = Resources.class.getResourceAsStream(name);
+    public static InputStream getResourceAsStream(String ref){
+        InputStream ret = ResourceLoader.getResourceAsStream(ref);
         if (ret == null){
             throw new RuntimeException("Resource not found");
         }
         return ret;
     }
     
-    public static Image getImage(String name) throws SlickException{
-        return new Image(getResourceAsStream(name), name, false);
+    public static Image getImage(String ref) throws SlickException{
+        return new Image(getResourceAsStream(ref), ref, false);
     }
     
-    public static Sound getSound(String name) throws SlickException{
-    	if (name.endsWith(".wav")){
+    public static Sound getSound(String ref) throws SlickException{
+    	if (ref.endsWith(".wav")){
     		throw new IllegalArgumentException("We can't use WAVs, because it breaks the JAR when deployed");
     	}
-        return new Sound(getResource(name));
+        return new Sound(getResource(ref));
     }
     
     private static final String[] LWJGL_NATIVE_NAMES = new String[]{

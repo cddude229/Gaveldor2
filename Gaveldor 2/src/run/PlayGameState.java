@@ -49,11 +49,6 @@ public class PlayGameState extends BasicGameState {
             }
             break;
         }
-//        Action action;
-//        while ((action = match.getCurrentPC().retrieveAction()) != null) {
-//            match.getOtherPC().propagateAction(action);
-//            match.model.applyAction(action);
-//        }
     }
 
     @Override

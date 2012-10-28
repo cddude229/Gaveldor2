@@ -15,7 +15,6 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import util.Constants;
-import util.Resources;
 
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
@@ -110,7 +109,6 @@ public class MainMenuState extends BasicGameState {
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
         for (int i = 0; i < 6; i++) {
-            System.out.println(yLoc);
             locations.add(new int[] { this.getxLoc(bWidth), yLoc });
             yLoc += 100;
         }
@@ -123,9 +121,8 @@ public class MainMenuState extends BasicGameState {
         Rectangle exitRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
 
         // create play Image
-        Sound s = Resources.getSound("/assets/audio/swordSlash.ogg");
+        Sound s = null;
         ArrayList<Image> images = this.makeImages();
-        System.out.println(images.size());
 
         // add buttons
         playBtn = new SimpleButton(playRect, images.get(0), images.get(1), s);
@@ -157,7 +154,6 @@ public class MainMenuState extends BasicGameState {
         playBtn.addListener(new ClickListener() {
 
             public void onClick(Button clicked, float mx, float my) {
-                System.out.println("true");
                 try {
                     ((Game) game).startLocalMatch("/assets/maps/basic");
                 } catch (GameException e) {
@@ -182,7 +178,6 @@ public class MainMenuState extends BasicGameState {
         hostBtn.addListener(new ClickListener() {
 
             public void onClick(Button clicked, float mx, float my) {
-                System.out.println("true");
                 try {
                     ((Game) game).startHostRemoteMatch("/assets/maps/basic");
                     game.enterState(HostGameState.STATE_ID);
@@ -198,7 +193,6 @@ public class MainMenuState extends BasicGameState {
         instructBtn.addListener(new ClickListener() {
 
             public void onClick(Button clicked, float mx, float my) {
-                System.out.println("true");
                 game.enterState(InstructionState.STATE_ID);
             }
             
@@ -209,7 +203,6 @@ public class MainMenuState extends BasicGameState {
         joinBtn.addListener(new ClickListener() {
 
             public void onClick(Button clicked, float mx, float my) {
-                System.out.println("true");
                 game.enterState(ConnectingState.STATE_ID);
             }
             
@@ -220,7 +213,6 @@ public class MainMenuState extends BasicGameState {
         creditBtn.addListener(new ClickListener() {
 
             public void onClick(Button clicked, float mx, float my) {
-                System.out.println("true");
                 game.enterState(CreditsState.STATE_ID);
             }
             

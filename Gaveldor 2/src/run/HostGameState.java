@@ -22,7 +22,6 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import util.Constants;
-import util.Resources;
 
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
@@ -135,7 +134,6 @@ public class HostGameState extends BasicGameState {
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
         for (int i = 0; i < 6; i++) {
-            System.out.println(yLoc);
             locations.add(new int[] { this.getxLoc(bWidth), yLoc });
             yLoc += 100;
         }
@@ -143,9 +141,8 @@ public class HostGameState extends BasicGameState {
         Rectangle backRect = new Rectangle(locations.get(5)[0] - 300, locations.get(5)[1], bWidth, bHeight);
 
         // create play Image
-        Sound s = Resources.getSound("/assets/audio/swordSlash.ogg");
+        Sound s = null;
         ArrayList<Image> images = this.makeImages();
-        System.out.println(images.size());
 
         // add buttons
         backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
@@ -167,7 +164,6 @@ public class HostGameState extends BasicGameState {
         backBtn.addListener(new ClickListener() {
 
             public void onClick(Button clicked, float mx, float my) {
-                System.out.println("true");
                 game.enterState(MainMenuState.STATE_ID);
             }
 
