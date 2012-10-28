@@ -32,7 +32,7 @@ public class ConnectingState extends BasicGameState {
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
-    private String connectErrorText = "";
+    private String instructionTxt;
     ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
 
     @Override
@@ -40,7 +40,7 @@ public class ConnectingState extends BasicGameState {
      * Builds buttons and adds listeners to game. This isn't fully functional.
      */
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-
+        instructionTxt = "Please enter the Host IP.";
         listener = new StickyListener();
         buttons = this.buildButtons(container, game);
         for (SimpleButton button : buttons) {
@@ -64,7 +64,7 @@ public class ConnectingState extends BasicGameState {
         backBtn.render(container, g);
         connectBtn.render(container, g);
         ipBox.render(container, g);
-        g.drawString(connectErrorText, 300, 200);
+        g.drawString(instructionTxt, ipBox.getX(), ipBox.getY() -50);
     }
 
     @Override
@@ -107,8 +107,8 @@ public class ConnectingState extends BasicGameState {
             yLoc += 100;
         }
         // create rectangles for buttons
-        Rectangle backRect = new Rectangle(locations.get(5)[0] - 300, locations.get(5)[1], bWidth, bHeight);
-        Rectangle connectRect = new Rectangle(locations.get(3)[0], locations.get(3)[1], bWidth, bHeight);
+        Rectangle backRect = new Rectangle(locations.get(5)[0] - 150, locations.get(5)[1], bWidth, bHeight);
+        Rectangle connectRect = new Rectangle(locations.get(5)[0] + 150, locations.get(5)[1], bWidth, bHeight);
 
         // create play Image
         Sound s = null;
@@ -152,7 +152,9 @@ public class ConnectingState extends BasicGameState {
                     ((Game) game).startClientRemoteMatch("/assets/maps/basic",ipBox.getText());
                     game.enterState(JoinGameState.STATE_ID);
                 } catch (GameException e) {
-                    connectErrorText = e.getMessage();
+                    instructionTxt = "A connection could not be established. Please try again.";
+                    ipBox.setText("");
+                    ipBox.setCursorVisible(true);
                 }
             }
 

@@ -36,15 +36,29 @@ public class HostGameState extends BasicGameState {
     private static final int bWidth = 200;
     private static final int bHeight = 50;
     private String hostIP = "";
-    ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
     
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         listener = new StickyListener();
-        buttons = this.buildButtons(container, game);
-        for (SimpleButton button : buttons) {
-            listener.add(button);
+        ArrayList<int[]> locations = new ArrayList<int[]>();
+        int yLoc = 75;
+        for (int i = 0; i < 6; i++) {
+            locations.add(new int[] { this.getxLoc(bWidth), yLoc});
+            yLoc += 100;
         }
+        // create rectangles for buttons
+        Rectangle backRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
+
+        // create play Image
+        Sound s = null;
+        ArrayList<Image> images = this.makeImages();
+
+        // add button
+        backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
+
+        // create listeners
+        createListeners(container,game);
+        listener.add(backBtn);
         
         URL whatismyip = null;
         String ip = "";
@@ -97,9 +111,7 @@ public class HostGameState extends BasicGameState {
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         GameMatch match = ((Game) game).match;
         Action action;
-        for (SimpleButton button : buttons) {
-            button.update(container, delta);
-        }
+        backBtn.update(container, delta);
         while ((action = match.getOtherPC().retrieveAction()) != null) {
             match.getOtherPC().propagateAction(action);
             match.model.applyAction(action);
@@ -133,39 +145,6 @@ public class HostGameState extends BasicGameState {
     }
     
     /**
-     * This function builds the buttons and adds the listeners. returning them
-     * in an arrayList. The arrayList is useful for update iterations.
-     * 
-     * @return an arrayList of the five buttons
-     * @throws SlickException
-     */
-    public ArrayList<SimpleButton> buildButtons(GameContainer container, StateBasedGame game) throws SlickException {
-        ArrayList<int[]> locations = new ArrayList<int[]>();
-        int yLoc = 75;
-        for (int i = 0; i < 6; i++) {
-            locations.add(new int[] { this.getxLoc(bWidth), yLoc });
-            yLoc += 100;
-        }
-        // create rectangles for buttons
-        Rectangle backRect = new Rectangle(locations.get(5)[0] - 300, locations.get(5)[1], bWidth, bHeight);
-
-        // create play Image
-        Sound s = null;
-        ArrayList<Image> images = this.makeImages();
-
-        // add buttons
-        backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
-
-        // create listeners
-        createListeners(container,game);
-
-        // add to array of buttons
-        ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
-        buttons.add(backBtn);
-        return buttons;
-    }
-
-    /**
      * Adds the listeners to the system. Currently only the play button is
      * implemented.
      */
@@ -183,26 +162,20 @@ public class HostGameState extends BasicGameState {
     
     public ArrayList<Image> makeImages() throws SlickException {
         ArrayList<Image> images = new ArrayList<Image>();
-        for (int i = 0; i <6; i++){
-            Image im = new Image(bWidth, bHeight);
-            im.getGraphics().setColor(Color.blue);
-            im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-            im.getGraphics().setColor(Color.white);
-            Image clickPlay = new Image(bWidth, bHeight);
-            clickPlay.getGraphics().setColor(Color.green);
-            clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-            clickPlay.getGraphics().setColor(Color.white);
-            switch (i){
-            case 0:
-                im.getGraphics().drawString("Back", 0, 0);
-                clickPlay.getGraphics().drawString("Back", 0, 0);
-                break;
-            }
-            im.getGraphics().flush();
-            clickPlay.getGraphics().flush();
-            images.add(im);
-            images.add(clickPlay);
-        }
+        Image im = new Image(bWidth, bHeight);
+        im.getGraphics().setColor(Color.blue);
+        im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+        im.getGraphics().setColor(Color.white);
+        Image clickPlay = new Image(bWidth, bHeight);
+        clickPlay.getGraphics().setColor(Color.green);
+        clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+        clickPlay.getGraphics().setColor(Color.white);
+        im.getGraphics().drawString("Back", 0, 0);
+        clickPlay.getGraphics().drawString("Back", 0, 0);
+        im.getGraphics().flush();
+        clickPlay.getGraphics().flush();
+        images.add(im);
+        images.add(clickPlay);
         return images;
     }
 

@@ -37,10 +37,26 @@ public class CreditsState extends BasicGameState {
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         this.container = container;
         listener = new StickyListener();
-        buttons = this.buildButtons(container, game);
-        for (SimpleButton button : buttons) {
-            listener.add(button);
+        ArrayList<int[]> locations = new ArrayList<int[]>();
+        int yLoc = 75;
+        for (int i = 0; i < 6; i++) {
+            locations.add(new int[] { this.getxLoc(bWidth), yLoc});
+            yLoc += 100;
         }
+        // create rectangles for buttons
+        Rectangle backRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
+
+        // create play Image
+        Sound s = null;
+        ArrayList<Image> images = this.makeImages();
+
+        // add button
+        backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
+
+        // create listeners
+        createListeners(container,game);
+        listener.add(backBtn);
+        
         credits = new String[] {"Credits","Chris Dessonville: Co-Producer","Ben Greenberg: Co-Producer","Lane Pertusi: Artists","Calvin Lewis: Sound","Todd Layton: Slick Master","Andres Romero: Networking", "Jeremy Sharpe: Game Logic","Kevin White: Menu"};
         generateLocations(credits);
         
@@ -67,9 +83,7 @@ public class CreditsState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-        for (SimpleButton button : buttons) {
-            button.update(container, delta);
-        }
+        backBtn.update(container, delta);
     }
 
     @Override
@@ -87,39 +101,6 @@ public class CreditsState extends BasicGameState {
         int scnWidth = Constants.WINDOW_WIDTH;
         int xLoc = scnWidth / 2 - width / 2;
         return xLoc;
-    }
-    
-    /**
-     * This function builds the buttons and adds the listeners. returning them
-     * in an arrayList. The arrayList is useful for update iterations.
-     * 
-     * @return an arrayList of the five buttons
-     * @throws SlickException
-     */
-    public ArrayList<SimpleButton> buildButtons(GameContainer container, StateBasedGame game) throws SlickException {
-        ArrayList<int[]> locations = new ArrayList<int[]>();
-        int yLoc = 75;
-        for (int i = 0; i < 6; i++) {
-            locations.add(new int[] { this.getxLoc(bWidth), yLoc });
-            yLoc += 100;
-        }
-        // create rectangles for buttons
-        Rectangle backRect = new Rectangle(locations.get(5)[0] - 300, locations.get(5)[1], bWidth, bHeight);
-
-        // create play Image
-        Sound s = null;
-        ArrayList<Image> images = this.makeImages();
-
-        // add buttons
-        backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
-
-        // create listeners
-        createListeners(container,game);
-
-        // add to array of buttons
-        ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
-        buttons.add(backBtn);
-        return buttons;
     }
 
     /**
