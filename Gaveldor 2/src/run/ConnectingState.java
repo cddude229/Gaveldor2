@@ -33,6 +33,7 @@ public class ConnectingState extends BasicGameState {
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
+    private String connectErrorText = "";
     ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
 
     @Override
@@ -65,6 +66,7 @@ public class ConnectingState extends BasicGameState {
         backBtn.render(container, g);
         connectBtn.render(container, g);
         ipBox.render(container, g);
+        g.drawString(connectErrorText, 300, 200);
     }
 
     @Override
@@ -156,7 +158,7 @@ public class ConnectingState extends BasicGameState {
                     ((Game) game).startClientRemoteMatch("/assets/maps/basic",ipBox.getText());
                     game.enterState(JoinGameState.STATE_ID);
                 } catch (GameException e) {
-                    ipBox.setText(e.getMessage());
+                    connectErrorText = e.getMessage();
                 }
             }
 

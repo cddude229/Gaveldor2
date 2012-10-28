@@ -64,11 +64,8 @@ public class MainMenuState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        g.drawString("Welcome to Gaveldor 2: The Engaveling of Ambidextria", 0, 0);
-        g.drawString("Press H to host match.", 0, 50);
-        g.drawString("Press C to connect to localhost.", 0, 100);
-        g.drawString("In game shift + click moves characters", 0, 150);
-        g.drawString("Close the window or click 'exit' to exit.", 0, 200);
+        g.drawString("Welcome to Gaveldor 2: The Engaveling of Ambidextria", 250, 10);
+        //g.drawString("In game shift + click moves characters", 0, 150);
         playBtn.render(container, g);
         hostBtn.render(container, g);
         joinBtn.render(container, g);
@@ -198,6 +195,17 @@ public class MainMenuState extends BasicGameState {
             public void onRightClick(Button clicked, float mx, float my) {}
         });
         
+        instructBtn.addListener(new ClickListener() {
+
+            public void onClick(Button clicked, float mx, float my) {
+                System.out.println("true");
+                game.enterState(InstructionState.STATE_ID);
+            }
+            
+            public void onDoubleClick(Button clicked, float mx, float my) {}
+            public void onRightClick(Button clicked, float mx, float my) {}
+        });
+
         joinBtn.addListener(new ClickListener() {
 
             public void onClick(Button clicked, float mx, float my) {
@@ -208,7 +216,17 @@ public class MainMenuState extends BasicGameState {
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });
+        
+        creditBtn.addListener(new ClickListener() {
 
+            public void onClick(Button clicked, float mx, float my) {
+                System.out.println("true");
+                game.enterState(CreditsState.STATE_ID);
+            }
+            
+            public void onDoubleClick(Button clicked, float mx, float my) {}
+            public void onRightClick(Button clicked, float mx, float my) {}
+        });
     }
     
     public ArrayList<Image> makeImages() throws SlickException {

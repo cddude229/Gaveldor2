@@ -68,6 +68,8 @@ public class Game extends StateBasedGame {
         addState(new PlayGameState());
         addState(new ConnectingState());
         addState(new JoinGameState());
+        addState(new CreditsState());
+        addState(new InstructionState());
     }
 
     public static void main(String[] args) throws SlickException, IOException, URISyntaxException {

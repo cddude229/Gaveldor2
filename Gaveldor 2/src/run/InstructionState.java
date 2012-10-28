@@ -1,14 +1,5 @@
 package run;
 
-import game.model.Action;
-import game.model.GameModel.GameState;
-import game.run.GameMatch;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -29,14 +20,13 @@ import com.aem.sticky.button.Button;
 import com.aem.sticky.button.SimpleButton;
 import com.aem.sticky.button.events.ClickListener;
 
-public class HostGameState extends BasicGameState {
+public class InstructionState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
     private SimpleButton backBtn;
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
-    private String hostIP = "";
     ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
     
     @Override
@@ -47,63 +37,20 @@ public class HostGameState extends BasicGameState {
         for (SimpleButton button : buttons) {
             listener.add(button);
         }
-        
-        URL whatismyip = null;
-        String ip = "";
-        try {
-            whatismyip = new URL("http://automation.whatismyip.com/n09230945.asp");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        BufferedReader in;
-        try {
-            in = new BufferedReader(new InputStreamReader(
-                            whatismyip.openStream()));
-            ip = in.readLine(); //you get the IP as a String
-        } catch (IOException e) {
-            try {
-                whatismyip = new URL("http://automation.whatismyip.com/n09230945.asp");
-            } catch (MalformedURLException d) {
-                d.printStackTrace();
-            }
-            try {
-                in = new BufferedReader(new InputStreamReader(
-                                whatismyip.openStream()));
-                ip = in.readLine(); //you get the IP as a String
-            } catch (IOException f) {
-                hostIP = "Cannot connect to Internet";
-            }
-        }
-        hostIP = ip;
+       
     }
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         backBtn.render(container, g);
-        g.drawString("Waiting For Player to Connect", 300, 100);
-        g.drawString("Your External IP:" + hostIP, 300, 200);
+        g.drawString("Shift + click moves characters", 250, 150);
     }
 
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-        GameMatch match = ((Game) game).match;
-        Action action;
         for (SimpleButton button : buttons) {
             button.update(container, delta);
-        }
-        while ((action = match.getOtherPC().retrieveAction()) != null) {
-            match.getOtherPC().propagateAction(action);
-            match.model.applyAction(action);
-            
-            if (match.model.gameState != GameState.SETTING_UP) {
-                if (match.model.gameState == GameState.DISCONNECTED) {
-                    // TODO
-                } else {
-                    game.enterState(PlayGameState.STATE_ID);
-                    break;
-                }
-            }
         }
     }
 
