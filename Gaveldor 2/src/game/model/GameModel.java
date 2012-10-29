@@ -206,4 +206,8 @@ public class GameModel {
             throw new RuntimeException();
         }
     }
+    
+    public void applyDelta(int delta){
+        //TODO: time-dependent game logic goes here (e.g. minigame timing)
+    }
 }

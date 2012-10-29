@@ -26,6 +26,7 @@ public class JoinGameState extends BasicGameState {
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         GameMatch match = ((Game) game).match;
+        match.model.applyDelta(delta);
         Action action;
         while ((action = match.getCurrentPC().retrieveAction()) != null) {
             match.getOtherPC().propagateAction(action);

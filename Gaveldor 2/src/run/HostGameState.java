@@ -110,8 +110,9 @@ public class HostGameState extends BasicGameState {
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         GameMatch match = ((Game) game).match;
-        Action action;
         backBtn.update(container, delta);
+        match.model.applyDelta(delta);
+        Action action;
         while ((action = match.getOtherPC().retrieveAction()) != null) {
             match.getOtherPC().propagateAction(action);
             match.model.applyAction(action);

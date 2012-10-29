@@ -36,6 +36,7 @@ public class PlayGameState extends BasicGameState {
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         match.ui.update(container, game, delta);
+        match.model.applyDelta(delta);
         while (true){
             Action action = match.getCurrentPC().retrieveAction();
             if (action != null){
