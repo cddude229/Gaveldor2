@@ -26,20 +26,22 @@ public class GameModel {
     }
 
     public GameState gameState = GameState.SETTING_UP;
-
-    public static class MinigameModel{
-        public final Piece attackingPiece, defendingPiece;
-
-        public static enum MinigameMove {
-            HIGH,MID,LOW;
-        }
-        public MinigameMove attackingMove = null, defendingMove = null;
-        
-        public MinigameModel(Piece attacking, Piece defending){
-            attackingPiece = attacking;
-            defendingPiece = defending;
-        }
-    }
+//
+//    public static class MinigameModel{
+//        public final Piece attackingPiece, defendingPiece;
+//
+//        public static enum Move {
+//            HIGH, MID, LOW, NONE;
+//        }
+//        public Move attackingMove = null, defendingMove = null;
+//        
+//        public long moveTime = 0;
+//        
+//        public MinigameModel(Piece attacking, Piece defending){
+//            attackingPiece = attacking;
+//            defendingPiece = defending;
+//        }
+//    }
     
     private MinigameModel minigame = null;
 
@@ -180,8 +182,10 @@ public class GameModel {
                 minigame.defendingMove = mmmPacket.move;
             }
             if (minigame.attackingMove != null && minigame.defendingMove != null){
-                if (minigame.attackingMove == minigame.defendingMove){
-                    
+                if (minigame.attackingMove == MinigameModel.Move.NONE){
+                    //TODO
+                } else if (minigame.attackingMove == minigame.defendingMove){
+                    //TODO
                 } else{
                     minigame.attackingPiece.attack(minigame.defendingPiece);
                     if (!minigame.defendingPiece.isAlive()) {
@@ -209,5 +213,8 @@ public class GameModel {
     
     public void applyDelta(int delta){
         //TODO: time-dependent game logic goes here (e.g. minigame timing)
+        if (gameState == GameState.PLAYING_MINIGAME){
+            minigame.moveTime += delta;
+        }
     }
 }

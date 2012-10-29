@@ -3,7 +3,7 @@ package game.run;
 import game.model.Action;
 import game.model.Action.MakeMinigameMoveAction;
 import game.model.GameModel;
-import game.model.GameModel.MinigameModel.MinigameMove;
+import game.model.MinigameModel.Move;
 import game.model.Piece;
 import game.model.Player;
 import game.model.Point;
@@ -156,22 +156,30 @@ public class LocalPlayerController extends PlayerController {
     }
     
     public void updatePlayingMinigameAttack(){
-        if (ui.getInput().isKeyDown(Input.KEY_A)){
-            actionQueue.add(new MakeMinigameMoveAction(MinigameMove.HIGH, player));
-        } else if (ui.getInput().isKeyDown(Input.KEY_S)){
-            actionQueue.add(new MakeMinigameMoveAction(MinigameMove.MID, player));
-        } else if (ui.getInput().isKeyDown(Input.KEY_D)){
-            actionQueue.add(new MakeMinigameMoveAction(MinigameMove.LOW, player));
+        if (model.getMinigame().attackingMove == null){
+            if (model.getMinigame().moveTime >= Constants.MINIGAME_MOVE_TIME){
+                actionQueue.add(new MakeMinigameMoveAction(Move.NONE, player));
+            } else if (ui.getInput().isKeyDown(Input.KEY_A)){
+                actionQueue.add(new MakeMinigameMoveAction(Move.HIGH, player));
+            } else if (ui.getInput().isKeyDown(Input.KEY_S)){
+                actionQueue.add(new MakeMinigameMoveAction(Move.MID, player));
+            } else if (ui.getInput().isKeyDown(Input.KEY_D)){
+                actionQueue.add(new MakeMinigameMoveAction(Move.LOW, player));
+            }
         }
     }
     
     public void updatePlayingMinigameDefend(){
-        if (ui.getInput().isKeyDown(Input.KEY_J)){
-            actionQueue.add(new MakeMinigameMoveAction(MinigameMove.HIGH, player));
-        } else if (ui.getInput().isKeyDown(Input.KEY_K)){
-            actionQueue.add(new MakeMinigameMoveAction(MinigameMove.MID, player));
-        } else if (ui.getInput().isKeyDown(Input.KEY_L)){
-            actionQueue.add(new MakeMinigameMoveAction(MinigameMove.LOW, player));
+        if (model.getMinigame().defendingMove == null){
+            if (model.getMinigame().moveTime >= Constants.MINIGAME_MOVE_TIME){
+                actionQueue.add(new MakeMinigameMoveAction(Move.NONE, player));
+            } else if (ui.getInput().isKeyDown(Input.KEY_J)){
+                actionQueue.add(new MakeMinigameMoveAction(Move.HIGH, player));
+            } else if (ui.getInput().isKeyDown(Input.KEY_K)){
+                actionQueue.add(new MakeMinigameMoveAction(Move.MID, player));
+            } else if (ui.getInput().isKeyDown(Input.KEY_L)){
+                actionQueue.add(new MakeMinigameMoveAction(Move.LOW, player));
+            }
         }
     }
 

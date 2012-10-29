@@ -1,6 +1,7 @@
 package game.model;
 
-import game.model.GameModel.MinigameModel.MinigameMove;
+
+import game.model.MinigameModel.Move;
 
 import java.io.Serializable;
 
@@ -74,9 +75,9 @@ public abstract class Action implements Serializable {
         private static final long serialVersionUID = 9022778930576890264L;
         
         public final int playerID;
-        public final MinigameMove move;
+        public final Move move;
         
-        public MakeMinigameMoveAction(MinigameMove move, Player player) {
+        public MakeMinigameMoveAction(Move move, Player player) {
             super(ActionType.MAKE_MINIGAME_MOVE);
             this.move = move;
             this.playerID = player.id;

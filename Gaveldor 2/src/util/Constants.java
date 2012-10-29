@@ -64,4 +64,7 @@ public class Constants {
             throw new RuntimeException(e);
         }
     }
+    
+    //all times in milliseconds
+    public static final long MINIGAME_MOVE_TIME = 3000L;
 }
