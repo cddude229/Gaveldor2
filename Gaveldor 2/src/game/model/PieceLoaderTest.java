@@ -15,14 +15,12 @@ public class PieceLoaderTest {
     @Test
     public void basicTest(){
         try {
-//        Player player1 = new Player(1);
-//        Player player2 = new Player(2);
 
         int MAP_WIDTH = 8;
         int MAP_HEIGHT = 8;
         
         
-        Set<Piece> pieces = PieceLoader.loadPieces("/assets/maps/basic", MAP_WIDTH, MAP_HEIGHT);
+        Set<Piece> pieces = Map.loadPieces("/assets/maps/basic", MAP_WIDTH, MAP_HEIGHT);
     
         Set<Point> outputPos = new HashSet<Point> ();
         for( Piece p : pieces){

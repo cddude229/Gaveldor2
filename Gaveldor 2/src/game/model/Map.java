@@ -74,7 +74,7 @@ public class Map {
         try {
             TerrainType[][] terrain = loadTerrain(name);
             int width = terrain.length, height = terrain[0].length;
-            Set<Piece> pieces = PieceLoader.loadPieces(name, width, height);
+            Set<Piece> pieces = Map.loadPieces(name, width, height);
             return new Map(name, width, height, terrain, pieces);
         } catch (IOException e) {
             throw new GameException("There was an I/O error while reading the map file", e);
@@ -113,6 +113,64 @@ public class Map {
                 }
             }
             return terrain;
+        } finally {
+            reader.close();
+        }
+    }
+
+    public static Set<Piece> loadPieces(String name, int mapWidth, int mapHeight) throws IOException {
+        Player p1 = new Player(1), p2 = new Player(2);
+        int idCounter = 0;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(Resources.getResourceAsStream(name + ".pieces")));
+        try {
+    
+            Set<Piece> pieces = new HashSet<Piece>();
+    
+            String rowLine;
+    
+            for (int j = 0; ((rowLine = reader.readLine()) != null) && (j < mapHeight); j++) {
+    
+                rowLine = rowLine.replaceAll("\\s", ""); // remove spaces
+    
+                // make player one piece tokens into single char
+                rowLine = rowLine.replaceAll("1i", "1");
+                rowLine = rowLine.replaceAll("1a", "2");
+                rowLine = rowLine.replaceAll("1c", "3");
+    
+                // same for player two
+                rowLine = rowLine.replaceAll("2i", "a");
+                rowLine = rowLine.replaceAll("2a", "b");
+                rowLine = rowLine.replaceAll("2c", "c");
+    
+                for (int i = 0; (i < mapWidth) && (i < rowLine.length()); i++) {
+                    int x = i * 2 + j % 2;
+                    int y = j;
+                    switch (rowLine.charAt(i)) {
+    
+                    case '1':
+                        pieces.add(new Infantry(p1, new Point(x, y), idCounter++));
+                        break;
+                    case '2':
+                        pieces.add(new Archer(p1, new Point(x, y), idCounter++));
+                        break;
+                    case '3':
+                        pieces.add(new Cavalry(p1, new Point(x, y), idCounter++));
+                        break;
+                    case 'a':
+    
+                        pieces.add(new Infantry(p2, new Point(x, y), idCounter++));
+                        break;
+                    case 'b':
+                        pieces.add(new Archer(p2, new Point(x, y), idCounter++));
+                        break;
+                    case 'c':
+                        pieces.add(new Cavalry(p2, new Point(x, y), idCounter++));
+                        break;
+                    }
+                }
+            }
+            return pieces;
+    
         } finally {
             reader.close();
         }

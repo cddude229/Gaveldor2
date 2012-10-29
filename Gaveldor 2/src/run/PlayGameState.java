@@ -4,6 +4,7 @@ import game.model.Action;
 import game.model.PieceType;
 import game.model.TerrainType;
 import game.run.GameMatch;
+import game.run.LocalPlayerController;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -21,6 +22,7 @@ public class PlayGameState extends BasicGameState {
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         TerrainType.initTiles();
         PieceType.initSprites();
+        LocalPlayerController.initImages();
     }
 
     @Override

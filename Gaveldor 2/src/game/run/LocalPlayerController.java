@@ -28,6 +28,8 @@ public class LocalPlayerController extends PlayerController {
     private final Queue<Action> actionQueue = new LinkedList<Action>();
 
     private Piece selectedPiece = null;
+    
+    private static Image hoverOverlay, movableOverlay, faceableArrows, attackableOverlay;
 
     public LocalPlayerController(Player player, GameModel model, GameUI ui) {
         super(player, model);
@@ -37,9 +39,12 @@ public class LocalPlayerController extends PlayerController {
             actionQueue.add(new Action.GameStartAction());
         }
     }
-
-    public boolean isReady() {
-        return true;
+    
+    public static void initImages(){
+        hoverOverlay = Resources.getImage("/assets/graphics/ui/hover.png");
+        movableOverlay = Resources.getImage("/assets/graphics/ui/movable.png");
+        faceableArrows = Resources.getImage("/assets/graphics/ui/arrows.png");
+        attackableOverlay = Resources.getImage("/assets/graphics/ui/attackable.png");
     }
 
     private void updateMousePan() {
@@ -199,34 +204,29 @@ public class LocalPlayerController extends PlayerController {
 
     @Override
     public void renderControllerPlayingBoard(Graphics g) throws SlickException {
-        Image im;
         Point position = GameUI.getTileCoords(ui.getInput().getMouseX() + displayX, ui.getInput().getMouseY()
                 + displayY);
         if (model.isValidPosition(position)) {
-            im = Resources.getImage("/assets/graphics/ui/hover.png");
-            renderAtPosition(im, g, position.x, position.y, 0f, 0f);
+            renderAtPosition(hoverOverlay, g, position.x, position.y, 0f, 0f);
         }
 
         if (selectedPiece != null) {
             switch (selectedPiece.turnState) {
             case MOVING:
-                im = Resources.getImage("/assets/graphics/ui/movable.png");
                 for (Point p : selectedPiece.getValidMoves()) {
                     if (model.isValidPosition(p)) {
-                        renderAtPosition(im, g, p.x, p.y, 0f, 0f);
+                        renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
                     }
                 }
                 break;
             case TURNING:
-                im = Resources.getImage("/assets/graphics/ui/arrows.png");
-                renderAtPosition(im, g, selectedPiece.getPosition().x, selectedPiece.getPosition().y, 0.5f, 0.5f);
+                renderAtPosition(faceableArrows, g, selectedPiece.getPosition().x, selectedPiece.getPosition().y, 0.5f, 0.5f);
                 // TODO
                 break;
             case ATTACKING:
-                im = Resources.getImage("/assets/graphics/ui/attackable.png");
                 for (Point p : selectedPiece.getValidAttacks()) {
                     if (model.isValidPosition(p)) {
-                        renderAtPosition(im, g, p.x, p.y, 0f, 0f);
+                        renderAtPosition(attackableOverlay, g, p.x, p.y, 0f, 0f);
                     }
                 }
                 break;
