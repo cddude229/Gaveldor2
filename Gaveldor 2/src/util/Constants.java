@@ -67,4 +67,6 @@ public class Constants {
     
     //all times in milliseconds
     public static final long MINIGAME_MOVE_TIME = 3000L;
+    
+    public static UnicodeFont testFont = loadFont("Arial Monospaced", Font.PLAIN, 40, Color.WHITE);
 }

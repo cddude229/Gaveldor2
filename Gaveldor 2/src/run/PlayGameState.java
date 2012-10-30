@@ -4,7 +4,6 @@ import game.model.Action;
 import game.model.PieceType;
 import game.model.TerrainType;
 import game.run.GameMatch;
-import game.run.LocalPlayerController;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -22,23 +21,34 @@ public class PlayGameState extends BasicGameState {
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         TerrainType.initTiles();
         PieceType.initSprites();
-        LocalPlayerController.initImages();
     }
 
     @Override
-    public void enter(GameContainer container, StateBasedGame game) {
+    public void enter(GameContainer container, StateBasedGame game) throws SlickException{
         match = ((Game) game).match;
+        match.getCurrentPC().init(container);
+        match.getOtherPC().init(container);
+//        match.getCurrentPC().getCurrentState().enter(container, match.getCurrentPC());
+//        match.getOtherPC().getCurrentState().enter(container, match.getOtherPC());
+    }
+    
+    @Override
+    public void leave(GameContainer container, StateBasedGame game) throws SlickException{
+//        match.getCurrentPC().getCurrentState().leave(container, match.getCurrentPC());
+//        match.getOtherPC().getCurrentState().leave(container, match.getOtherPC());
     }
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        match.getCurrentPC().render(g);
+        match.getCurrentPC().render(container, g);
     }
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         match.ui.update(container, game, delta);
         match.model.applyDelta(delta);
+        match.getCurrentPC().update(container, delta);
+        match.getOtherPC().update(container, delta);
         while (true){
             Action action = match.getCurrentPC().retrieveAction();
             if (action != null){

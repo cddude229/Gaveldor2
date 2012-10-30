@@ -23,6 +23,10 @@ public class GameModel {
 
     public static enum GameState {
         SETTING_UP, PLAYING_BOARD, PLAYING_MINIGAME, WON, DISCONNECTED;
+        
+        public int getPCStateID(){
+            return ordinal();
+        }
     }
 
     public GameState gameState = GameState.SETTING_UP;

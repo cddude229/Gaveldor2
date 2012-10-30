@@ -37,15 +37,15 @@ public class Game extends StateBasedGame {
         GameUI ui = new GameUI();
         GameModel model;
         model = new GameModel(mapName);
-        match = new GameMatch(ui, model, new LocalPlayerController(model.getCurrentPlayer(), model, ui),
-                new LocalPlayerController(model.getOtherPlayer(), model, ui));
+        match = new GameMatch(ui, model, new LocalPlayerController(model.getCurrentPlayer(), model),
+                new LocalPlayerController(model.getOtherPlayer(), model));
     }
 
     public void startHostRemoteMatch(String mapName, Socket socket) throws GameException {
         GameUI ui = new GameUI();
         GameModel model;
         model = new GameModel(mapName);
-        match = new GameMatch(ui, model, new LocalPlayerController(model.getCurrentPlayer(), model, ui),
+        match = new GameMatch(ui, model, new LocalPlayerController(model.getCurrentPlayer(), model),
                 new RemotePlayerController(model.getOtherPlayer(), model, socket));
     }
 
@@ -54,7 +54,7 @@ public class Game extends StateBasedGame {
         GameModel model;
         model = new GameModel(mapName);
         match = new GameMatch(ui, model, new RemotePlayerController(model.getCurrentPlayer(), model, socket),
-                new LocalPlayerController(model.getOtherPlayer(), model, ui));
+                new LocalPlayerController(model.getOtherPlayer(), model));
 
     }
 

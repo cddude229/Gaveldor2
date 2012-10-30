@@ -6,7 +6,7 @@ import game.model.Player;
 
 import java.net.Socket;
 
-import org.newdawn.slick.Graphics;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 
 
@@ -23,11 +23,6 @@ public class RemotePlayerController extends PlayerController {
     public RemotePlayerController(Player player, GameModel model, Socket socket) {
         this(player, model, new NetworkingController(socket)); 
     }
-    
-    @Override
-    public void setup(){
-        //TODO
-    }
 
     @Override
     public Action retrieveAction(){
@@ -38,9 +33,13 @@ public class RemotePlayerController extends PlayerController {
     public void propagateAction(Action action) {
         networkingController.sendAction(action);
     }
-    
 
-    public void renderControllerPlayingBoard(Graphics g) throws SlickException{
-        //TODO: render the remote player's actions
+    @Override
+    public void initStatesList(GameContainer container) throws SlickException {
+        addState(new SetupState(false));
+        addState(new PlayBoardState(false));
+        addState(new PlayMinigameState(false));
+        addState(new DisconnectedState(false));
+        addState(new WonState(false));
     }
 }
