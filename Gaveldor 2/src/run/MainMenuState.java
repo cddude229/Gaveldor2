@@ -177,12 +177,12 @@ public class MainMenuState extends BasicGameState {
         hostBtn.addListener(new ClickListener() {
 
             public void onClick(Button clicked, float mx, float my) {
-                try {
-                    ((Game) game).startHostRemoteMatch("/assets/maps/basic");
+//                try {
+//                    ((Game) game).startHostRemoteMatch("/assets/maps/basic");
                     game.enterState(HostGameState.STATE_ID);
-                } catch (GameException e) {
-                    e.printStackTrace();
-                }
+//                } catch (GameException e) {
+//                    e.printStackTrace();
+//                }
             }
             
             public void onDoubleClick(Button clicked, float mx, float my) {}

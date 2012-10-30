@@ -2,6 +2,9 @@ package run;
 
 import game.run.GameException;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -34,6 +37,8 @@ public class ConnectingState extends BasicGameState {
     private static final int bHeight = 50;
     private String instructionTxt;
     ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
+    
+    private Socket socket = null;
 
     @Override
     /**
@@ -57,6 +62,14 @@ public class ConnectingState extends BasicGameState {
     @Override
     public void leave(GameContainer container, StateBasedGame game){
         container.getInput().removeListener(listener);
+        if (socket != null && !socket.isConnected()){
+            try {
+                socket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        socket = null;
     }
 
     @Override
@@ -72,6 +85,15 @@ public class ConnectingState extends BasicGameState {
         // TODO
         for (SimpleButton button : buttons) {
             button.update(container, delta);
+        }
+        if (socket != null && socket.isConnected()){
+            try {
+                ((Game)game).startClientRemoteMatch("/assets/maps/basic", socket);
+            } catch (GameException e) {
+                // TODO
+                e.printStackTrace();
+            }
+            game.enterState(PlayGameState.STATE_ID);
         }
     }
 
@@ -148,14 +170,25 @@ public class ConnectingState extends BasicGameState {
         });
         connectBtn.addListener(new ClickListener(){
             public void onClick(Button clicked, float mx, float my) {
-                try {
-                    ((Game) game).startClientRemoteMatch("/assets/maps/basic",ipBox.getText());
-                    game.enterState(JoinGameState.STATE_ID);
-                } catch (GameException e) {
-                    instructionTxt = "A connection could not be established. Please try again.";
-                    ipBox.setText("");
-                    ipBox.setCursorVisible(true);
-                }
+//                try {
+//                    ((Game) game).startClientRemoteMatch("/assets/maps/basic",ipBox.getText());
+//                    game.enterState(JoinGameState.STATE_ID);
+//                } catch (GameException e) {
+//                    instructionTxt = "A connection could not be established. Please try again.";
+//                    ipBox.setText("");
+//                    ipBox.setCursorVisible(true);
+//                }
+                socket = new Socket();
+                new Thread(new Runnable(){
+                    private final String ip = ipBox.getText();
+                    @Override
+                    public void run() {
+                        try {
+                            socket.connect(new InetSocketAddress(ip, Constants.REMOTE_CONNECTION_PORT));
+                        }catch (IOException e) {
+                        }
+                    }
+                }).start();
             }
 
             public void onDoubleClick(Button clicked, float mx, float my) {}

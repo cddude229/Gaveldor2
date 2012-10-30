@@ -15,19 +15,16 @@ import org.newdawn.slick.util.ResourceLocation;
 
 public class Resources {
     
-
-    public static class ActualClasspathLocation implements ResourceLocation {
-        public URL getResource(String ref) {
-            return this.getClass().getResource(ref);
-        }
-        
-        public InputStream getResourceAsStream(String ref) {
-            return this.getClass().getResourceAsStream(ref);
-        }
-    }
-    
     static{
-        ResourceLoader.addResourceLocation(new ActualClasspathLocation());
+        ResourceLoader.addResourceLocation(new ResourceLocation(){
+            public URL getResource(String ref) {
+                return this.getClass().getResource(ref);
+            }
+            
+            public InputStream getResourceAsStream(String ref) {
+                return this.getClass().getResourceAsStream(ref);
+            }
+        });
     }
     
     public static URL getResource(String ref) {

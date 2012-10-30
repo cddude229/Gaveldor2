@@ -5,10 +5,10 @@ import game.run.GameException;
 import game.run.GameMatch;
 import game.run.GameUI;
 import game.run.LocalPlayerController;
-import game.run.RemotePlayerController.ClientRemotePlayerController;
-import game.run.RemotePlayerController.HostRemotePlayerController;
+import game.run.RemotePlayerController;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.net.URISyntaxException;
 
 import org.newdawn.slick.AppGameContainer;
@@ -41,24 +41,21 @@ public class Game extends StateBasedGame {
                 new LocalPlayerController(model.getOtherPlayer(), model, ui));
     }
 
-    public void startHostRemoteMatch(String mapName) throws GameException {
+    public void startHostRemoteMatch(String mapName, Socket socket) throws GameException {
         GameUI ui = new GameUI();
         GameModel model;
         model = new GameModel(mapName);
         match = new GameMatch(ui, model, new LocalPlayerController(model.getCurrentPlayer(), model, ui),
-                new HostRemotePlayerController(model.getOtherPlayer(), model, Constants.REMOTE_CONNECTION_PORT));
+                new RemotePlayerController(model.getOtherPlayer(), model, socket));
     }
 
-    public void startClientRemoteMatch(String mapName, String address) throws GameException {
+    public void startClientRemoteMatch(String mapName, Socket socket) throws GameException {
         GameUI ui = new GameUI();
         GameModel model;
         model = new GameModel(mapName);
-        try {
-            match = new GameMatch(ui, model, new ClientRemotePlayerController(model.getCurrentPlayer(), model, address,
-                    Constants.REMOTE_CONNECTION_PORT), new LocalPlayerController(model.getOtherPlayer(), model, ui));
-        } catch (IOException e) {
-            throw new GameException("A connection could not be established to that host", e);
-        }
+        match = new GameMatch(ui, model, new RemotePlayerController(model.getCurrentPlayer(), model, socket),
+                new LocalPlayerController(model.getOtherPlayer(), model, ui));
+
     }
 
     @Override
@@ -67,7 +64,6 @@ public class Game extends StateBasedGame {
         addState(new HostGameState());
         addState(new PlayGameState());
         addState(new ConnectingState());
-        addState(new JoinGameState());
         addState(new CreditsState());
         addState(new InstructionState());
     }
