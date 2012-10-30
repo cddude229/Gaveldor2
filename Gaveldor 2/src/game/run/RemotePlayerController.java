@@ -23,6 +23,11 @@ public class RemotePlayerController extends PlayerController {
     public RemotePlayerController(Player player, GameModel model, Socket socket) {
         this(player, model, new NetworkingController(socket)); 
     }
+    
+    @Override
+    public void setup(){
+        //TODO
+    }
 
     @Override
     public Action retrieveAction(){

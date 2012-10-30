@@ -40,6 +40,11 @@ public class LocalPlayerController extends PlayerController {
         }
     }
     
+    @Override
+    public void setup(){
+        selectedPiece = null;
+    }
+    
     public static void initImages(){
         hoverOverlay = Resources.getImage("/assets/graphics/ui/hover.png");
         movableOverlay = Resources.getImage("/assets/graphics/ui/movable.png");
@@ -83,7 +88,11 @@ public class LocalPlayerController extends PlayerController {
             break;
         case PLAYING_BOARD:
             if (model.getCurrentPlayer().equals(player)){
-                updatePlayingBoardCurrent();
+                if (ui.getInput().isKeyDown(Input.KEY_ESCAPE)){
+                    actionQueue.add(new Action.ForfeitAction(player));
+                } else{
+                    updatePlayingBoardCurrent();
+                }
             }
             break;
         case PLAYING_MINIGAME:

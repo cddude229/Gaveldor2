@@ -28,7 +28,10 @@ public abstract class PlayerController {
     public PlayerController(Player player, GameModel model) {
         this.player = player;
         this.model = model;
+        setup();
     }
+    
+    public abstract void setup();
 
     public abstract Action retrieveAction();
 
@@ -52,7 +55,11 @@ public abstract class PlayerController {
             renderControllerWon(g);
             break;
         case DISCONNECTED:
-            // TODO
+            //TODO
+            renderBoard(g);
+            renderPieces(g);
+            g.setFont(f);
+            g.drawString("DISCONNECTED: the connection was lost", 0, 100);
             break;
         }
     }

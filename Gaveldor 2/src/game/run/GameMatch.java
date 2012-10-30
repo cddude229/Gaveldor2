@@ -29,4 +29,10 @@ public class GameMatch {
     public PlayerController getOtherPC(){
         return playerControllers.get(model.getOtherPlayer());
     }
+    
+    public void setup(){
+        for (PlayerController pc : playerControllers.values()){
+            pc.setup();
+        }
+    }
 }
