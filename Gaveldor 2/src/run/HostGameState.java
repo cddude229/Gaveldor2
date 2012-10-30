@@ -86,7 +86,9 @@ public class HostGameState extends BasicGameState {
                 try {
                     socket = serverSocket.accept();
                 } catch (IOException e) {
+                    //TODO: an error message to display
                 }
+                serverSocket = null;
             }
         }).start();
     }
@@ -95,9 +97,14 @@ public class HostGameState extends BasicGameState {
     public void leave(GameContainer container, StateBasedGame game){
         container.getInput().removeListener(listener);
         try {
-            serverSocket.close();
-            serverSocket = null;
-            socket = null;
+            if (serverSocket != null){
+                serverSocket.close();
+                serverSocket = null;
+            }
+            if (socket != null){
+                socket.close();
+                socket = null;
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -118,28 +125,11 @@ public class HostGameState extends BasicGameState {
                 ((Game)game).startHostRemoteMatch("/assets/maps/basic", socket);
             } catch (GameException e) {
                 // TODO
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
-//            ((Game)game).match.model.gameState = GameModel.GameState.PLAYING_BOARD;
+            socket = null;
             game.enterState(PlayGameState.STATE_ID);
         }
-//        GameMatch match = ((Game) game).match;
-//        backBtn.update(container, delta);
-//        match.model.applyDelta(delta);
-//        Action action;
-//        while ((action = match.getOtherPC().retrieveAction()) != null) {
-//            match.getOtherPC().propagateAction(action);
-//            match.model.applyAction(action);
-//            
-//            if (match.model.gameState != GameState.SETTING_UP) {
-//                if (match.model.gameState == GameState.DISCONNECTED) {
-//                    // TODO
-//                } else {
-//                    game.enterState(PlayGameState.STATE_ID);
-//                    break;
-//                }
-//            }
-//        }
     }
 
     @Override
