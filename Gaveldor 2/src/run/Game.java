@@ -63,7 +63,7 @@ public class Game extends StateBasedGame {
         addState(new MainMenuState());
         addState(new HostGameState());
         addState(new PlayGameState());
-        addState(new ConnectingState());
+        addState(new JoinGameState());
         addState(new CreditsState());
         addState(new InstructionState());
     }

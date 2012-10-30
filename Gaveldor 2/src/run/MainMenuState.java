@@ -202,7 +202,7 @@ public class MainMenuState extends BasicGameState {
         joinBtn.addListener(new ClickListener() {
 
             public void onClick(Button clicked, float mx, float my) {
-                game.enterState(ConnectingState.STATE_ID);
+                game.enterState(JoinGameState.STATE_ID);
             }
             
             public void onDoubleClick(Button clicked, float mx, float my) {}
