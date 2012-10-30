@@ -53,12 +53,12 @@ public class Map {
         return (Constants.TILE_HEIGHT - Constants.TILE_HEIGHT_SPACING) + Constants.TILE_HEIGHT_SPACING * height;
     }
 
-    public Set<Piece> createPieces(Player player1, Player player2) {
+    public Set<Piece> createPieces(Player[] players) {
         Set<Piece> piecesNew = new HashSet<Piece>();
         for (Piece p : pieces) {
             try {
                 piecesNew.add(p.getClass().getConstructor(Player.class, Point.class, int.class)
-                        .newInstance(p.owner.id == player1.id ? player1 : player2, p.getPosition(), p.id));
+                        .newInstance(players[p.owner.id], p.getPosition(), p.id));
             } catch (Exception e) {
                 if (e instanceof RuntimeException) {
                     throw (RuntimeException) e;
@@ -119,7 +119,7 @@ public class Map {
     }
 
     public static Set<Piece> loadPieces(String name, int mapWidth, int mapHeight) throws IOException {
-        Player p1 = new Player(1), p2 = new Player(2);
+        Player p1 = new Player(0), p2 = new Player(1);
         int idCounter = 0;
         BufferedReader reader = new BufferedReader(new InputStreamReader(Resources.getResourceAsStream(name + ".pieces")));
         try {

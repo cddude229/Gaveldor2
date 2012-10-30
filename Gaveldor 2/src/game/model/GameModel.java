@@ -15,8 +15,8 @@ public class GameModel {
 
     // TODO
 
-    private final Player player1, player2;
-    private boolean player1IsCurrent = true;
+    private final Player[] players;
+    private int currentPlayerIndex = 0;
 
     public final Map map;
     private Set<Piece> pieces;
@@ -30,26 +30,40 @@ public class GameModel {
     private MinigameModel minigame = null;
 
     public GameModel(String name) throws GameException {
-        player1 = new Player(1);
-        player2 = new Player(2);
+        players = new Player[]{new Player(1), new Player(2)};
 
         map = Map.loadMap(name);
     }
 
     public void setup() {
-        pieces = map.createPieces(player1, player2);
+        pieces = map.createPieces(players);
+        currentPlayerIndex = 0;
     }
 
     public Player getCurrentPlayer() {
-        return player1IsCurrent ? player1 : player2;
+        return players[currentPlayerIndex];
+    }
+    
+    public void setCurrentPlayer(int playerID){
+        for (int i = 0; i < players.length; i++){
+            if (players[i].id == playerID){
+                currentPlayerIndex = i;
+                return;
+            }
+        }
+        throw new IllegalArgumentException("The given player is not one of this game's players");
+    }
+    
+    public void setCurrentPlayer(Player player){
+        setCurrentPlayer(player.id);
     }
 
     public Player getOtherPlayer() {
-        return player1IsCurrent ? player2 : player1;
+        return players[1 - currentPlayerIndex];
     }
 
     private void switchCurrentAndOtherPlayers() {
-        player1IsCurrent ^= true;
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
     }
 
     private void endTurn() {
@@ -123,7 +137,8 @@ public class GameModel {
             break;
         case FORFEIT:
             ForfeitAction forfeitPacket = (ForfeitAction) action;
-            player1IsCurrent = forfeitPacket.playerID != player1.id;
+            setCurrentPlayer(forfeitPacket.playerID);
+            setCurrentPlayer(getOtherPlayer());
             gameState = GameState.WON;
             break;
         case MOVE:
@@ -155,7 +170,7 @@ public class GameModel {
             break;
         case MAKE_MINIGAME_MOVE:
             MakeMinigameMoveAction mmmPacket = (MakeMinigameMoveAction)action;
-            Player player = mmmPacket.playerID == player1.id ? player1 : player2;
+            Player player = mmmPacket.playerID == players[0].id ? players[0] : players[1];
             if (player.equals(getCurrentPlayer())){
                 assert player.equals(minigame.attackingPiece.owner);
                 assert minigame.attackingMove == null;
@@ -179,7 +194,8 @@ public class GameModel {
                 minigame.attackingPiece.turnState = TurnState.DONE;
                 gameState = GameState.PLAYING_BOARD;
                 if (!hasAnyPieces(minigame.defendingPiece.owner)) {
-                    player1IsCurrent = !minigame.defendingPiece.owner.equals(player1);
+                    setCurrentPlayer(minigame.defendingPiece.owner);
+                    setCurrentPlayer(getOtherPlayer());
                     gameState = GameState.WON;
                 }
                 minigame = null;
