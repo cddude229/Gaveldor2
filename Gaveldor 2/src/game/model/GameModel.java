@@ -160,6 +160,19 @@ public class GameModel {
             assert piece.turnState == TurnState.TURNING;
             piece.setDirection(facePacket.direction);
             piece.turnState = TurnState.ATTACKING;
+            
+            boolean any = false;
+            for (Point position : piece.getValidAttacks()) {
+                Piece p = getPieceByPosition(position);
+                if (p != null && !p.owner.equals(piece.owner)){
+                    any = true;
+                    break;
+                }
+            }
+            if (!any){
+                piece.turnState = TurnState.DONE;
+            }
+            
             break;
         case ATTACK:
             AttackAction attackPacket = (AttackAction) action;

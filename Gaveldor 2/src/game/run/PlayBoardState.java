@@ -62,9 +62,12 @@ public class PlayBoardState extends PlayerControllerState {
                 // TODO
                 break;
             case ATTACKING:
-                for (Point p : pc.selectedPiece.getValidAttacks()) {
-                    if (pc.model.isValidPosition(p)) {
-                        pc.renderAtPosition(attackableOverlay, g, p.x, p.y, 0f, 0f);
+                for (Point pos : pc.selectedPiece.getValidAttacks()) {
+                    if (pc.model.isValidPosition(pos)) {
+                        Piece p = pc.model.getPieceByPosition(pos);
+                        if (p != null && !p.owner.equals(pc.selectedPiece.owner)){
+                            pc.renderAtPosition(attackableOverlay, g, pos.x, pos.y, 0f, 0f);
+                        }
                     }
                 }
                 break;
@@ -80,10 +83,10 @@ public class PlayBoardState extends PlayerControllerState {
     @Override
     public void updateLocal(GameContainer container, LocalPlayerController pc, int delta) throws SlickException {
         pc.updateMousePan(container, pc, delta);
+        
         if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
             Point position = GameUI.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
                     + pc.displayY);
-            System.out.println(position);
             Piece piece = pc.model.getPieceByPosition(position);
     
             if (container.getInput().isKeyDown(Input.KEY_LSHIFT)) {
