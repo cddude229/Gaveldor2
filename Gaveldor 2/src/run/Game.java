@@ -3,7 +3,6 @@ package run;
 import game.model.GameModel;
 import game.run.GameException;
 import game.run.GameMatch;
-import game.run.GameUI;
 import game.run.LocalPlayerController;
 import game.run.RemotePlayerController;
 
@@ -34,26 +33,26 @@ public class Game extends StateBasedGame {
     }
 
     public void startLocalMatch(String mapName) throws GameException {
-        GameUI ui = new GameUI();
+//        GameUI ui = new GameUI();
         GameModel model;
         model = new GameModel(mapName);
-        match = new GameMatch(ui, model, new LocalPlayerController(model.getCurrentPlayer(), model),
+        match = new GameMatch(model, new LocalPlayerController(model.getCurrentPlayer(), model),
                 new LocalPlayerController(model.getOtherPlayer(), model));
     }
 
     public void startHostRemoteMatch(String mapName, Socket socket) throws GameException {
-        GameUI ui = new GameUI();
+//        GameUI ui = new GameUI();
         GameModel model;
         model = new GameModel(mapName);
-        match = new GameMatch(ui, model, new LocalPlayerController(model.getCurrentPlayer(), model),
+        match = new GameMatch(model, new LocalPlayerController(model.getCurrentPlayer(), model),
                 new RemotePlayerController(model.getOtherPlayer(), model, socket));
     }
 
     public void startClientRemoteMatch(String mapName, Socket socket) throws GameException {
-        GameUI ui = new GameUI();
+//        GameUI ui = new GameUI();
         GameModel model;
         model = new GameModel(mapName);
-        match = new GameMatch(ui, model, new RemotePlayerController(model.getCurrentPlayer(), model, socket),
+        match = new GameMatch(model, new RemotePlayerController(model.getCurrentPlayer(), model, socket),
                 new LocalPlayerController(model.getOtherPlayer(), model));
 
     }

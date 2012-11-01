@@ -28,27 +28,18 @@ public class PlayGameState extends BasicGameState {
         match = ((Game) game).match;
         match.getCurrentPC().init(container);
         match.getOtherPC().init(container);
-//        match.getCurrentPC().getCurrentState().enter(container, match.getCurrentPC());
-//        match.getOtherPC().getCurrentState().enter(container, match.getOtherPC());
     }
     
     @Override
     public void leave(GameContainer container, StateBasedGame game) throws SlickException{
-//        match.getCurrentPC().getCurrentState().leave(container, match.getCurrentPC());
-//        match.getOtherPC().getCurrentState().leave(container, match.getOtherPC());
     }
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         match.getCurrentPC().render(container, g);
     }
-
-    @Override
-    public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-        match.ui.update(container, game, delta);
-        match.model.applyDelta(delta);
-        match.getCurrentPC().update(container, delta);
-        match.getOtherPC().update(container, delta);
+    
+    private void updateActions(GameContainer container, StateBasedGame game, int delta) throws SlickException{
         while (true){
             Action action = match.getCurrentPC().retrieveAction();
             if (action != null){
@@ -64,6 +55,16 @@ public class PlayGameState extends BasicGameState {
             }
             break;
         }
+    }
+
+    @Override
+    public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        updateActions(container, game, delta);
+//        match.ui.update(container, game, delta);
+        match.model.applyDelta(delta);
+        match.getCurrentPC().update(container, delta);
+        match.getOtherPC().update(container, delta);
+        updateActions(container, game, delta);
     }
 
     @Override
