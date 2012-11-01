@@ -233,6 +233,16 @@ public class MainMenuState extends BasicGameState {
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });
+        
+        findMatchBtn.addListener(new ClickListener() {
+
+            public void onClick(Button clicked, float mx, float my) {
+                game.enterState(JoinMatchMakingState.STATE_ID);
+            }
+            
+            public void onDoubleClick(Button clicked, float mx, float my) {}
+            public void onRightClick(Button clicked, float mx, float my) {}
+        });
     }
     
     public ArrayList<Image> makeImages() throws SlickException {
