@@ -224,7 +224,7 @@ public class MainMenuState extends BasicGameState {
             public void onRightClick(Button clicked, float mx, float my) {}
         });
         
-        findBtn.addListener(new ClickListener() {
+        hostMatchBtn.addListener(new ClickListener() {
 
             public void onClick(Button clicked, float mx, float my) {
                 game.enterState(HostMatchMakingState.STATE_ID);
