@@ -5,11 +5,10 @@ import game.run.GameException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -28,9 +27,9 @@ import com.aem.sticky.button.Button;
 import com.aem.sticky.button.SimpleButton;
 import com.aem.sticky.button.events.ClickListener;
 
-import de.htwg_konstanz.rmi.hp.socket.HolePunchingSocket;
+import de.htwg_konstanz.in.uce.hp.parallel.target.HolePunchingTarget;
 
-public class MatchMakingGameState extends BasicGameState {
+public class HostMatchMakingState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
     private SimpleButton backBtn;
@@ -39,7 +38,7 @@ public class MatchMakingGameState extends BasicGameState {
     private static final int bHeight = 50;
     private String hostIP = "";
     
-    private ServerSocket serverSocket = null;
+    private HolePunchingTarget serverSocket = null;
     private Socket socket = null;
     
     @Override
@@ -78,23 +77,30 @@ public class MatchMakingGameState extends BasicGameState {
     public void enter(GameContainer container, StateBasedGame game) {
         container.getInput().addListener(listener);
         hostIP = getIPAddress();
-
-        InetSocketAddress mediatorSocketAddress = new InetSocketAddress(
-                "18.189.2.61", 400);
+        
+        SocketAddress mediatorRegisterSocketAddress = new InetSocketAddress(
+                "18.189.2.61", Constants.REMOTE_CONNECTION_PORT);
         String targetID = "myTarget";
-        HolePunchingSocket source = new HolePunchingSocket();
-        try {
-            Socket s = source.requestConnection(UUID.fromString(targetID), mediatorSocketAddress);
-            socket = s;
-            System.out.println(s.getInetAddress());
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
+        HolePunchingTarget target = new HolePunchingTarget(
+                mediatorRegisterSocketAddress, targetID);
+        serverSocket = target;
         
         new Thread(new Runnable(){
             @Override
             public void run() {
+                try {
+                    serverSocket.start();
+                    socket = serverSocket.accept();
+                } catch (IllegalStateException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         }).start();
     }
@@ -104,7 +110,7 @@ public class MatchMakingGameState extends BasicGameState {
         container.getInput().removeListener(listener);
         try {
             if (serverSocket != null){
-                serverSocket.close();
+                serverSocket.stop();
                 serverSocket = null;
             }
             if (socket != null){

@@ -12,5 +12,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="sticky"/>
+	<classpathentry kind="lib" path="src/hole-punching-jars/source-1.0-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="src/hole-punching-jars/target-1.0-jar-with-dependencies.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
