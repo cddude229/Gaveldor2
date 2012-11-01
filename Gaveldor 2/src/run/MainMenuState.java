@@ -28,7 +28,8 @@ public class MainMenuState extends BasicGameState {
     private SimpleButton instructBtn;
     private SimpleButton hostBtn;
     private SimpleButton joinBtn;
-    private SimpleButton findBtn;
+    private SimpleButton hostMatchBtn;
+    private SimpleButton findMatchBtn;
     private SimpleButton creditBtn;
     private SimpleButton exitBtn;
     private StickyListener listener;
@@ -105,18 +106,19 @@ public class MainMenuState extends BasicGameState {
     public ArrayList<SimpleButton> buildButtons(GameContainer container, StateBasedGame game) throws SlickException {
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
             locations.add(new int[] { this.getxLoc(bWidth), yLoc });
-            yLoc += 100;
+            yLoc += 75;
         }
         // create rectangles for buttons
         Rectangle playRect = new Rectangle(locations.get(0)[0], locations.get(0)[1], bWidth, bHeight);
         Rectangle hostRect = new Rectangle(locations.get(1)[0], locations.get(1)[1], bWidth, bHeight);
         Rectangle joinRect = new Rectangle(locations.get(2)[0], locations.get(2)[1], bWidth, bHeight);
-        Rectangle findRect = new Rectangle(locations.get(3)[0], locations.get(3)[1], bWidth, bHeight);
-        Rectangle instructRect = new Rectangle(locations.get(4)[0], locations.get(4)[1], bWidth, bHeight);
-        Rectangle creditRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
-        Rectangle exitRect = new Rectangle(locations.get(6)[0], locations.get(6)[1], bWidth, bHeight);
+        Rectangle joinMatchRect = new Rectangle(locations.get(3)[0], locations.get(3)[1], bWidth, bHeight);
+        Rectangle findMatchRect = new Rectangle(locations.get(4)[0], locations.get(4)[1], bWidth, bHeight);
+        Rectangle instructRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
+        Rectangle creditRect = new Rectangle(locations.get(6)[0], locations.get(6)[1], bWidth, bHeight);
+        Rectangle exitRect = new Rectangle(locations.get(7)[0], locations.get(7)[1], bWidth, bHeight);
 
         // create play Image
         Sound s = null;
@@ -126,10 +128,11 @@ public class MainMenuState extends BasicGameState {
         playBtn = new SimpleButton(playRect, images.get(0), images.get(1), s);
         hostBtn = new SimpleButton(hostRect, images.get(2), images.get(3), s);
         joinBtn = new SimpleButton(joinRect, images.get(4), images.get(5), s);
-        findBtn = new SimpleButton(findRect, images.get(6),images.get(7), s);
-        instructBtn = new SimpleButton(instructRect, images.get(8), images.get(9), s);
-        creditBtn = new SimpleButton(creditRect, images.get(10), images.get(11), s);
-        exitBtn = new SimpleButton(exitRect, images.get(12), images.get(13), s);
+        hostMatchBtn = new SimpleButton(joinMatchRect, images.get(6),images.get(7), s);
+        findMatchBtn = new SimpleButton(findMatchRect, images.get(8),images.get(9), s);
+        instructBtn = new SimpleButton(instructRect, images.get(10), images.get(11), s);
+        creditBtn = new SimpleButton(creditRect, images.get(12), images.get(13), s);
+        exitBtn = new SimpleButton(exitRect, images.get(14), images.get(15), s);
 
         // create listeners
         createListeners(container,game);
@@ -139,7 +142,8 @@ public class MainMenuState extends BasicGameState {
         buttons.add(playBtn);
         buttons.add(hostBtn);
         buttons.add(joinBtn);
-        buttons.add(findBtn);
+        buttons.add(hostMatchBtn);
+        buttons.add(findMatchBtn);
         buttons.add(instructBtn);
         buttons.add(creditBtn);
         buttons.add(exitBtn);
@@ -233,7 +237,7 @@ public class MainMenuState extends BasicGameState {
     
     public ArrayList<Image> makeImages() throws SlickException {
         ArrayList<Image> images = new ArrayList<Image>();
-        for (int i = 0; i <7; i++){
+        for (int i = 0; i <8; i++){
             Image im = new Image(bWidth, bHeight);
             im.getGraphics().setColor(Color.blue);
             im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
@@ -256,18 +260,22 @@ public class MainMenuState extends BasicGameState {
                 clickPlay.getGraphics().drawString("Join a Match", 0, 0);
                 break;
             case 3:
-                im.getGraphics().drawString("Matchmaking", 0, 0);
-                clickPlay.getGraphics().drawString("Matchmaking", 0, 0);
+                im.getGraphics().drawString("Host matchmaking", 0, 0);
+                clickPlay.getGraphics().drawString("Find a match", 0, 0);
                 break;
             case 4:
+                im.getGraphics().drawString("Join matchmaking", 0, 0);
+                clickPlay.getGraphics().drawString("Join a match", 0, 0);
+                break;
+            case 5:
                 im.getGraphics().drawString("Instructions", 0, 0);
                 clickPlay.getGraphics().drawString("Instructions", 0, 0);
                 break;
-            case 5:
+            case 6:
                 im.getGraphics().drawString("Credits", 0, 0);
                 clickPlay.getGraphics().drawString("Credits", 0, 0);
                 break;
-            case 6:
+            case 7:
                 im.getGraphics().drawString("Exit", 0, 0);
                 clickPlay.getGraphics().drawString("Exit", 0, 0);
                 break;
