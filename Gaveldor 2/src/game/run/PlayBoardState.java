@@ -3,6 +3,7 @@ package game.run;
 import game.model.Action;
 import game.model.GameModel.GameState;
 import game.model.Piece;
+import game.model.Piece.TurnState;
 import game.model.Point;
 
 import java.util.Arrays;
@@ -47,22 +48,30 @@ public class PlayBoardState extends PlayerControllerState {
 
         sidebarButtons = new Button[]{
                 Helpful.makeButton(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH / 2, 50, "End Turn", new ClickListener(){
-                    
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
-                        if (pc.player.equals(pc.model.getCurrentPlayer())){
-                            endTurn(pc);
-                        }
+                        endTurn(pc);
                     }
-
                     @Override
                     public void onRightClick(Button clicked, float mx, float my) {
                     }
-
                     @Override
                     public void onDoubleClick(Button clicked, float mx, float my) {
                     }
-                    
+                }),
+                Helpful.makeButton(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH / 2, 150, "Cancel", new ClickListener(){
+                    @Override
+                    public void onClick(Button clicked, float mx, float my) {
+                        if (pc.selectedPiece != null){
+                            clearSelection(pc);
+                        }
+                    }
+                    @Override
+                    public void onRightClick(Button clicked, float mx, float my) {
+                    }
+                    @Override
+                    public void onDoubleClick(Button clicked, float mx, float my) {
+                    }
                 }),
         };
         for (Button b : sidebarButtons){
@@ -101,37 +110,45 @@ public class PlayBoardState extends PlayerControllerState {
         }
 
         if (pc.selectedPiece != null) {
-            switch (pc.selectedPiece.turnState) {
-            case MOVING:
-                if (pc.selectedPieceMove == null){
-                    for (Point p : pc.selectedPiece.getValidMoves()) {
-                        if (pc.model.isValidPosition(p)) {
-                            pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
+            if (pc.player.equals(pc.selectedPiece.owner)){
+                switch (pc.selectedPiece.turnState) {
+                case MOVING:
+                    if (pc.selectedPieceMove == null){
+                        for (Point p : pc.selectedPiece.getValidMoves()) {
+                            if (pc.model.isValidPosition(p)) {
+                                pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
+                            }
                         }
-                    }
-                } else if (pc.selectedPieceFace == -1){
-                    pc.renderAtPosition(faceableArrows, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0.5f, 0.5f);
-                    // TODO
-                } else{
-                    for (Point pos : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
-                        if (pc.model.isValidPosition(pos)) {
-                            Piece p = pc.model.getPieceByPosition(pos);
-                            if (p != null && !p.owner.equals(pc.selectedPiece.owner)){
-                                pc.renderAtPosition(attackableOverlay, g, pos.x, pos.y, 0f, 0f);
+                    } else if (pc.selectedPieceFace == -1){
+                        pc.renderAtPosition(faceableArrows, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0.5f, 0.5f);
+                        // TODO
+                    } else{
+                        for (Point pos : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
+                            if (pc.model.isValidPosition(pos)) {
+                                Piece p = pc.model.getPieceByPosition(pos);
+                                if (p != null && !p.owner.equals(pc.selectedPiece.owner)){
+                                    pc.renderAtPosition(attackableOverlay, g, pos.x, pos.y, 0f, 0f);
+                                }
                             }
                         }
                     }
+                    break;
+                case TURNING:
+                    throw new RuntimeException();
+                case ATTACKING:
+                    break;
+                case DONE:
+                    // do nothing
+                    break;
+                default:
+                    throw new RuntimeException();
                 }
-                break;
-            case TURNING:
-                throw new RuntimeException();
-            case ATTACKING:
-                break;
-            case DONE:
-                // do nothing
-                break;
-            default:
-                throw new RuntimeException();
+            } else{
+                for (Point p : pc.selectedPiece.getValidMoves()) {
+                    if (pc.model.isValidPosition(p)) {
+                        pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
+                    }
+                }
             }
         }
         renderLocalSidebar(container, g);
@@ -140,6 +157,12 @@ public class PlayBoardState extends PlayerControllerState {
     @Override
     public void updateLocal(GameContainer container, LocalPlayerController pc, int delta) throws SlickException {
         if (pc.isCurrentPC()){
+            container.getInput().addListener(stickyListener);
+        } else{
+            container.getInput().removeListener(stickyListener);
+        }
+        
+        if (pc.isCurrentPC()){
             pc.updateMousePan(container, pc, delta);
             updateLocalSidebar(container, delta);
             
@@ -147,14 +170,12 @@ public class PlayBoardState extends PlayerControllerState {
                 Point position = PlayBoardState.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
                         + pc.displayY);
                 Piece piece = pc.model.getPieceByPosition(position);
-        
-                if (container.getInput().isKeyDown(Input.KEY_LSHIFT)) {
-                    if (piece != null && piece.owner.equals(pc.player) && !piece.equals(pc.selectedPiece)) {
+                
+                if (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner)){
+                    if (piece != null && !(pc.player.equals(piece.owner) && piece.turnState == TurnState.DONE)) {
                         pc.selectedPiece = piece;
-                        pc.selectedPieceMove = null;
-                        pc.selectedPieceFace = -1;
                     }
-                } else if (pc.selectedPiece != null) {
+                } else {
                     switch (pc.selectedPiece.turnState) {
                     case MOVING:
                         if (pc.selectedPieceMove == null){
@@ -181,6 +202,7 @@ public class PlayBoardState extends PlayerControllerState {
                                 if (!any){
                                     pc.actionQueue.add(new Action.MoveAction(pc.selectedPiece, pc.selectedPieceMove));
                                     pc.actionQueue.add(new Action.FaceAction(pc.selectedPiece, pc.selectedPieceFace));
+                                    clearSelection(pc);
                                 }
                             } else {
                                 // TODO: do nothing?
@@ -192,6 +214,7 @@ public class PlayBoardState extends PlayerControllerState {
                                 pc.actionQueue.add(new Action.MoveAction(pc.selectedPiece, pc.selectedPieceMove));
                                 pc.actionQueue.add(new Action.FaceAction(pc.selectedPiece, pc.selectedPieceFace));
                                 pc.actionQueue.add(new Action.AttackAction(pc.selectedPiece, piece));
+                                clearSelection(pc);
                             } else {
                                 // TODO: do nothing?
                             }
@@ -202,10 +225,6 @@ public class PlayBoardState extends PlayerControllerState {
                     case ATTACKING:
                         throw new RuntimeException();
                     case DONE:
-                        pc.selectedPiece = null;
-                        pc.selectedPieceMove = null;
-                        pc.selectedPieceFace = -1;
-                        break;
                     default:
                         throw new RuntimeException();
                     }
@@ -219,10 +238,14 @@ public class PlayBoardState extends PlayerControllerState {
     }
 
     private void endTurn(LocalPlayerController pc){
+        clearSelection(pc);
+        pc.actionQueue.add(new Action.TurnEndAction(pc.player));
+    }
+    
+    private void clearSelection(LocalPlayerController pc){
         pc.selectedPiece = null;
         pc.selectedPieceMove = null;
         pc.selectedPieceFace = -1;
-        pc.actionQueue.add(new Action.TurnEndAction(pc.player));
     }
 
     public static Point getTileCoords(int pixelX, int pixelY){
