@@ -271,11 +271,11 @@ public class MainMenuState extends BasicGameState {
                 break;
             case 3:
                 im.getGraphics().drawString("Host matchmaking", 0, 0);
-                clickPlay.getGraphics().drawString("Find a match", 0, 0);
+                clickPlay.getGraphics().drawString("Host matchmaking", 0, 0);
                 break;
             case 4:
                 im.getGraphics().drawString("Join matchmaking", 0, 0);
-                clickPlay.getGraphics().drawString("Join a match", 0, 0);
+                clickPlay.getGraphics().drawString("Join matchmaking", 0, 0);
                 break;
             case 5:
                 im.getGraphics().drawString("Instructions", 0, 0);
