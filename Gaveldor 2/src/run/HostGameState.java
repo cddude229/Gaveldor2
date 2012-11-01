@@ -120,6 +120,7 @@ public class HostGameState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        backBtn.update(container, delta);
         if (socket != null && socket.isConnected()){
             try {
                 ((Game)game).startHostRemoteMatch("/assets/maps/basic", socket);
