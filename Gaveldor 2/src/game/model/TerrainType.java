@@ -44,13 +44,13 @@ public enum TerrainType {
     public Image tile = null;
     
     private TerrainType(char repChar){
-        this.repChar = repChar;
+        this.repChar = Character.toUpperCase(repChar);
     }
     
     abstract public boolean enterable(PieceType p);
     
     public static TerrainType getByRepChar(char repChar){
-        return byRepChar.get(repChar);
+        return byRepChar.get(Character.toUpperCase(repChar));
     }
     
     public static void initTiles() throws SlickException{
