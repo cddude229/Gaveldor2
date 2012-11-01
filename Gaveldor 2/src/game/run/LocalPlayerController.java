@@ -4,11 +4,13 @@ import game.model.Action;
 import game.model.GameModel;
 import game.model.Piece;
 import game.model.Player;
+import game.model.Point;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 import util.Constants;
@@ -18,11 +20,29 @@ public class LocalPlayerController extends PlayerController {
     public final Queue<Action> actionQueue = new LinkedList<Action>();
 
     public Piece selectedPiece = null;
+    public Point selectedPieceMove = null;
+    public int selectedPieceFace = -1;
 
     public LocalPlayerController(Player player, GameModel model) {
         super(player, model);
         if (player.equals(model.getCurrentPlayer())) {
             actionQueue.add(new Action.GameStartAction());
+        }
+    }
+
+    public void renderPieces(Graphics g) {
+        for (Piece p : model.getPieces()) {
+            Point pos = p.getPosition();
+            int dir = p.getDirection();
+            if (p.equals(selectedPiece)){
+                if (selectedPieceMove != null){
+                    pos = selectedPieceMove;
+                }
+                if (selectedPieceFace != -1){
+                    dir = selectedPieceFace;
+                }
+            }
+            renderAtPosition(p.getSprite(dir), g, pos.x, pos.y, .5f, 1f);
         }
     }
 

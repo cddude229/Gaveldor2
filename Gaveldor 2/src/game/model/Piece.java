@@ -194,9 +194,7 @@ public abstract class Piece {
      * 
      * @return
      */
-    final public Point[] getValidAttacks() {
-        Point p = this.getPosition();
-        int dir = this.getDirection();
+    final public Point[] getValidAttacks(Point p, int dir) {
         Point[] ret;
         switch (defaultAttackRange()) {
         case 1:
@@ -226,6 +224,10 @@ public abstract class Piece {
         default:
             throw new RuntimeException("Not yet implemented for d >= 3");
         }
+    }
+    
+    public final Point[] getValidAttacks(){
+        return getValidAttacks(this.getPosition(), this.getDirection());
     }
 
     /**
@@ -270,8 +272,12 @@ public abstract class Piece {
      * 
      * @return
      */
-    public Image getSprite() {
-        return pieceType.getSprite(owner.id, getHealth(), getDirection());
+    public Image getSprite(int direction) {
+        return pieceType.getSprite(owner.id, getHealth(), direction);
+    }
+    
+    public Image getSprite(){
+        return getSprite(getDirection());
     }
 
     public static int pointsToDirection(Point to, Point from) {
@@ -350,5 +356,4 @@ public abstract class Piece {
         }
         throw new RuntimeException("Piece.getPointsFromPoint() not yet implemented for d >= 3");
     }
-
 }
