@@ -94,7 +94,7 @@ public class PlayBoardState extends PlayerControllerState {
     }
     
     public void renderLocal(GameContainer container, LocalPlayerController pc, Graphics g) throws SlickException {
-        Point position = GameUI.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
+        Point position = PlayBoardState.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
                 + pc.displayY);
         if (pc.model.isValidPosition(position)) {
             pc.renderAtPosition(hoverOverlay, g, position.x, position.y, 0f, 0f);
@@ -144,7 +144,7 @@ public class PlayBoardState extends PlayerControllerState {
             updateLocalSidebar(container, delta);
             
             if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-                Point position = GameUI.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
+                Point position = PlayBoardState.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
                         + pc.displayY);
                 Piece piece = pc.model.getPieceByPosition(position);
         
@@ -223,5 +223,30 @@ public class PlayBoardState extends PlayerControllerState {
         pc.selectedPieceMove = null;
         pc.selectedPieceFace = -1;
         pc.actionQueue.add(new Action.TurnEndAction(pc.player));
+    }
+
+    public static Point getTileCoords(int pixelX, int pixelY){
+        double y = (1.0 * pixelY + (Constants.TILE_HEIGHT - Constants.TILE_HEIGHT_SPACING)) / Constants.TILE_HEIGHT_SPACING;
+        double x = 1.0 * pixelX / Constants.TILE_WIDTH_SPACING / 2;
+        double z = -0.5 * y - x;
+               x = -0.5 * y + x;
+        int iy = (int)Math.floor(y+0.5);
+        int ix = (int)Math.floor(x+0.5);
+        int iz = (int)Math.floor(z+0.5);
+        int s = iy+ix+iz;
+        if( s != 0){
+            double abs_dy = Math.abs(iy-y);
+            double abs_dx = Math.abs(ix-x);
+            double abs_dz = Math.abs(iz-z);
+            if( abs_dy >= abs_dx && abs_dy >= abs_dz )
+                iy -= s;
+            else if( abs_dx >= abs_dy && abs_dx >= abs_dz )
+                ix -= s;
+            else
+                iz -= s;
+        }
+        iy -= 1;
+        ix -= 1;
+        return new Point(ix - iz, iy);
     }
 }

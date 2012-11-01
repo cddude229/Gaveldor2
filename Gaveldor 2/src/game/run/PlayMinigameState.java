@@ -4,6 +4,7 @@ import game.model.Action.MakeMinigameMoveAction;
 import game.model.GameModel.GameState;
 import game.model.MinigameModel.Move;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -27,6 +28,7 @@ public class PlayMinigameState extends PlayerControllerState {
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
         //TODO, obviously
         g.setFont(Constants.testFont);
+        g.setColor(Color.white);
         g.drawString("MINIGAME", 0, 0);
         g.drawString(String.valueOf(pc.model.getMinigame().attackingMove), 0, 100);
         g.drawString(String.valueOf(pc.model.getMinigame().defendingMove), 400, 100);
