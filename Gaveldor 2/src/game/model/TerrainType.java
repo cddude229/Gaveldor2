@@ -11,9 +11,23 @@ import util.Resources;
 public enum TerrainType {
 
     OPEN_LAND('L'){
+        @Override
+        public boolean enterable(PieceType p) {
+            return true;
+        }
     },
-    FOREST('F'),
-    WATER('W'),
+    SWAMP('S') {
+        @Override
+        public boolean enterable(PieceType p) {
+            return p == PieceType.INFANTRY;
+        }
+    },
+    MOUNTAIN('M') {
+        @Override
+        public boolean enterable(PieceType p) {
+            return false;
+        }
+    },
     //TODO
     ;
     
@@ -32,6 +46,8 @@ public enum TerrainType {
     private TerrainType(char repChar){
         this.repChar = repChar;
     }
+    
+    abstract public boolean enterable(PieceType p);
     
     public static TerrainType getByRepChar(char repChar){
         return byRepChar.get(repChar);
