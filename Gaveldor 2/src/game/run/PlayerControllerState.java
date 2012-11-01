@@ -8,11 +8,15 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import com.aem.sticky.StickyListener;
+
 public abstract class PlayerControllerState extends BasicGameState {
     
     public final GameState gameState;
     
     public final boolean isLocal;
+    
+    public final StickyListener stickyListener = new StickyListener();
     
     public PlayerControllerState(GameState gameState, boolean isLocal){
         this.gameState = gameState;
@@ -30,6 +34,24 @@ public abstract class PlayerControllerState extends BasicGameState {
     }
     
     public abstract void init(GameContainer container, PlayerController pc) throws SlickException;
+    
+    @Override
+    public final void enter(GameContainer container, StateBasedGame game) throws SlickException{
+        container.getInput().addListener(stickyListener);
+        enter(container, (PlayerController)game);
+        
+    }
+
+    public void enter(GameContainer container, PlayerController pc) throws SlickException{};
+
+    @Override
+    public final void leave(GameContainer container, StateBasedGame game) throws SlickException{
+        container.getInput().removeListener(stickyListener);
+        leave(container, (PlayerController)game);
+        
+    }
+
+    public void leave(GameContainer container, PlayerController pc) throws SlickException{};
     
     @Override
     public final void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException{

@@ -35,6 +35,7 @@ public class PlayBoardState extends PlayerControllerState {
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
         pc.renderBoard(g);
         pc.renderPieces(g);
+        pc.renderSidebar(g);
         if (isLocal){
             renderLocal(container, (LocalPlayerController)pc, g);
         }

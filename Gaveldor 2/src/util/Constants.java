@@ -14,8 +14,9 @@ import org.newdawn.slick.font.effects.Effect;
  */
 public class Constants {
     
-    public static final int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
+    public static final int WINDOW_WIDTH = 1300, WINDOW_HEIGHT = 768;
     public static final boolean WINDOW_FULLSCREEN = false;
+    public static final int BOARD_SIDEBAR_WIDTH = WINDOW_WIDTH - 1024;
     
     // the actual size of the tiles in-file
     public static final int TILE_WIDTH = 170, TILE_HEIGHT = 196;

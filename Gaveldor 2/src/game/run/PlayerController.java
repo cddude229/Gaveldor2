@@ -6,6 +6,7 @@ import game.model.Piece;
 import game.model.Player;
 import game.model.TerrainType;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -59,5 +60,10 @@ public abstract class PlayerController extends StateBasedGame{
             Image sprite = p.getSprite();
             renderAtPosition(sprite, g, p.getPosition().x, p.getPosition().y, .5f, 1f);
         }
+    }
+    
+    public void renderSidebar(Graphics g){
+        g.setColor(new Color(0x77000000));
+        g.fillRect(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH, 0, Constants.BOARD_SIDEBAR_WIDTH, Constants.WINDOW_HEIGHT);
     }
 }
