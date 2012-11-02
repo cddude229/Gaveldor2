@@ -46,9 +46,16 @@ public abstract class PlayerController extends StateBasedGame{
     }
 
     public void renderBoard(Graphics g) {
-        for (int j = 0; j < model.map.height; j++) {
-            for (int i = j % 2; i < model.map.width; i += 2) {
-                TerrainType terrain = model.map.getTerrain(i, j);
+        int w = Constants.WINDOW_WIDTH / Constants.TILE_WIDTH_SPACING / 2;
+        int h = (Constants.WINDOW_HEIGHT + (Constants.TILE_HEIGHT - Constants.TILE_HEIGHT_SPACING)) / Constants.TILE_HEIGHT_SPACING;
+        for (int j = - h; j < model.map.height + h; j++) {
+            for (int i = j % 2 - w; i < model.map.width + w; i += 2) {
+                TerrainType terrain;
+                if (j < 0 || j >= model.map.height || i < 0 || i >= model.map.width){
+                    terrain = TerrainType.MOUNTAINS;
+                } else{
+                    terrain = model.map.getTerrain(i, j);
+                }
                 renderAtPosition(terrain.tile, g, i, j, 0f, 0f);
             }
         }

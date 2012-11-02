@@ -19,11 +19,6 @@ public enum PieceType {
         sprites = new Image[2][defaultHealth][6];
     }
     
-//    private String getSpriteRef(int player, int health){
-//        return "/assets/graphics/units/player" + player + "/" + name().toLowerCase()
-//                + "_p" + player + "_h" + health + ".png";
-//    }
-    
     public static void initSprites(){
         int[] m = new int[]{1, 2, 5, 4, 3, 0};
         for (PieceType type : PieceType.values()){

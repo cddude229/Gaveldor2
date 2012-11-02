@@ -249,8 +249,8 @@ public class PlayBoardState extends PlayerControllerState {
     }
 
     public static Point getTileCoords(int pixelX, int pixelY){
-        double y = (1.0 * pixelY + (Constants.TILE_HEIGHT - Constants.TILE_HEIGHT_SPACING)) / Constants.TILE_HEIGHT_SPACING;
         double x = 1.0 * pixelX / Constants.TILE_WIDTH_SPACING / 2;
+        double y = (1.0 * pixelY + (Constants.TILE_HEIGHT - Constants.TILE_HEIGHT_SPACING)) / Constants.TILE_HEIGHT_SPACING;
         double z = -0.5 * y - x;
                x = -0.5 * y + x;
         int iy = (int)Math.floor(y+0.5);

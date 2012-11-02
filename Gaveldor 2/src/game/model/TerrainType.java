@@ -10,7 +10,7 @@ import util.Resources;
 
 public enum TerrainType {
 
-    OPEN_LAND('L'){
+    FIELD('L'){
         @Override
         public boolean enterable(PieceType p) {
             return true;
@@ -22,7 +22,7 @@ public enum TerrainType {
             return p == PieceType.INFANTRY;
         }
     },
-    MOUNTAIN('M') {
+    MOUNTAINS('M') {
         @Override
         public boolean enterable(PieceType p) {
             return false;
@@ -54,7 +54,8 @@ public enum TerrainType {
     }
     
     public static void initTiles() throws SlickException{
-        OPEN_LAND.tile = Resources.getImage("/assets/graphics/terrain/blank.png").getScaledCopy(.5f);
+        FIELD.tile = Resources.getImage("/assets/graphics/terrain/field.png").getScaledCopy(.5f);
+        MOUNTAINS.tile = Resources.getImage("/assets/graphics/terrain/mountains.png").getScaledCopy(.5f);
     }
 }
 
