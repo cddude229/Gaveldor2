@@ -19,11 +19,9 @@ public class Constants {
     public static final int BOARD_SIDEBAR_WIDTH = WINDOW_WIDTH - 1024;
     
     // the actual size of the tiles in-file
-    public static final int TILE_WIDTH = 170, TILE_HEIGHT = 196;
-    // the perspective adjustment, given the natural height-to-width ratio of a regular hexagon
-    public static final double TILE_PERSPECTIVE_RATIO = (TILE_HEIGHT / 2) / (TILE_WIDTH / Math.sqrt(3));
+    public static final int TILE_WIDTH = 200, TILE_HEIGHT = 150;
     // the size to be used to get proper tile placement
-    public static final int  TILE_WIDTH_SPACING = (int) (TILE_WIDTH * TILE_PERSPECTIVE_RATIO / 2);
+    public static final int  TILE_WIDTH_SPACING = (int) (TILE_WIDTH / 2);
     public static final int TILE_HEIGHT_SPACING = (int)(TILE_HEIGHT * 3 / 4);
     
     public static final int REMOTE_CONNECTION_PORT = 400;

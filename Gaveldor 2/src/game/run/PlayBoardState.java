@@ -40,10 +40,10 @@ public class PlayBoardState extends PlayerControllerState {
     }
     
     public void initLocal(GameContainer container, final LocalPlayerController pc) throws SlickException{
-        hoverOverlay = Resources.getImage("/assets/graphics/ui/hover.png");
-        movableOverlay = Resources.getImage("/assets/graphics/ui/movable.png");
-        faceableArrows = Resources.getImage("/assets/graphics/ui/arrows.png");
-        attackableOverlay = Resources.getImage("/assets/graphics/ui/attackable.png");
+        hoverOverlay = Resources.getImage("/assets/graphics/ui/hover.png").getScaledCopy(.5f);
+        movableOverlay = Resources.getImage("/assets/graphics/ui/movable.png").getScaledCopy(.5f);
+        faceableArrows = Resources.getImage("/assets/graphics/ui/arrows.png").getScaledCopy(.5f);
+        attackableOverlay = Resources.getImage("/assets/graphics/ui/attackable.png").getScaledCopy(.5f);
         
 
         sidebarButtons = new Button[]{

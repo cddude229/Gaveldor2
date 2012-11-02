@@ -25,20 +25,18 @@ public enum PieceType {
 //    }
     
     public static void initSprites(){
+        int[] m = new int[]{1, 2, 5, 4, 3, 0};
         for (PieceType type : PieceType.values()){
             for (int player : new int[]{1, 2}){
                 for (int health = 1; health <= type.defaultHealth; health++){
-                    for (int direction = 0; direction < 6; direction++){
-                        Image im;
+                    for (int direction  = 0; direction < 6; direction++){
                         String name = type.name().toLowerCase();
                         String ref = "/assets/graphics/units/" + name + "/" + name
-                                + "_p" + player + "_h" + health + "_d1" + ".png";
-                        if (direction == 0){
-                            im = Resources.getImage(ref);
-                        } else{
-                            im = type.sprites[player - 1][health - 1][0].copy();
+                                + "_p" + player + "_h" + health + "_d" + (m[direction] % 3) + ".png";
+                        Image im = Resources.getImage(ref).getScaledCopy(.5f);
+                        if (m[direction] >= 3){
+                            im = im.getFlippedCopy(true, false);
                         }
-                        im.rotate(360f / 6 * direction);
                         type.sprites[player - 1][health - 1][direction] = im;
                     }
                 }
