@@ -24,15 +24,9 @@ import com.aem.sticky.button.events.ClickListener;
 public class MainMenuState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
-    private SimpleButton playBtn;
-    private SimpleButton instructBtn;
-    private SimpleButton hostBtn;
-    private SimpleButton joinBtn;
-    private SimpleButton hostMatchBtn;
-    private SimpleButton findMatchBtn;
-    private SimpleButton creditBtn;
-    private SimpleButton exitBtn;
     private StickyListener listener;
+    private GameContainer container;
+    private StateBasedGame game;
     private static final int bWidth = 150;
     private static final int bHeight = 50;
     ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
@@ -42,9 +36,10 @@ public class MainMenuState extends BasicGameState {
      * Builds buttons and adds listeners to game. This isn't fully functional.
      */
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-
+        this.container = container;
+        this.game = game;
         listener = new StickyListener();
-        buttons = this.buildButtons(container, game);
+        buttons = this.buildButtons();
         game.enterState(MainMenuState.STATE_ID);
         for (SimpleButton button : buttons) {
             listener.add(button);
@@ -65,7 +60,6 @@ public class MainMenuState extends BasicGameState {
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         g.drawString("Welcome to Gaveldor 2: The Engaveling of Ambidextria", 250, 10);
-        //g.drawString("In game shift + click moves characters", 0, 150);
         for (SimpleButton button: buttons){
             button.render(container, g);
         }
@@ -73,7 +67,6 @@ public class MainMenuState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-        // TODO
         for (SimpleButton button : buttons) {
             button.update(container, delta);
         }
@@ -103,148 +96,154 @@ public class MainMenuState extends BasicGameState {
      * @return an arrayList of the five buttons
      * @throws SlickException
      */
-    public ArrayList<SimpleButton> buildButtons(GameContainer container, StateBasedGame game) throws SlickException {
+    public ArrayList<SimpleButton> buildButtons() throws SlickException {
+        
+        //create possible locations for buttons
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
         for (int i = 0; i < 8; i++) {
             locations.add(new int[] { this.getxLoc(bWidth), yLoc });
             yLoc += 75;
         }
-        // create rectangles for buttons
-        Rectangle playRect = new Rectangle(locations.get(0)[0], locations.get(0)[1], bWidth, bHeight);
-        Rectangle hostRect = new Rectangle(locations.get(1)[0], locations.get(1)[1], bWidth, bHeight);
-        Rectangle joinRect = new Rectangle(locations.get(2)[0], locations.get(2)[1], bWidth, bHeight);
-        Rectangle joinMatchRect = new Rectangle(locations.get(3)[0], locations.get(3)[1], bWidth, bHeight);
-        Rectangle findMatchRect = new Rectangle(locations.get(4)[0], locations.get(4)[1], bWidth, bHeight);
-        Rectangle instructRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
-        Rectangle creditRect = new Rectangle(locations.get(6)[0], locations.get(6)[1], bWidth, bHeight);
-        Rectangle exitRect = new Rectangle(locations.get(7)[0], locations.get(7)[1], bWidth, bHeight);
+        
+        //create rectangles for buttons
+        ArrayList<Rectangle> rects = new ArrayList<Rectangle>();
+        for (int i = 0; i < locations.size(); i++){
+            rects.add(new Rectangle(locations.get(i)[0],locations.get(i)[1],bWidth,bHeight));
+        }
 
         // create play Image
         Sound s = null;
         ArrayList<Image> images = this.makeImages();
-
-        // add buttons
-        playBtn = new SimpleButton(playRect, images.get(0), images.get(1), s);
-        hostBtn = new SimpleButton(hostRect, images.get(2), images.get(3), s);
-        joinBtn = new SimpleButton(joinRect, images.get(4), images.get(5), s);
-        hostMatchBtn = new SimpleButton(joinMatchRect, images.get(6),images.get(7), s);
-        findMatchBtn = new SimpleButton(findMatchRect, images.get(8),images.get(9), s);
-        instructBtn = new SimpleButton(instructRect, images.get(10), images.get(11), s);
-        creditBtn = new SimpleButton(creditRect, images.get(12), images.get(13), s);
-        exitBtn = new SimpleButton(exitRect, images.get(14), images.get(15), s);
+        
+        //create the buttons
+        ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
+        for (int i = 0; i < rects.size(); i++){
+            buttons.add(new SimpleButton(rects.get(i), images.get(2*i), images.get(2*i + 1),s));
+        }
 
         // create listeners
-        createListeners(container,game);
-
-        // add to array of buttons
-        ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
-        buttons.add(playBtn);
-        buttons.add(hostBtn);
-        buttons.add(joinBtn);
-        buttons.add(hostMatchBtn);
-        buttons.add(findMatchBtn);
-        buttons.add(instructBtn);
-        buttons.add(creditBtn);
-        buttons.add(exitBtn);
+        createListeners(game, buttons);
         return buttons;
     }
 
     /**
-     * Adds the listeners to the system. Currently only the playbutton is
-     * implemented.
+     * Adds the listeners to the system. Editing the listeners must be in order of button appearance
+     *
      */
-    private void createListeners(final GameContainer container, final StateBasedGame game) {
-        playBtn.addListener(new ClickListener() {
+    private void createListeners(final StateBasedGame game, ArrayList<SimpleButton> buttons) {
+        for (int i = 0; i < buttons.size(); i++){
+            switch (i){
 
-            public void onClick(Button clicked, float mx, float my) {
-                try {
-                    ((Game) game).startLocalMatch("/assets/maps/basic");
-                } catch (GameException e) {
-                    e.printStackTrace();
-                }
-                game.enterState(PlayGameState.STATE_ID);
+            case 0:
+                buttons.get(i).addListener(new ClickListener() {
+
+                    public void onClick(Button clicked, float mx, float my) {
+                        try {
+                            ((Game) game).startLocalMatch("/assets/maps/basic");
+                        } catch (GameException e) {
+                            e.printStackTrace();
+                        }
+                        game.enterState(PlayGameState.STATE_ID);
+                    }
+
+                    public void onDoubleClick(Button clicked, float mx, float my) {}
+                    public void onRightClick(Button clicked, float mx, float my) {}
+                });
+                break;
+
+            case 1:
+                buttons.get(i).addListener(new ClickListener() {
+
+                    public void onClick(Button clicked, float mx, float my) {
+                        game.enterState(HostGameState.STATE_ID);
+                    }
+
+                    public void onDoubleClick(Button clicked, float mx, float my) {}
+                    public void onRightClick(Button clicked, float mx, float my) {}
+                });
+                break;
+
+            case 2:
+                buttons.get(i).addListener(new ClickListener() {
+
+                    public void onClick(Button clicked, float mx, float my) {
+                        game.enterState(JoinGameState.STATE_ID);
+                    }
+
+                    public void onDoubleClick(Button clicked, float mx, float my) {}
+                    public void onRightClick(Button clicked, float mx, float my) {}
+                });
+                break;
+
+            case 3:
+                buttons.get(i).addListener(new ClickListener() {
+
+                    public void onClick(Button clicked, float mx, float my) {
+                        game.enterState(HostMatchMakingState.STATE_ID);
+                    }
+
+                    public void onDoubleClick(Button clicked, float mx, float my) {}
+                    public void onRightClick(Button clicked, float mx, float my) {}
+                });
+                break;
+
+            case 4:
+                buttons.get(i).addListener(new ClickListener() {
+
+                    public void onClick(Button clicked, float mx, float my) {
+                        game.enterState(JoinMatchMakingState.STATE_ID);
+                    }
+
+                    public void onDoubleClick(Button clicked, float mx, float my) {}
+                    public void onRightClick(Button clicked, float mx, float my) {}
+                });
+                break;
+
+            case 5:
+                buttons.get(i).addListener(new ClickListener() {
+
+                    public void onClick(Button clicked, float mx, float my) {
+                        game.enterState(InstructionState.STATE_ID);
+                    }
+
+                    public void onDoubleClick(Button clicked, float mx, float my) {}
+                    public void onRightClick(Button clicked, float mx, float my) {}
+                });
+                break;
+
+            case 6:
+                buttons.get(i).addListener(new ClickListener() {
+
+                    public void onClick(Button clicked, float mx, float my) {
+                        game.enterState(CreditsState.STATE_ID);
+                    }
+
+                    public void onDoubleClick(Button clicked, float mx, float my) {}
+                    public void onRightClick(Button clicked, float mx, float my) {}
+                });
+                break;
+
+            case 7:
+                buttons.get(i).addListener(new ClickListener(){
+                    public void onClick(Button clicked, float mx, float my) {
+                        container.exit();
+                        System.exit(0);
+                    }
+
+                    public void onDoubleClick(Button clicked, float mx, float my) {}
+                    public void onRightClick(Button clicked, float mx, float my) {}
+                });
+                break;
             }
-
-            public void onDoubleClick(Button clicked, float mx, float my) {}
-            public void onRightClick(Button clicked, float mx, float my) {}
-        });
-        exitBtn.addListener(new ClickListener(){
-            public void onClick(Button clicked, float mx, float my) {
-                container.exit();
-                System.exit(0);
-            }
-
-            public void onDoubleClick(Button clicked, float mx, float my) {}
-            public void onRightClick(Button clicked, float mx, float my) {}
-        });
-        
-        hostBtn.addListener(new ClickListener() {
-
-            public void onClick(Button clicked, float mx, float my) {
-//                try {
-//                    ((Game) game).startHostRemoteMatch("/assets/maps/basic");
-                    game.enterState(HostGameState.STATE_ID);
-//                } catch (GameException e) {
-//                    e.printStackTrace();
-//                }
-            }
-            
-            public void onDoubleClick(Button clicked, float mx, float my) {}
-            public void onRightClick(Button clicked, float mx, float my) {}
-        });
-        
-        instructBtn.addListener(new ClickListener() {
-
-            public void onClick(Button clicked, float mx, float my) {
-                game.enterState(InstructionState.STATE_ID);
-            }
-            
-            public void onDoubleClick(Button clicked, float mx, float my) {}
-            public void onRightClick(Button clicked, float mx, float my) {}
-        });
-
-        joinBtn.addListener(new ClickListener() {
-
-            public void onClick(Button clicked, float mx, float my) {
-                game.enterState(JoinGameState.STATE_ID);
-            }
-            
-            public void onDoubleClick(Button clicked, float mx, float my) {}
-            public void onRightClick(Button clicked, float mx, float my) {}
-        });
-        
-        creditBtn.addListener(new ClickListener() {
-
-            public void onClick(Button clicked, float mx, float my) {
-                game.enterState(CreditsState.STATE_ID);
-            }
-            
-            public void onDoubleClick(Button clicked, float mx, float my) {}
-            public void onRightClick(Button clicked, float mx, float my) {}
-        });
-        
-        hostMatchBtn.addListener(new ClickListener() {
-
-            public void onClick(Button clicked, float mx, float my) {
-                game.enterState(HostMatchMakingState.STATE_ID);
-            }
-            
-            public void onDoubleClick(Button clicked, float mx, float my) {}
-            public void onRightClick(Button clicked, float mx, float my) {}
-        });
-        
-        findMatchBtn.addListener(new ClickListener() {
-
-            public void onClick(Button clicked, float mx, float my) {
-                game.enterState(JoinMatchMakingState.STATE_ID);
-            }
-            
-            public void onDoubleClick(Button clicked, float mx, float my) {}
-            public void onRightClick(Button clicked, float mx, float my) {}
-        });
+        }
     }
     
+    /**
+     * Creates the images and the corresponding image text
+     * @return images, a list of images used for each of the buttons
+     * @throws SlickException
+     */
     public ArrayList<Image> makeImages() throws SlickException {
         ArrayList<Image> images = new ArrayList<Image>();
         for (int i = 0; i <8; i++){
