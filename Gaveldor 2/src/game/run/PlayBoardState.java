@@ -47,7 +47,7 @@ public class PlayBoardState extends PlayerControllerState {
         
 
         sidebarButtons = new Button[]{
-                Helpful.makeButton(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH / 2, 50, "End Turn", new ClickListener(){
+                Helpful.makeButton(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH / 2, 150, "End Turn", new ClickListener(){
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
                         endTurn(pc);
@@ -59,7 +59,7 @@ public class PlayBoardState extends PlayerControllerState {
                     public void onDoubleClick(Button clicked, float mx, float my) {
                     }
                 }),
-                Helpful.makeButton(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH / 2, 150, "Cancel", new ClickListener(){
+                Helpful.makeButton(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH / 2, 250, "Cancel", new ClickListener(){
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
                         if (pc.selectedPiece != null){
@@ -88,15 +88,17 @@ public class PlayBoardState extends PlayerControllerState {
         }
     }
     
-    public void renderLocalSidebar(GameContainer container, Graphics g){
+    public void renderLocalSidebar(GameContainer container, LocalPlayerController pc, Graphics g){
         g.setColor(new Color(0x77000000));
         g.fillRect(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH, 0, Constants.BOARD_SIDEBAR_WIDTH, Constants.WINDOW_HEIGHT);
+        g.setColor(Color.white);
+        g.drawString(pc.player.toString(), Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH + 10, 50);
         for (Button b : sidebarButtons){
             b.render(container, g);
         }
     }
     
-    public void updateLocalSidebar(GameContainer container, int delta){
+    public void updateLocalSidebar(GameContainer container, LocalPlayerController pc, int delta){
         for (Button b : sidebarButtons){
             b.update(container, delta);
         }
@@ -151,7 +153,7 @@ public class PlayBoardState extends PlayerControllerState {
                 }
             }
         }
-        renderLocalSidebar(container, g);
+        renderLocalSidebar(container, pc, g);
     }
 
     @Override
@@ -164,7 +166,7 @@ public class PlayBoardState extends PlayerControllerState {
         
         if (pc.isCurrentPC()){
             pc.updateMousePan(container, pc, delta);
-            updateLocalSidebar(container, delta);
+            updateLocalSidebar(container, pc, delta);
             
             if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
                 Point position = PlayBoardState.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
@@ -174,6 +176,7 @@ public class PlayBoardState extends PlayerControllerState {
                 if (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner)){
                     if (piece != null && !(pc.player.equals(piece.owner) && piece.turnState == TurnState.DONE)) {
                         pc.selectedPiece = piece;
+                        pc.setDisplayCenter(piece.getPosition().x, piece.getPosition().y);
                     }
                 } else {
                     switch (pc.selectedPiece.turnState) {

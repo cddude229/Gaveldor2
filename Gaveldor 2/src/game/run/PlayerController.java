@@ -32,6 +32,21 @@ public abstract class PlayerController extends StateBasedGame{
     public abstract void propagateAction(Action action);
 
     
+    public void setDisplayPoint(int pixelX, int pixelY){
+        displayX = pixelX;
+        displayX = Math.max(displayX, -Constants.WINDOW_WIDTH / 2);
+        displayX = Math.min(displayX, model.map.getPixelWidth() - Constants.WINDOW_WIDTH / 2);
+        displayY = pixelY;
+        displayY = Math.max(displayY, -Constants.WINDOW_HEIGHT / 2);
+        displayY = Math.min(displayY, model.map.getPixelHeight() - Constants.WINDOW_HEIGHT / 2);
+    }
+    
+    public void setDisplayCenter(int tileX, int tileY){
+        System.out.println(tileX + ", " + tileY);
+        setDisplayPoint(
+                tileX * Constants.TILE_WIDTH_SPACING + Constants.TILE_WIDTH / 2 - Constants.WINDOW_WIDTH / 2,
+                tileY * Constants.TILE_HEIGHT_SPACING + Constants.TILE_HEIGHT / 2 - Constants.WINDOW_HEIGHT / 2);
+    }
     
     
     public void renderControllerWon(Graphics g) throws SlickException {
@@ -49,7 +64,7 @@ public abstract class PlayerController extends StateBasedGame{
         int w = Constants.WINDOW_WIDTH / Constants.TILE_WIDTH_SPACING / 2;
         int h = (Constants.WINDOW_HEIGHT + (Constants.TILE_HEIGHT - Constants.TILE_HEIGHT_SPACING)) / Constants.TILE_HEIGHT_SPACING;
         for (int j = - h; j < model.map.height + h; j++) {
-            for (int i = j % 2 - w; i < model.map.width + w; i += 2) {
+            for (int i = j % 2 - w - 2; i < model.map.width + w + 2; i += 2) {
                 TerrainType terrain;
                 if (j < 0 || j >= model.map.height || i < 0 || i >= model.map.width){
                     terrain = TerrainType.MOUNTAINS;
