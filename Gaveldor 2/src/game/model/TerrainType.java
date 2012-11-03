@@ -54,8 +54,9 @@ public enum TerrainType {
     }
     
     public static void initTiles() throws SlickException{
-        FIELD.tile = Resources.getImage("/assets/graphics/terrain/field.png").getScaledCopy(.5f);
-        MOUNTAINS.tile = Resources.getImage("/assets/graphics/terrain/mountains.png").getScaledCopy(.5f);
+        for (TerrainType type : values()){
+            type.tile = Resources.getImage("/assets/graphics/terrain/" + type.name() + ".png").getScaledCopy(.5f);
+        }
     }
 }
 
