@@ -53,18 +53,26 @@ public abstract class PlayerController extends StateBasedGame{
         g.setFont(Constants.testFont);
         g.drawString("Player " + model.getCurrentPlayer().id + " Wins!", 0, 0);
     }
+    
+    public static float getPixelX(int x, int width, float centerX){
+        return x * Constants.TILE_WIDTH_SPACING + (Constants.TILE_WIDTH - width) * centerX;
+    }
+    
+    public static float getPixelY(int y, int height, float centerY){
+        return y * Constants.TILE_HEIGHT_SPACING + (Constants.TILE_HEIGHT - height) * centerY;
+    }
 
     public void renderAtPosition(Image image, Graphics g, int x, int y, float centerX, float centerY) {
-        g.drawImage(image, x * Constants.TILE_WIDTH_SPACING + (Constants.TILE_WIDTH - image.getWidth()) * centerX
-                - displayX, y * Constants.TILE_HEIGHT_SPACING + (Constants.TILE_HEIGHT - image.getHeight()) * centerY
-                - displayY);
+        g.drawImage(image,
+                getPixelX(x, image.getWidth(), centerX) - displayX,
+                getPixelY(y, image.getHeight(), centerY)- displayY);
     }
 
     public void renderBoard(Graphics g) {
-        int w = Constants.WINDOW_WIDTH / Constants.TILE_WIDTH_SPACING / 2;
-        int h = (Constants.WINDOW_HEIGHT + (Constants.TILE_HEIGHT - Constants.TILE_HEIGHT_SPACING)) / Constants.TILE_HEIGHT_SPACING;
+        int w = (int) Math.ceil(1.0 * Constants.WINDOW_WIDTH / Constants.TILE_WIDTH_SPACING / 2) + 1;
+        int h = (int) Math.ceil(1.0 * (Constants.WINDOW_HEIGHT + (Constants.TILE_HEIGHT - Constants.TILE_HEIGHT_SPACING)) / Constants.TILE_HEIGHT_SPACING);
         for (int j = - h; j < model.map.height + h; j++) {
-            for (int i = j % 2 - w - 2; i < model.map.width + w + 2; i += 2) {
+            for (int i = j % 2 - (w - w % 2); i < model.map.width + w; i += 2) {
                 TerrainType terrain;
                 if (j < 0 || j >= model.map.height || i < 0 || i >= model.map.width){
                     terrain = TerrainType.MOUNTAINS;

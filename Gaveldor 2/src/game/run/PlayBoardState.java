@@ -47,7 +47,7 @@ public class PlayBoardState extends PlayerControllerState {
         
 
         sidebarButtons = new Button[]{
-                Helpful.makeButton(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH / 2, 150, "End Turn", new ClickListener(){
+                Helpful.makeButton(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH / 2, 250, "End Turn", new ClickListener(){
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
                         endTurn(pc);
@@ -59,7 +59,7 @@ public class PlayBoardState extends PlayerControllerState {
                     public void onDoubleClick(Button clicked, float mx, float my) {
                     }
                 }),
-                Helpful.makeButton(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH / 2, 250, "Cancel", new ClickListener(){
+                Helpful.makeButton(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH / 2, 350, "Cancel", new ClickListener(){
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
                         if (pc.selectedPiece != null){
@@ -88,11 +88,45 @@ public class PlayBoardState extends PlayerControllerState {
         }
     }
     
-    public void renderLocalSidebar(GameContainer container, LocalPlayerController pc, Graphics g){
+    public void renderMinimap(Graphics g, LocalPlayerController pc, int x, int y) throws SlickException{
+        //TODO clean up constants
+        final int minimapWidth = 200, minimapHeight = 200;
+        float scale = Math.min(1f * minimapWidth / pc.model.map.getPixelWidth() , 1f * minimapHeight / pc.model.map.getPixelHeight());
+        int width = Math.round(pc.model.map.getPixelWidth() * scale);
+        int height = Math.round(pc.model.map.getPixelHeight() * scale);
+        int xi = x + (minimapWidth - width) / 2, yi = y + (minimapHeight - height) / 2;
+        g.setColor(Color.black);
+        g.fillRect(x, y, minimapWidth, minimapHeight);
+        g.setColor(Color.white);
+        for (int j = 0; j < pc.model.map.height; j++) {
+            for (int i = j % 2; i < pc.model.map.width; i += 2) {
+                g.drawOval(
+                        PlayerController.getPixelX(i, Constants.TILE_WIDTH, .5f) * scale + xi,
+                        PlayerController.getPixelY(j, Constants.TILE_HEIGHT, .5f) * scale + yi,
+                        Constants.TILE_WIDTH * scale, Constants.TILE_HEIGHT * scale);
+            }
+        }
+        for (Piece p : pc.model.getPieces()) {
+            g.setColor(p.owner.id == 1 ? Color.blue : Color.orange); //TODO
+            g.fillOval(
+                        PlayerController.getPixelX(p.getPosition().x, Constants.TILE_WIDTH, .5f) * scale + xi,
+                        PlayerController.getPixelY(p.getPosition().y, Constants.TILE_HEIGHT, .5f) * scale + yi,
+                        Constants.TILE_WIDTH * scale, Constants.TILE_HEIGHT * scale);
+        }
+        g.setColor(Color.white);
+        float rl = Math.max(pc.displayX * scale + xi, x), rt = Math.max(pc.displayY * scale + yi, y),
+                rr = Math.min((pc.displayX + Constants.WINDOW_WIDTH) * scale + xi, x + minimapWidth),
+                rb = Math.min((pc.displayY + Constants.WINDOW_HEIGHT) * scale + yi, y + minimapHeight);
+        
+        g.drawRect(rl, rt, rr - rl, rb - rt);
+    }
+    
+    public void renderLocalSidebar(GameContainer container, LocalPlayerController pc, Graphics g) throws SlickException{
         g.setColor(new Color(0x77000000));
         g.fillRect(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH, 0, Constants.BOARD_SIDEBAR_WIDTH, Constants.WINDOW_HEIGHT);
         g.setColor(Color.white);
         g.drawString(pc.player.toString(), Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH + 10, 50);
+        renderMinimap(g, pc, Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH, 0);
         for (Button b : sidebarButtons){
             b.render(container, g);
         }
