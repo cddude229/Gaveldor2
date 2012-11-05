@@ -1,7 +1,5 @@
 package game.model;
 
-import game.model.Action.AttackAction;
-import game.model.Action.FaceAction;
 import game.model.Action.ForfeitAction;
 import game.model.Action.MakeMinigameMoveAction;
 import game.model.Action.MoveAction;
@@ -151,39 +149,16 @@ public class GameModel {
             assert piece != null;
             assert piece.turnState == TurnState.MOVING;
             piece.setPosition(movePacket.destination);
-            piece.turnState = TurnState.TURNING;
-            break;
-        case FACE:
-            FaceAction facePacket = (FaceAction) action;
-            piece = getPieceByID(facePacket.pieceID);
-            assert piece != null;
-            assert piece.turnState == TurnState.TURNING;
-            piece.setDirection(facePacket.direction);
-            piece.turnState = TurnState.ATTACKING;
-            
-            boolean any = false;
-            for (Point position : piece.getValidAttacks()) {
-                Piece p = getPieceByPosition(position);
-                if (p != null && !p.owner.equals(piece.owner)){
-                    any = true;
-                    break;
-                }
-            }
-            if (!any){
+            piece.setDirection(movePacket.direction);
+            if (movePacket.targetID == -1){
                 piece.turnState = TurnState.DONE;
+            } else{
+                Piece target = getPieceByID(movePacket.targetID);
+                assert target != null;
+                assert !piece.owner.equals(target.owner);
+                gameState = GameState.PLAYING_MINIGAME;
+                minigame = new MinigameModel(piece, target);
             }
-            
-            break;
-        case ATTACK:
-            AttackAction attackPacket = (AttackAction) action;
-            piece = getPieceByID(attackPacket.pieceID);
-            assert piece != null;
-            assert piece.turnState == TurnState.ATTACKING;
-            Piece target = getPieceByID(attackPacket.targetID);
-            assert target != null;
-            assert !piece.owner.equals(target.owner);
-            gameState = GameState.PLAYING_MINIGAME;
-            minigame = new MinigameModel(piece, target);
             break;
         case MAKE_MINIGAME_MOVE:
             MakeMinigameMoveAction mmmPacket = (MakeMinigameMoveAction)action;

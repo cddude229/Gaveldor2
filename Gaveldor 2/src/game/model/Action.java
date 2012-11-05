@@ -9,7 +9,7 @@ public abstract class Action implements Serializable {
 
     public static final long serialVersionUID = 1L;
     public enum ActionType {
-    	FORFEIT,MOVE,FACE,ATTACK,TURN_END,GAME_START,DISCONNECT, MAKE_MINIGAME_MOVE;/*,HEART_BEAT,RESPONSE*/
+    	FORFEIT,MOVE,TURN_END,GAME_START,DISCONNECT, MAKE_MINIGAME_MOVE;/*,HEART_BEAT,RESPONSE*/
     	}
     	
     	public final ActionType type;
@@ -84,42 +84,33 @@ public abstract class Action implements Serializable {
         }
     }
 
-    public static class AttackAction extends Action {
-
-        private static final long serialVersionUID = 7192637502453282800L;
-        public final int pieceID, targetID;
-    	
-    	public AttackAction(Piece piece, Piece target) {
-            super(ActionType.ATTACK);
-    	    pieceID = piece.id;
-    	    targetID = target.id;
-    	}
-    }
+//    public static class AttackAction extends Action {
+//
+//        private static final long serialVersionUID = 7192637502453282800L;
+//        public final int pieceID, targetID;
+//    	
+//    	public AttackAction(Piece piece, Piece target) {
+//            super(ActionType.ATTACK);
+//    	    pieceID = piece.id;
+//    	    targetID = target.id;
+//    	}
+//    }
     
     public static class MoveAction extends Action {
     	
         private static final long serialVersionUID = 8582750212791110715L;
         public final int pieceID;
     	public final Point destination;
+        public final int direction;
+        public final int targetID;
     	
-    	public MoveAction(Piece piece, Point destination) {
+    	public MoveAction(Piece piece, Point destination, int direction, Piece target) {
             super(ActionType.MOVE);
     		this.pieceID = piece.id;
     		this.destination = destination;
+    		this.direction = direction;
+    		targetID = target == null ? -1 : target.id;
     	}
-    }
-    
-    public static class FaceAction extends Action {
-        
-        private static final long serialVersionUID = 8582750212791110715L;
-        public final int pieceID;
-        public final int direction;
-        
-        public FaceAction(Piece piece, int direction) {
-            super(ActionType.FACE);
-            this.pieceID = piece.id;
-            this.direction = direction;
-        }
     }
     
     public static class TurnEndAction extends Action {
