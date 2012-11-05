@@ -1,6 +1,6 @@
 package game.run;
 
-import game.model.Action.MakeMinigameMoveAction;
+import game.model.Action.MinigameMoveAction;
 import game.model.GameModel.GameState;
 import game.model.MinigameModel.Move;
 
@@ -46,13 +46,13 @@ public class PlayMinigameState extends PlayerControllerState {
     public void updateLocalAttack(GameContainer container, LocalPlayerController pc, int delta){
         if (pc.model.getMinigame().attackingMove == null){
             if (pc.model.getMinigame().moveTime >= Constants.MINIGAME_MOVE_TIME){
-                pc.actionQueue.add(new MakeMinigameMoveAction(Move.NONE, pc.player));
+                pc.actionQueue.add(new MinigameMoveAction(Move.NONE, pc.player));
             } else if (container.getInput().isKeyDown(Input.KEY_A)){
-                pc.actionQueue.add(new MakeMinigameMoveAction(Move.HIGH, pc.player));
+                pc.actionQueue.add(new MinigameMoveAction(Move.HIGH, pc.player));
             } else if (container.getInput().isKeyDown(Input.KEY_S)){
-                pc.actionQueue.add(new MakeMinigameMoveAction(Move.MID, pc.player));
+                pc.actionQueue.add(new MinigameMoveAction(Move.MID, pc.player));
             } else if (container.getInput().isKeyDown(Input.KEY_D)){
-                pc.actionQueue.add(new MakeMinigameMoveAction(Move.LOW, pc.player));
+                pc.actionQueue.add(new MinigameMoveAction(Move.LOW, pc.player));
             }
         }
     }
@@ -60,13 +60,13 @@ public class PlayMinigameState extends PlayerControllerState {
     public void updateLocalDefend(GameContainer container, LocalPlayerController pc, int delta){
         if (pc.model.getMinigame().defendingMove == null){
             if (pc.model.getMinigame().moveTime >= Constants.MINIGAME_MOVE_TIME){
-                pc.actionQueue.add(new MakeMinigameMoveAction(Move.NONE, pc.player));
+                pc.actionQueue.add(new MinigameMoveAction(Move.NONE, pc.player));
             } else if (container.getInput().isKeyDown(Input.KEY_J)){
-                pc.actionQueue.add(new MakeMinigameMoveAction(Move.HIGH, pc.player));
+                pc.actionQueue.add(new MinigameMoveAction(Move.HIGH, pc.player));
             } else if (container.getInput().isKeyDown(Input.KEY_K)){
-                pc.actionQueue.add(new MakeMinigameMoveAction(Move.MID, pc.player));
+                pc.actionQueue.add(new MinigameMoveAction(Move.MID, pc.player));
             } else if (container.getInput().isKeyDown(Input.KEY_L)){
-                pc.actionQueue.add(new MakeMinigameMoveAction(Move.LOW, pc.player));
+                pc.actionQueue.add(new MinigameMoveAction(Move.LOW, pc.player));
             }
         }
     }

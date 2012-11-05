@@ -235,7 +235,7 @@ public class PlayBoardState extends PlayerControllerState {
                                     }
                                 }
                                 if (!any){
-                                    pc.actionQueue.add(new Action.MoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
+                                    pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
                                     clearSelection(pc);
                                 }
                             } else {
@@ -245,8 +245,8 @@ public class PlayBoardState extends PlayerControllerState {
                             if (pc.model.isValidPosition(position)
                                     && Arrays.asList(pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)).contains(position) && piece != null
                                     && !piece.owner.equals(pc.selectedPiece.owner)) {
-                                pc.actionQueue.add(new Action.MoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, piece));
-//                                pc.actionQueue.add(new Action.AttackAction(pc.selectedPiece, piece));
+                                pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, piece));
+                                pc.actionQueue.add(new Action.MinigameStartAction());
                                 clearSelection(pc);
                             } else {
                                 // TODO: do nothing?

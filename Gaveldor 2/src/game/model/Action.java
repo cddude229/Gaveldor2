@@ -1,15 +1,13 @@
 package game.model;
 
 
-import game.model.MinigameModel.Move;
-
 import java.io.Serializable;
 
 public abstract class Action implements Serializable {
 
     public static final long serialVersionUID = 1L;
     public enum ActionType {
-    	FORFEIT,MOVE,TURN_END,GAME_START,DISCONNECT, MAKE_MINIGAME_MOVE;/*,HEART_BEAT,RESPONSE*/
+    	FORFEIT,BOARD_MOVE,TURN_END,GAME_START,DISCONNECT, MINIGAME_START, MINIGAME_MOVE;/*,HEART_BEAT,RESPONSE*/
     	}
     	
     	public final ActionType type;
@@ -70,33 +68,31 @@ public abstract class Action implements Serializable {
     	}
     } */
     
-    public static class MakeMinigameMoveAction extends Action{
+    public static class MinigameStartAction extends Action{
+
+        private static final long serialVersionUID = 4273914302579028775L;
+
+        public MinigameStartAction() {
+            super(ActionType.MINIGAME_START);
+        }
+        
+    }
+    
+    public static class MinigameMoveAction extends Action{
 
         private static final long serialVersionUID = 9022778930576890264L;
         
         public final int playerID;
-        public final Move move;
+        public final MinigameModel.Move move;
         
-        public MakeMinigameMoveAction(Move move, Player player) {
-            super(ActionType.MAKE_MINIGAME_MOVE);
+        public MinigameMoveAction(MinigameModel.Move move, Player player) {
+            super(ActionType.MINIGAME_MOVE);
             this.move = move;
             this.playerID = player.id;
         }
     }
-
-//    public static class AttackAction extends Action {
-//
-//        private static final long serialVersionUID = 7192637502453282800L;
-//        public final int pieceID, targetID;
-//    	
-//    	public AttackAction(Piece piece, Piece target) {
-//            super(ActionType.ATTACK);
-//    	    pieceID = piece.id;
-//    	    targetID = target.id;
-//    	}
-//    }
     
-    public static class MoveAction extends Action {
+    public static class BoardMoveAction extends Action {
     	
         private static final long serialVersionUID = 8582750212791110715L;
         public final int pieceID;
@@ -104,8 +100,8 @@ public abstract class Action implements Serializable {
         public final int direction;
         public final int targetID;
     	
-    	public MoveAction(Piece piece, Point destination, int direction, Piece target) {
-            super(ActionType.MOVE);
+    	public BoardMoveAction(Piece piece, Point destination, int direction, Piece target) {
+            super(ActionType.BOARD_MOVE);
     		this.pieceID = piece.id;
     		this.destination = destination;
     		this.direction = direction;

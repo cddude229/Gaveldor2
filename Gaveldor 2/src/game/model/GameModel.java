@@ -1,8 +1,8 @@
 package game.model;
 
+import game.model.Action.BoardMoveAction;
 import game.model.Action.ForfeitAction;
-import game.model.Action.MakeMinigameMoveAction;
-import game.model.Action.MoveAction;
+import game.model.Action.MinigameMoveAction;
 import game.model.Action.TurnEndAction;
 import game.model.Piece.TurnState;
 import game.run.GameException;
@@ -29,17 +29,23 @@ public class GameModel {
 
     public GameState gameState = GameState.SETTING_UP;
     
-    private MinigameModel minigame = null;
-
+    private MinigameModel minigame;
     public GameModel(String name) throws GameException {
         players = new Player[]{new Player(1), new Player(2)};
 
         map = Map.loadMap(name);
     }
+    
+    private Piece lastMoved;
+    private Point lastMovedPosition;
+    //TODO direction
+    private long sinceLastMoved;
 
     public void setup() {
         pieces = map.createPieces(players);
         currentPlayerIndex = 0;
+        lastMoved = null;
+        minigame = null;
     }
 
     public Player getCurrentPlayer() {
@@ -74,6 +80,7 @@ public class GameModel {
                 p.turnState = TurnState.MOVING;
             }
         }
+        lastMoved = null;
         switchCurrentAndOtherPlayers();
         // TODO
     }
@@ -143,11 +150,14 @@ public class GameModel {
             setCurrentPlayer(getOtherPlayer());
             gameState = GameState.WON;
             break;
-        case MOVE:
-            MoveAction movePacket = (MoveAction) action;
+        case BOARD_MOVE:
+            BoardMoveAction movePacket = (BoardMoveAction) action;
             piece = getPieceByID(movePacket.pieceID);
             assert piece != null;
             assert piece.turnState == TurnState.MOVING;
+            lastMoved = piece;
+            lastMovedPosition = piece.getPosition();
+            sinceLastMoved = 0;
             piece.setPosition(movePacket.destination);
             piece.setDirection(movePacket.direction);
             if (movePacket.targetID == -1){
@@ -156,12 +166,16 @@ public class GameModel {
                 Piece target = getPieceByID(movePacket.targetID);
                 assert target != null;
                 assert !piece.owner.equals(target.owner);
-                gameState = GameState.PLAYING_MINIGAME;
+                piece.turnState = TurnState.ATTACKING;
                 minigame = new MinigameModel(piece, target);
             }
             break;
-        case MAKE_MINIGAME_MOVE:
-            MakeMinigameMoveAction mmmPacket = (MakeMinigameMoveAction)action;
+        case MINIGAME_START:
+            assert minigame != null;
+            gameState = GameState.PLAYING_MINIGAME;
+            break;
+        case MINIGAME_MOVE:
+            MinigameMoveAction mmmPacket = (MinigameMoveAction)action;
             Player player = mmmPacket.playerID == players[0].id ? players[0] : players[1];
             if (player.equals(getCurrentPlayer())){
                 assert player.equals(minigame.attackingPiece.owner);
@@ -204,9 +218,15 @@ public class GameModel {
     }
     
     public void applyDelta(int delta){
-        //TODO: time-dependent game logic goes here (e.g. minigame timing)
-        if (gameState == GameState.PLAYING_MINIGAME){
+        switch (gameState){
+        case PLAYING_BOARD:
+            sinceLastMoved += delta;
+            break;
+        case PLAYING_MINIGAME:
             minigame.moveTime += delta;
+            break;
+        default:
+            break;
         }
     }
 }
