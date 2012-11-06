@@ -41,11 +41,20 @@ public abstract class Piece {
     }
 
     /**
-     * Return whether or not a back attack
+     * Back attack at current position?
      */
     final public boolean isBackAttack(Piece opponent) {
+        return isBackAttack(this.getPosition(), opponent);
+    }
+    
+    /**
+     * Back attack at given position?
+     * @param p Point to check
+     * @param opponent
+     * @return
+     */
+    final public boolean isBackAttack(Point p, Piece opponent){
         int attackDir = -1;
-        Point p = this.getPosition();
         Point o = opponent.getPosition();
         if (Math.abs(p.x - o.x) + Math.abs(p.y - o.y) == 2 || !(Math.abs(p.x - o.x) == 2 && p.y == o.y)) {
             Point[] ret = Piece.getPointsFromPoint(p, 1);
@@ -135,7 +144,11 @@ public abstract class Piece {
      * @return
      */
     final public boolean isValidMove(Point p) {
-        for (Point p2 : getValidMoves()) {
+        return isValidMove(p, this.getPosition());
+    }
+    
+    final public boolean isValidMove(Point p, Point currentPoint){
+        for (Point p2 : getValidMoves(currentPoint)) {
             if (p.equals(p2)) {
                 return true;
             }
@@ -148,8 +161,7 @@ public abstract class Piece {
      * 
      * @return
      */
-    final public Point[] getValidMoves() {
-        Point p = this.getPosition();
+    final public Point[] getValidMoves(Point p){
         switch (defaultMoveRange()) {
         case 1:
             return Helpful.arrayConcatAll(
@@ -167,6 +179,10 @@ public abstract class Piece {
         }
     }
 
+    final public Point[] getValidMoves() {
+        return getValidMoves(this.getPosition());
+    }
+
     /**
      * Can the piece attack this spot, if a unit is there?
      * 
@@ -174,7 +190,10 @@ public abstract class Piece {
      * @return
      */
     final public boolean isValidAttack(Point p) {
-        for (Point p2 : getValidAttacks()) {
+        return isValidAttack(p, this.getPosition(), this.getDirection());
+    }
+    final public boolean isValidAttack(Point p, Point currentPosition, int currentDirection){
+        for (Point p2 : getValidAttacks(currentPosition, currentDirection)) {
             if (p.equals(p2)) {
                 return true;
             }
@@ -186,7 +205,10 @@ public abstract class Piece {
      * Return list of valid locations that piece can face
      */
     final public Point[] getValidFacings() {
-        return Piece.getPointsFromPoint(this.point, 1);
+        return getValidFacings(this.getPosition());
+    }
+    final public Point[] getValidFacings(Point p){
+        return Piece.getPointsFromPoint(p, 1);
     }
 
     /**
