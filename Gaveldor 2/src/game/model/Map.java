@@ -44,6 +44,10 @@ public class Map {
         }
         return terrain;
     }
+    
+    public TerrainType getTerrain(Point p){
+        return getTerrain(p.x, p.y);
+    }
 
     public int getPixelWidth() {
         return (Constants.TILE_WIDTH - Constants.TILE_WIDTH_SPACING) + Constants.TILE_WIDTH_SPACING * width;

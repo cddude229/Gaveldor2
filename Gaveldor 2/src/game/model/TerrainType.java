@@ -47,6 +47,9 @@ public enum TerrainType {
     }
     
     abstract public boolean enterable(PieceType p);
+    public boolean enterable(Piece p){
+        return enterable(p.pieceType);
+    }
     
     public static TerrainType getByRepChar(char repChar){
         return byRepChar.get(Character.toUpperCase(repChar));
