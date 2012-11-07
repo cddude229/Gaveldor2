@@ -1,5 +1,6 @@
 package game.run;
 
+import game.model.Action;
 import game.model.Action.MinigameMoveAction;
 import game.model.GameModel.GameState;
 import game.model.MinigameModel.Move;
@@ -13,6 +14,8 @@ import util.Constants;
 import util.ControlScheme;
 
 public class PlayMinigameState extends PlayerControllerState {
+    
+    private boolean hasPlayedAttackSound;
 
     public PlayMinigameState(boolean isLocal) {
         super(GameState.PLAYING_MINIGAME, isLocal);
@@ -22,6 +25,11 @@ public class PlayMinigameState extends PlayerControllerState {
     public void init(GameContainer container, PlayerController pc) throws SlickException {
         //TODO: initialize minigame state
 
+    }
+    
+    @Override
+    public void enter(GameContainer container, PlayerController pc) throws SlickException{
+        hasPlayedAttackSound = false;
     }
 
     @Override
@@ -36,11 +44,27 @@ public class PlayMinigameState extends PlayerControllerState {
                 pc.model.getCurrentPlayer().equals(pc.model.getPlayer1()) ? 0 : 400, 200);
         g.drawString(String.valueOf(pc.model.getMinigame().defendingMove),
                 pc.model.getCurrentPlayer().equals(pc.model.getPlayer2()) ? 0 : 400, 200);
+        if (pc.model.getMinigame().hasBothMoves()){
+            if (pc.model.getMinigame().isSuccessfulAttack()){
+                if (!hasPlayedAttackSound){
+                    pc.model.getMinigame().attackingPiece.pieceType.getAttackSound().play();
+                    hasPlayedAttackSound = true;
+                }
+            }
+        }
     }
 
     @Override
     public void updateLocal(GameContainer container, LocalPlayerController pc, int delta) throws SlickException {
-        updateLocalMove(container, pc, delta);
+        if (pc.model.getMinigame().hasBothMoves()){
+            if (pc.isCurrentPC()){
+                if (pc.model.getMinigame().sinceHasBothMoves >= Constants.MINIGAME_WAIT_TIME){
+                    pc.actionQueue.add(new Action.MinigameEndAction());
+                }
+            }
+        } else{
+            updateLocalMove(container, pc, delta);
+        }
     }
     
     private void updateLocalMove(GameContainer container, LocalPlayerController pc, int delta){
@@ -54,7 +78,7 @@ public class PlayMinigameState extends PlayerControllerState {
             }
         }
         ControlScheme controls = pc.player.equals(pc.model.getPlayer1()) ? Constants.PLAYER_1_CONTROLS : Constants.PLAYER_2_CONTROLS;
-        if (pc.model.getMinigame().moveTime >= Constants.MINIGAME_MOVE_TIME){
+        if (pc.model.getMinigame().sinceMoveTimeStart >= Constants.MINIGAME_MOVE_TIME){
             pc.actionQueue.add(new MinigameMoveAction(Move.NONE, pc.player));
         } else if (container.getInput().isKeyDown(controls.minigameLowMove)){
             pc.actionQueue.add(new MinigameMoveAction(Move.LOW, pc.player));

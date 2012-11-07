@@ -191,26 +191,23 @@ public class GameModel {
                 assert minigame.defendingMove == null;
                 minigame.defendingMove = mmmPacket.move;
             }
-            if (minigame.attackingMove != null && minigame.defendingMove != null){
-                if (minigame.attackingMove == MinigameModel.Move.NONE){
-                    //do nothing
-                } else if (minigame.attackingMove == minigame.defendingMove){
-                    //do nothing
-                } else{
-                    minigame.attackingPiece.attack(minigame.defendingPiece);
-                    if (!minigame.defendingPiece.isAlive()) {
-                        pieces.remove(minigame.defendingPiece);
-                    }
+            break;
+        case MINIGAME_END:
+            assert minigame.hasBothMoves();
+            if (minigame.isSuccessfulAttack()){
+                minigame.attackingPiece.attack(minigame.defendingPiece);
+                if (!minigame.defendingPiece.isAlive()) {
+                    pieces.remove(minigame.defendingPiece);
                 }
-                minigame.attackingPiece.turnState = TurnState.DONE;
-                gameState = GameState.PLAYING_BOARD;
-                if (!hasAnyPieces(minigame.defendingPiece.owner)) {
-                    setCurrentPlayer(minigame.defendingPiece.owner);
-                    setCurrentPlayer(getOtherPlayer());
-                    gameState = GameState.WON;
-                }
-                minigame = null;
             }
+            minigame.attackingPiece.turnState = TurnState.DONE;
+            gameState = GameState.PLAYING_BOARD;
+            if (!hasAnyPieces(minigame.defendingPiece.owner)) {
+                setCurrentPlayer(minigame.defendingPiece.owner);
+                setCurrentPlayer(getOtherPlayer());
+                gameState = GameState.WON;
+            }
+            minigame = null;
             break;
         case TURN_END:
             TurnEndAction turnEndPacket = (TurnEndAction) action;
@@ -228,7 +225,10 @@ public class GameModel {
             sinceLastMoved += delta;
             break;
         case PLAYING_MINIGAME:
-            minigame.moveTime += delta;
+            minigame.sinceMoveTimeStart += delta;
+            if (minigame.hasBothMoves()){
+                minigame.sinceHasBothMoves += delta;
+            }
             break;
         default:
             break;
