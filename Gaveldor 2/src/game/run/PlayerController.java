@@ -51,7 +51,7 @@ public abstract class PlayerController extends StateBasedGame{
     
     
     public void renderControllerWon(Graphics g) throws SlickException {
-        g.setFont(Constants.testFont);
+        g.setFont(Constants.TEST_FONT);
         g.drawString("Player " + model.getCurrentPlayer().id + " Wins!", 0, 0);
     }
     

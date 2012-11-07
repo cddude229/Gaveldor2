@@ -3,7 +3,10 @@ package game.run;
 import game.model.Action;
 import game.model.Action.MinigameMoveAction;
 import game.model.GameModel.GameState;
+import game.model.MinigameModel;
 import game.model.MinigameModel.Move;
+import game.model.Piece;
+import game.model.Player;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -35,15 +38,11 @@ public class PlayMinigameState extends PlayerControllerState {
     @Override
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
         //TODO: render minigame visuals
-        g.setFont(Constants.testFont);
+        g.setFont(Constants.TEST_FONT);
         g.setColor(Color.white);
         g.drawString("MINIGAME", 0, 0);
-        g.drawString(pc.model.getPlayer1().toString(), 0, 100);
-        g.drawString(pc.model.getPlayer2().toString(), 400, 100);
-        g.drawString(String.valueOf(pc.model.getMinigame().attackingMove),
-                pc.model.getCurrentPlayer().equals(pc.model.getPlayer1()) ? 0 : 400, 200);
-        g.drawString(String.valueOf(pc.model.getMinigame().defendingMove),
-                pc.model.getCurrentPlayer().equals(pc.model.getPlayer2()) ? 0 : 400, 200);
+        renderSide(container, pc, g, pc.model.getPlayer1(), true);
+        renderSide(container, pc, g, pc.model.getPlayer2(), false);
         if (pc.model.getMinigame().hasBothMoves()){
             if (pc.model.getMinigame().isSuccessfulAttack()){
                 if (!hasPlayedAttackSound){
@@ -52,6 +51,20 @@ public class PlayMinigameState extends PlayerControllerState {
                 }
             }
         }
+    }
+    
+    private void renderSide(GameContainer container, PlayerController pc, Graphics g, Player player, boolean leftSide) throws SlickException{
+        int x = leftSide ? 0 : 400;
+        g.setFont(Constants.TEST_FONT);
+        g.setColor(Color.white);
+        g.drawString(player.toString(), x, 100);
+        boolean isAttacking = pc.model.getCurrentPlayer().equals(player);
+        Piece piece = isAttacking ?
+                pc.model.getMinigame().attackingPiece : pc.model.getMinigame().defendingPiece;
+        g.drawImage(piece.getSprite(leftSide ? 0 : 3), x, 200);
+        MinigameModel.Move move = isAttacking ?
+                pc.model.getMinigame().attackingMove : pc.model.getMinigame().defendingMove;
+        g.drawString(move == null ? "Not yet..." : move.toString(), x, 500);
     }
 
     @Override
