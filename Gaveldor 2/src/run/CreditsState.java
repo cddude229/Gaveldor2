@@ -14,8 +14,6 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import util.Constants;
-
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
 import com.aem.sticky.button.SimpleButton;
@@ -40,7 +38,7 @@ public class CreditsState extends BasicGameState {
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
         for (int i = 0; i < 6; i++) {
-            locations.add(new int[] { this.getxLoc(bWidth), yLoc});
+            locations.add(new int[] { this.getxLoc(container, bWidth), yLoc});
             yLoc += 100;
         }
         // create rectangles for buttons
@@ -58,7 +56,7 @@ public class CreditsState extends BasicGameState {
         listener.add(backBtn);
         
         credits = new String[] {"Credits","Chris Dessonville: Co-Producer","Ben Greenberg: Co-Producer","Lane Pertusi: Artists","Calvin Lewis: Sound","Todd Layton: Slick Master","Andres Romero: Networking", "Jeremy Sharpe: Game Logic","Kevin White: Menu"};
-        generateLocations(credits);
+        generateLocations(container, credits);
         
     }
     
@@ -97,8 +95,8 @@ public class CreditsState extends BasicGameState {
      * @param height
      * @return an int[] containing the screen location of the buttons
      */
-    public int getxLoc(int width) {
-        int scnWidth = Constants.WINDOW_WIDTH;
+    public int getxLoc(GameContainer container, int width) {
+        int scnWidth = container.getWidth();
         int xLoc = scnWidth / 2 - width / 2;
         return xLoc;
     }
@@ -144,12 +142,12 @@ public class CreditsState extends BasicGameState {
         return images;
     }
     
-    private void generateLocations(String[] credits){
+    private void generateLocations(GameContainer container, String[] credits){
         Font defFont = container.getDefaultFont();
         int yLoc = 50;
         for (String line : credits){
             int width = defFont.getWidth(line);
-            this.nameLocations.put(line, new int[] {(Constants.WINDOW_WIDTH-width)/2,yLoc});
+            this.nameLocations.put(line, new int[] {(container.getWidth()-width)/2,yLoc});
             yLoc += 50;
         }
     }
