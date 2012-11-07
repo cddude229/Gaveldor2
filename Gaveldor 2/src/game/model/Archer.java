@@ -18,7 +18,7 @@ public class Archer extends Piece {
             fx = new Sound("/assets/audio/effects/bow3.ogg");
             fx.play();
         } catch (SlickException e) {
-            // TODO Auto-generated catch block
+            // TODO: move sound loading to PieceType initialization
             e.printStackTrace();
         }
         int power = this.defaultAttackPower();

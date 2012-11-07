@@ -47,7 +47,6 @@ public class LocalPlayerController extends PlayerController {
     public void updateMousePan(GameContainer container, LocalPlayerController pc, int delta) {
         double placementX = ((double)container.getInput().getMouseX()) / container.getWidth();
         double placementY = ((double)container.getInput().getMouseY()) / container.getHeight();
-        // TODO: clean up ALL these constants
         placementX = Math.max(placementX, 0);
         placementX = Math.min(placementX, 1);
         int x = displayX, y = displayY;

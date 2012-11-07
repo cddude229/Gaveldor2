@@ -20,13 +20,13 @@ public class PlayMinigameState extends PlayerControllerState {
 
     @Override
     public void init(GameContainer container, PlayerController pc) throws SlickException {
-        // TODO Auto-generated method stub
+        //TODO: initialize minigame state
 
     }
 
     @Override
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
-        //TODO, obviously
+        //TODO: render minigame visuals
         g.setFont(Constants.testFont);
         g.setColor(Color.white);
         g.drawString("MINIGAME", 0, 0);

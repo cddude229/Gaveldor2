@@ -77,8 +77,8 @@ public class HostGameState extends BasicGameState {
         try {
             serverSocket = new ServerSocket(Constants.REMOTE_CONNECTION_PORT);
         } catch (IOException e) {
-            //TODO
-            e.printStackTrace();
+            //TODO: display error message
+            throw new RuntimeException(e);
         }
         new Thread(new Runnable(){
             @Override
@@ -86,7 +86,8 @@ public class HostGameState extends BasicGameState {
                 try {
                     socket = serverSocket.accept();
                 } catch (IOException e) {
-                    //TODO: an error message to display
+                    //TODO: display error message
+                    throw new RuntimeException(e);
                 }
                 serverSocket = null;
             }
@@ -125,7 +126,7 @@ public class HostGameState extends BasicGameState {
             try {
                 ((Game)game).startHostRemoteMatch("/assets/maps/basic", socket);
             } catch (GameException e) {
-                // TODO
+                //TODO: display error message
                 throw new RuntimeException(e);
             }
             socket = null;

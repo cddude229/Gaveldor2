@@ -11,8 +11,6 @@ import java.util.Set;
 
 public class GameModel {
 
-    // TODO
-
     private final Player[] players;
     private int currentPlayerIndex = 0;
 
@@ -38,7 +36,7 @@ public class GameModel {
     
     private Piece lastMoved;
     private Point lastMovedPosition;
-    //TODO direction
+    //TODO lastMovedDirection
     private long sinceLastMoved;
 
     public void setup() {
@@ -90,7 +88,6 @@ public class GameModel {
         }
         lastMoved = null;
         switchCurrentAndOtherPlayers();
-        // TODO
     }
 
     public boolean isValidPosition(Point p) {
@@ -196,9 +193,9 @@ public class GameModel {
             }
             if (minigame.attackingMove != null && minigame.defendingMove != null){
                 if (minigame.attackingMove == MinigameModel.Move.NONE){
-                    //TODO
+                    //do nothing
                 } else if (minigame.attackingMove == minigame.defendingMove){
-                    //TODO
+                    //do nothing
                 } else{
                     minigame.attackingPiece.attack(minigame.defendingPiece);
                     if (!minigame.defendingPiece.isAlive()) {

@@ -83,13 +83,12 @@ public class JoinMatchMakingState extends BasicGameState {
                 "18.189.2.61",Constants.REMOTE_CONNECTION_PORT);
         String targetID = "myTarget";
         socketSource = new HolePunchingSource();
+        //TODO
         try {
             socket = socketSource.getSocket(targetID, mediatorSocketAddress);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (TargetNotRegisteredException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         System.out.println(socket.getInetAddress());

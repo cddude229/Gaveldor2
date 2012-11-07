@@ -88,17 +88,15 @@ public class HostMatchMakingState extends BasicGameState {
         new Thread(new Runnable(){
             @Override
             public void run() {
+                //TODO
                 try {
                     serverSocket.start();
                     socket = serverSocket.accept();
                 } catch (IllegalStateException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }

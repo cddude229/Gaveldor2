@@ -114,13 +114,11 @@ public class StickyListener implements InputListener {
 
     @Override
     public void mouseDragged(int arg0, int arg1, int arg2, int arg3) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void inputStarted() {
-        // TODO Auto-generated method stub
     }
 
 }

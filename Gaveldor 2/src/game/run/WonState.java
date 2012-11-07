@@ -14,6 +14,7 @@ public class WonState extends PlayerControllerState {
 
     @Override
     public void init(GameContainer container, PlayerController pc) throws SlickException {
+        //TODO: initialize won state
     }
 
     @Override
@@ -21,11 +22,12 @@ public class WonState extends PlayerControllerState {
         pc.renderBoard(container, g);
         pc.renderPieces(g);
         pc.renderControllerWon(g);
+        //render won state
     }
 
     @Override
     public void updateLocal(GameContainer container, LocalPlayerController pc, int delta) throws SlickException {
-        //TODO
+        //update local won state
     }
 
 }

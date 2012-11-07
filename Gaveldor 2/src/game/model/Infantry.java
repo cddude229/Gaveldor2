@@ -17,7 +17,7 @@ public class Infantry extends Piece {
             fx = new Sound("/assets/audio/effects/sword.ogg");
             fx.play();
         } catch (SlickException e) {
-            // TODO Auto-generated catch block
+            // TODO: move sound loading to PieceType initialization
             e.printStackTrace();
         }
         int power = this.defaultAttackPower();

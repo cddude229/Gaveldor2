@@ -107,7 +107,7 @@ public class PlayBoardState extends PlayerControllerState {
             }
         }
         for (Piece p : pc.model.getPieces()) {
-            g.setColor(p.owner.id == 1 ? Color.blue : Color.orange); //TODO
+            g.setColor(p.owner.id == 1 ? Color.blue : Color.orange); //TODO: add minimap assets
             g.fillOval(
                         PlayerController.getPixelX(p.getPosition().x, Constants.TILE_WIDTH, .5f) * scale + xi,
                         PlayerController.getPixelY(p.getPosition().y, Constants.TILE_HEIGHT, .5f) * scale + yi,
@@ -158,7 +158,7 @@ public class PlayBoardState extends PlayerControllerState {
                         }
                     } else if (pc.selectedPieceFace == -1){
                         pc.renderAtPosition(faceableArrows, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0.5f, 0.5f);
-                        // TODO
+                        // TODO: add full tile overlays
                     } else{
                         for (Point pos : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
                             if (pc.model.isValidPosition(pos)) {
@@ -168,7 +168,7 @@ public class PlayBoardState extends PlayerControllerState {
                                 }
                             }
                         }
-                        //TODO
+                        //TODO: use different overlay
                         pc.renderAtPosition(attackableOverlay, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0f, 0f);
                     }
                     break;
@@ -221,28 +221,11 @@ public class PlayBoardState extends PlayerControllerState {
                                     && Arrays.asList(pc.selectedPiece.getValidMoves()).contains(position)
                                     && (piece == null || piece == pc.selectedPiece)) {
                                 pc.selectedPieceMove = position;
-                            } else {
-                                // TODO: do nothing?
                             }
                         } else if (pc.selectedPieceFace == -1){
                             int direction = Piece.pointsToDirection(position, pc.selectedPieceMove);
                             if (direction != -1) {
                                 pc.selectedPieceFace = direction;
-//                                boolean any = false;
-//                                for (Point pos : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
-//                                    Piece p = pc.model.getPieceByPosition(pos);
-//                                    if (p != null && !p.owner.equals(pc.selectedPiece.owner)){
-//                                        System.out.println(pos);
-//                                        any = true;
-//                                        break;
-//                                    }
-//                                }
-//                                if (!any){
-//                                    pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
-//                                    clearSelection(pc);
-//                                }
-                            } else {
-                                // TODO: do nothing?
                             }
                         } else{
                             if (pc.model.isValidPosition(position)
@@ -257,8 +240,6 @@ public class PlayBoardState extends PlayerControllerState {
                                     pc.actionQueue.add(new Action.MinigameStartAction());
                                 }
                                 clearSelection(pc);
-                            } else {
-                                // TODO: do nothing?
                             }
                         }
                         break;

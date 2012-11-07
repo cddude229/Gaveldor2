@@ -82,7 +82,6 @@ public class JoinGameState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta){
-        // TODO
         for (SimpleButton button : buttons) {
             button.update(container, delta);
         }
@@ -90,7 +89,7 @@ public class JoinGameState extends BasicGameState {
             try {
                 ((Game)game).startClientRemoteMatch("/assets/maps/basic", socket);
             } catch (GameException e) {
-                // TODO
+                //TODO: display error message
                 throw new RuntimeException(e);
             }
             socket = null;

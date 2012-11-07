@@ -16,7 +16,7 @@ public class DisconnectedState extends PlayerControllerState {
 
     @Override
     public void init(GameContainer container, PlayerController pc) throws SlickException {
-        //TODO
+        //TODO: initialize disconnected state
     }
 
     @Override
@@ -25,11 +25,12 @@ public class DisconnectedState extends PlayerControllerState {
         pc.renderPieces(g);
         g.setFont(Constants.testFont);
         g.drawString("DISCONNECTED: the connection was lost", 0, 100);
+        //TODO: render disconnected state
     }
 
     @Override
     public void updateLocal(GameContainer container, LocalPlayerController pc, int delta) throws SlickException {
-        //TODO
+        //TODO: update local disconnected state
     }
 
 }

@@ -28,7 +28,6 @@ public enum TerrainType {
             return false;
         }
     },
-    //TODO
     ;
     
     
