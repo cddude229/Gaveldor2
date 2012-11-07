@@ -7,7 +7,6 @@ import game.model.MinigameModel.Move;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import util.Constants;
@@ -30,44 +29,26 @@ public class PlayMinigameState extends PlayerControllerState {
         g.setFont(Constants.testFont);
         g.setColor(Color.white);
         g.drawString("MINIGAME", 0, 0);
-        g.drawString(String.valueOf(pc.model.getMinigame().attackingMove), 0, 100);
-        g.drawString(String.valueOf(pc.model.getMinigame().defendingMove), 400, 100);
+        g.drawString(pc.model.getCurrentPlayer().toString(), 0, 100);
+        g.drawString(pc.model.getOtherPlayer().toString(), 400, 100);
+        g.drawString(String.valueOf(pc.model.getMinigame().attackingMove), 0, 200);
+        g.drawString(String.valueOf(pc.model.getMinigame().defendingMove), 400, 200);
     }
 
     @Override
     public void updateLocal(GameContainer container, LocalPlayerController pc, int delta) throws SlickException {
-        if (pc.model.getCurrentPlayer().equals(pc.player)){
-            updateLocalAttack(container, pc, delta);
-        } else{
-            updateLocalDefend(container, pc, delta);
-        }
+        updateLocalMove(container, pc, delta);
     }
     
-    public void updateLocalAttack(GameContainer container, LocalPlayerController pc, int delta){
-        if (pc.model.getMinigame().attackingMove == null){
-            if (pc.model.getMinigame().moveTime >= Constants.MINIGAME_MOVE_TIME){
-                pc.actionQueue.add(new MinigameMoveAction(Move.NONE, pc.player));
-            } else if (container.getInput().isKeyDown(Input.KEY_A)){
-                pc.actionQueue.add(new MinigameMoveAction(Move.HIGH, pc.player));
-            } else if (container.getInput().isKeyDown(Input.KEY_S)){
-                pc.actionQueue.add(new MinigameMoveAction(Move.MID, pc.player));
-            } else if (container.getInput().isKeyDown(Input.KEY_D)){
-                pc.actionQueue.add(new MinigameMoveAction(Move.LOW, pc.player));
-            }
-        }
-    }
-    
-    public void updateLocalDefend(GameContainer container, LocalPlayerController pc, int delta){
-        if (pc.model.getMinigame().defendingMove == null){
-            if (pc.model.getMinigame().moveTime >= Constants.MINIGAME_MOVE_TIME){
-                pc.actionQueue.add(new MinigameMoveAction(Move.NONE, pc.player));
-            } else if (container.getInput().isKeyDown(Input.KEY_J)){
-                pc.actionQueue.add(new MinigameMoveAction(Move.HIGH, pc.player));
-            } else if (container.getInput().isKeyDown(Input.KEY_K)){
-                pc.actionQueue.add(new MinigameMoveAction(Move.MID, pc.player));
-            } else if (container.getInput().isKeyDown(Input.KEY_L)){
-                pc.actionQueue.add(new MinigameMoveAction(Move.LOW, pc.player));
-            }
+    private void updateLocalMove(GameContainer container, LocalPlayerController pc, int delta){
+        if (pc.model.getMinigame().moveTime >= Constants.MINIGAME_MOVE_TIME){
+            pc.actionQueue.add(new MinigameMoveAction(Move.NONE, pc.player));
+        } else if (container.getInput().isKeyDown(pc.controls.minigameLowMove)){
+            pc.actionQueue.add(new MinigameMoveAction(Move.LOW, pc.player));
+        } else if (container.getInput().isKeyDown(pc.controls.minigameMidMove)){
+            pc.actionQueue.add(new MinigameMoveAction(Move.MID, pc.player));
+        } else if (container.getInput().isKeyDown(pc.controls.minigameHighMove)){
+            pc.actionQueue.add(new MinigameMoveAction(Move.HIGH, pc.player));
         }
     }
 

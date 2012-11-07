@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.List;
 
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -65,5 +66,9 @@ public class Constants {
     //all times in milliseconds
     public static final long MINIGAME_MOVE_TIME = 3000L;
     
-    public static UnicodeFont testFont = loadFont("Arial Monospaced", Font.PLAIN, 40, Color.WHITE);
+    public static final UnicodeFont testFont = loadFont("Arial Monospaced", Font.PLAIN, 40, Color.WHITE);
+    
+    public static final ControlScheme
+            PLAYER_1_CONTROLS = new ControlScheme(Input.KEY_A, Input.KEY_S, Input.KEY_D),
+            PLAYER_2_CONTROLS = new ControlScheme(Input.KEY_J, Input.KEY_K, Input.KEY_L);
 }
