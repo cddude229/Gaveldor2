@@ -167,6 +167,8 @@ public class PlayBoardState extends PlayerControllerState {
                                 }
                             }
                         }
+                        //TODO
+                        pc.renderAtPosition(attackableOverlay, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0f, 0f);
                     }
                     break;
                 case ATTACKING:
@@ -225,28 +227,34 @@ public class PlayBoardState extends PlayerControllerState {
                             int direction = Piece.pointsToDirection(position, pc.selectedPieceMove);
                             if (direction != -1) {
                                 pc.selectedPieceFace = direction;
-                                boolean any = false;
-                                for (Point pos : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
-                                    Piece p = pc.model.getPieceByPosition(pos);
-                                    if (p != null && !p.owner.equals(pc.selectedPiece.owner)){
-                                        System.out.println(pos);
-                                        any = true;
-                                        break;
-                                    }
-                                }
-                                if (!any){
-                                    pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
-                                    clearSelection(pc);
-                                }
+//                                boolean any = false;
+//                                for (Point pos : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
+//                                    Piece p = pc.model.getPieceByPosition(pos);
+//                                    if (p != null && !p.owner.equals(pc.selectedPiece.owner)){
+//                                        System.out.println(pos);
+//                                        any = true;
+//                                        break;
+//                                    }
+//                                }
+//                                if (!any){
+//                                    pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
+//                                    clearSelection(pc);
+//                                }
                             } else {
                                 // TODO: do nothing?
                             }
                         } else{
                             if (pc.model.isValidPosition(position)
-                                    && Arrays.asList(pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)).contains(position) && piece != null
-                                    && !piece.owner.equals(pc.selectedPiece.owner)) {
-                                pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, piece));
-                                pc.actionQueue.add(new Action.MinigameStartAction());
+                                    && (Arrays.asList(pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)).contains(position) && piece != null
+                                    && !piece.owner.equals(pc.selectedPiece.owner)) || position.equals(pc.selectedPieceMove)) {
+                                pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove,
+                                        pc.selectedPieceFace, position.equals(pc.selectedPieceMove) ? null : piece));
+                                if (position.equals(pc.selectedPieceMove)){
+                                    pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
+                                } else{
+                                    pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, piece));
+                                    pc.actionQueue.add(new Action.MinigameStartAction());
+                                }
                                 clearSelection(pc);
                             } else {
                                 // TODO: do nothing?
