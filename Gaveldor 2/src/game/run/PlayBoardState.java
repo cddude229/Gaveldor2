@@ -5,6 +5,7 @@ import game.model.GameModel.GameState;
 import game.model.Piece;
 import game.model.Piece.TurnState;
 import game.model.Point;
+import game.model.TerrainType;
 
 import java.util.Arrays;
 
@@ -151,7 +152,14 @@ public class PlayBoardState extends PlayerControllerState {
                 case MOVING:
                     if (pc.selectedPieceMove == null){
                         for (Point p : pc.selectedPiece.getValidMoves()) {
-                            if (pc.model.isValidPosition(p) && pc.model.getPieceByPosition(p) == null) {
+                            if(pc.model.isValidPosition(p) == false){
+                                continue;
+                            }
+                            TerrainType t = pc.model.map.getTerrain(p);
+                            if(t != null && t.enterable(pc.selectedPiece) == false){
+                                continue; // Skip this square for rendering movement
+                            }
+                            if (pc.model.getPieceByPosition(p) == null) {
                                 pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
                             }
                         }
@@ -207,6 +215,12 @@ public class PlayBoardState extends PlayerControllerState {
                         + pc.displayY);
                 Piece piece = pc.model.getPieceByPosition(position);
                 
+                // Get terrain type, but only if valid position (index out of bounds error otherwise)
+                TerrainType t = null;
+                if(pc.model.isValidPosition(position)){
+                    t = pc.model.map.getTerrain(position);
+                }
+                
                 if (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner)){
                     if (piece != null && !(pc.player.equals(piece.owner) && piece.turnState == TurnState.DONE)) {
                         pc.selectedPiece = piece;
@@ -218,7 +232,8 @@ public class PlayBoardState extends PlayerControllerState {
                         if (pc.selectedPieceMove == null){
                             if (pc.model.isValidPosition(position)
                                     && Arrays.asList(pc.selectedPiece.getValidMoves()).contains(position)
-                                    && (piece == null || piece == pc.selectedPiece)) {
+                                    && (piece == null || piece == pc.selectedPiece)
+                                    && (t == null || t.enterable(pc.selectedPiece))) {
                                 pc.selectedPieceMove = position;
                             } else {
                                 // TODO: do nothing?
