@@ -47,7 +47,7 @@ public class PlayBoardState extends PlayerControllerState {
         
 
         sidebarButtons = new Button[]{
-                Helpful.makeButton(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH / 2, 250, "End Turn", new ClickListener(){
+                Helpful.makeButton(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH / 2, 250, "End Turn", new ClickListener(){
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
                         endTurn(pc);
@@ -59,7 +59,7 @@ public class PlayBoardState extends PlayerControllerState {
                     public void onDoubleClick(Button clicked, float mx, float my) {
                     }
                 }),
-                Helpful.makeButton(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH / 2, 350, "Cancel", new ClickListener(){
+                Helpful.makeButton(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH / 2, 350, "Cancel", new ClickListener(){
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
                         if (pc.selectedPiece != null){
@@ -81,14 +81,14 @@ public class PlayBoardState extends PlayerControllerState {
 
     @Override
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
-        pc.renderBoard(g);
+        pc.renderBoard(container, g);
         pc.renderPieces(g);
         if (isLocal){
             renderLocal(container, (LocalPlayerController)pc, g);
         }
     }
     
-    public void renderMinimap(Graphics g, LocalPlayerController pc, int x, int y) throws SlickException{
+    public void renderMinimap(GameContainer container, Graphics g, LocalPlayerController pc, int x, int y) throws SlickException{
         //TODO clean up constants
         final int minimapWidth = 200, minimapHeight = 200;
         float scale = Math.min(1f * minimapWidth / pc.model.map.getPixelWidth() , 1f * minimapHeight / pc.model.map.getPixelHeight());
@@ -115,18 +115,18 @@ public class PlayBoardState extends PlayerControllerState {
         }
         g.setColor(Color.white);
         float rl = Math.max(pc.displayX * scale + xi, x), rt = Math.max(pc.displayY * scale + yi, y),
-                rr = Math.min((pc.displayX + Constants.WINDOW_WIDTH) * scale + xi, x + minimapWidth),
-                rb = Math.min((pc.displayY + Constants.WINDOW_HEIGHT) * scale + yi, y + minimapHeight);
+                rr = Math.min((pc.displayX + container.getWidth()) * scale + xi, x + minimapWidth),
+                rb = Math.min((pc.displayY + container.getWidth()) * scale + yi, y + minimapHeight);
         
         g.drawRect(rl, rt, rr - rl, rb - rt);
     }
     
     public void renderLocalSidebar(GameContainer container, LocalPlayerController pc, Graphics g) throws SlickException{
         g.setColor(new Color(0x77000000));
-        g.fillRect(Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH, 0, Constants.BOARD_SIDEBAR_WIDTH, Constants.WINDOW_HEIGHT);
+        g.fillRect(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0, Constants.BOARD_SIDEBAR_WIDTH, container.getHeight());
         g.setColor(Color.white);
-        g.drawString(pc.player.toString(), Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH + 10, 50);
-        renderMinimap(g, pc, Constants.WINDOW_WIDTH - Constants.BOARD_SIDEBAR_WIDTH, 0);
+        g.drawString(pc.player.toString(), container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 50);
+        renderMinimap(container, g, pc, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0);
         for (Button b : sidebarButtons){
             b.render(container, g);
         }
@@ -208,7 +208,7 @@ public class PlayBoardState extends PlayerControllerState {
                 if (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner)){
                     if (piece != null && !(pc.player.equals(piece.owner) && piece.turnState == TurnState.DONE)) {
                         pc.selectedPiece = piece;
-                        pc.setDisplayCenter(piece.getPosition().x, piece.getPosition().y);
+                        pc.setDisplayCenter(container, piece.getPosition().x, piece.getPosition().y);
                     }
                 } else {
                     switch (pc.selectedPiece.turnState) {

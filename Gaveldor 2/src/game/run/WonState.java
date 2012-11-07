@@ -18,7 +18,7 @@ public class WonState extends PlayerControllerState {
 
     @Override
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
-        pc.renderBoard(g);
+        pc.renderBoard(container, g);
         pc.renderPieces(g);
         pc.renderControllerWon(g);
     }

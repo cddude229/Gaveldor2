@@ -1,5 +1,8 @@
 package game.model;
 
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
+
 import util.Constants;
 
 public class Archer extends Piece {
@@ -10,6 +13,14 @@ public class Archer extends Piece {
 
     @Override
     public void attack(Piece opponent) {
+        Sound fx;
+        try {
+            fx = new Sound("/assets/audio/effects/bow3.ogg");
+            fx.play();
+        } catch (SlickException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         int power = this.defaultAttackPower();
 
         // Do double damage for back attack

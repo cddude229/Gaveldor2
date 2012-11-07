@@ -109,8 +109,8 @@ public class JoinGameState extends BasicGameState {
      * @param height
      * @return an int[] containing the screen location of the buttons
      */
-    public int getxLoc(int width) {
-        int scnWidth = Constants.WINDOW_WIDTH;
+    public int getxLoc(GameContainer container, int width) {
+        int scnWidth = container.getWidth();
         int xLoc = scnWidth / 2 - width / 2;
         return xLoc;
     }
@@ -126,7 +126,7 @@ public class JoinGameState extends BasicGameState {
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
         for (int i = 0; i < 6; i++) {
-            locations.add(new int[] { this.getxLoc(bWidth), yLoc });
+            locations.add(new int[] { this.getxLoc(container, bWidth), yLoc });
             yLoc += 100;
         }
         // create rectangles for buttons

@@ -33,7 +33,6 @@ public class Game extends StateBasedGame {
     }
 
     public void startLocalMatch(String mapName) throws GameException {
-//        GameUI ui = new GameUI();
         GameModel model;
         model = new GameModel(mapName);
         match = new GameMatch(model, new LocalPlayerController(model.getCurrentPlayer(), model),
@@ -41,7 +40,6 @@ public class Game extends StateBasedGame {
     }
 
     public void startHostRemoteMatch(String mapName, Socket socket) throws GameException {
-//        GameUI ui = new GameUI();
         GameModel model;
         model = new GameModel(mapName);
         match = new GameMatch(model, new LocalPlayerController(model.getCurrentPlayer(), model),
@@ -49,7 +47,6 @@ public class Game extends StateBasedGame {
     }
 
     public void startClientRemoteMatch(String mapName, Socket socket) throws GameException {
-//        GameUI ui = new GameUI();
         GameModel model;
         model = new GameModel(mapName);
         match = new GameMatch(model, new RemotePlayerController(model.getCurrentPlayer(), model, socket),
@@ -75,7 +72,7 @@ public class Game extends StateBasedGame {
         Game start = new Game();
         AppGameContainer app = new AppGameContainer(start);
         app.setVerbose(false);
-        app.setDisplayMode(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, Constants.WINDOW_FULLSCREEN);
+        app.setDisplayMode(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, false);
         app.setVSync(true);
         app.setShowFPS(false);
         app.start();

@@ -13,8 +13,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
-import util.Constants;
-
 public class LocalPlayerController extends PlayerController {
 
     public final Queue<Action> actionQueue = new LinkedList<Action>();
@@ -47,27 +45,27 @@ public class LocalPlayerController extends PlayerController {
     }
 
     public void updateMousePan(GameContainer container, LocalPlayerController pc, int delta) {
-        double placementX = ((double)container.getInput().getMouseX()) / Constants.WINDOW_WIDTH;
-        double placementY = ((double)container.getInput().getMouseY()) / Constants.WINDOW_HEIGHT;
+        double placementX = ((double)container.getInput().getMouseX()) / container.getWidth();
+        double placementY = ((double)container.getInput().getMouseY()) / container.getHeight();
         // TODO: clean up ALL these constants
         placementX = Math.max(placementX, 0);
         placementX = Math.min(placementX, 1);
         int x = displayX, y = displayY;
         if (placementX < .1) {
-            x -= (.1 - placementX) * .25 * Constants.WINDOW_WIDTH;
+            x -= (.1 - placementX) * .25 * container.getWidth();
         } else if (placementX >= .9) {
-            x += (placementX - .9) * .25 * Constants.WINDOW_WIDTH;
+            x += (placementX - .9) * .25 * container.getHeight();
         }
 
         placementY = Math.max(placementY, 0);
         placementY = Math.min(placementY, 1);
         if (placementY < .1) {
-            y -= (.1 - placementY) * .25 * Constants.WINDOW_HEIGHT;
+            y -= (.1 - placementY) * .25 * container.getWidth();
         } else if (placementY >= .9) {
-            y += (placementY - .9) * .25 * Constants.WINDOW_HEIGHT;
+            y += (placementY - .9) * .25 * container.getHeight();
         }
         
-        pc.setDisplayPoint(x, y);
+        pc.setDisplayPoint(container, x, y);
     }
 
     @Override
