@@ -152,14 +152,20 @@ public class PlayBoardState extends PlayerControllerState {
                 case MOVING:
                     if (pc.selectedPieceMove == null){
                         for (Point p : pc.selectedPiece.getValidMoves()) {
+                            // Don't do anything if pos isn't even valid
                             if(pc.model.isValidPosition(p) == false){
                                 continue;
                             }
+                            
+                            // Ok, load stuff and check terrain?
+                            Piece piece = pc.model.getPieceByPosition(p);
                             TerrainType t = pc.model.map.getTerrain(p);
                             if(t != null && t.enterable(pc.selectedPiece) == false){
                                 continue; // Skip this square for rendering movement
                             }
-                            if (pc.model.getPieceByPosition(p) == null) {
+
+                            // Go go go!
+                            if (piece == null || piece == pc.selectedPiece) {
                                 pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
                             }
                         }
