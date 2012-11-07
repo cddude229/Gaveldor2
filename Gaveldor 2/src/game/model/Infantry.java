@@ -1,5 +1,8 @@
 package game.model;
 
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
+
 import util.Constants;
 
 public class Infantry extends Piece {
@@ -9,6 +12,14 @@ public class Infantry extends Piece {
 
     @Override
     public void attack(Piece opponent) {
+        Sound fx;
+        try {
+            fx = new Sound("/assets/audio/effects/sword.ogg");
+            fx.play();
+        } catch (SlickException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         int power = this.defaultAttackPower();
 
         if (this.isBackAttack(opponent))

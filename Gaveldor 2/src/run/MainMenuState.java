@@ -8,6 +8,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Rectangle;
@@ -36,6 +37,8 @@ public class MainMenuState extends BasicGameState {
      * Builds buttons and adds listeners to game. This isn't fully functional.
      */
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
+        Music music = new Music("assets/audio/music/DarkKnight.ogg");
+        music.loop();
         this.container = container;
         this.game = game;
         listener = new StickyListener();
