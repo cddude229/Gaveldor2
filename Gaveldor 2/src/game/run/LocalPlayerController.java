@@ -13,11 +13,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
-import util.ControlScheme;
-
 public class LocalPlayerController extends PlayerController {
-    
-    public final ControlScheme controls;
 
     public final Queue<Action> actionQueue = new LinkedList<Action>();
 
@@ -25,9 +21,8 @@ public class LocalPlayerController extends PlayerController {
     public Point selectedPieceMove = null;
     public int selectedPieceFace = -1;
 
-    public LocalPlayerController(Player player, GameModel model, ControlScheme controls) {
+    public LocalPlayerController(Player player, GameModel model) {
         super(player, model);
-        this.controls = controls;
         if (player.equals(model.getCurrentPlayer())) {
             actionQueue.add(new Action.GameStartAction());
         }

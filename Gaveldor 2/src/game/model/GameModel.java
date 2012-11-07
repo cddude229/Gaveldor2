@@ -48,6 +48,14 @@ public class GameModel {
         minigame = null;
     }
 
+    public Player getPlayer1(){
+        return players[0];
+    }
+    
+    public Player getPlayer2(){
+        return players[1];
+    }
+    
     public Player getCurrentPlayer() {
         return players[currentPlayerIndex];
     }

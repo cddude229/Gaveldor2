@@ -36,23 +36,24 @@ public class Game extends StateBasedGame {
         GameModel model;
         model = new GameModel(mapName);
         match = new GameMatch(model,
-                new LocalPlayerController(model.getCurrentPlayer(), model, Constants.PLAYER_1_CONTROLS),
-                new LocalPlayerController(model.getOtherPlayer(), model, Constants.PLAYER_2_CONTROLS));
+                new LocalPlayerController(model.getCurrentPlayer(), model),
+                new LocalPlayerController(model.getOtherPlayer(), model));
     }
 
     public void startHostRemoteMatch(String mapName, Socket socket) throws GameException {
         GameModel model;
         model = new GameModel(mapName);
         match = new GameMatch(model,
-                new LocalPlayerController(model.getCurrentPlayer(), model, Constants.PLAYER_1_CONTROLS),
+                new LocalPlayerController(model.getCurrentPlayer(), model),
                 new RemotePlayerController(model.getOtherPlayer(), model, socket));
     }
 
     public void startClientRemoteMatch(String mapName, Socket socket) throws GameException {
         GameModel model;
         model = new GameModel(mapName);
-        match = new GameMatch(model, new RemotePlayerController(model.getCurrentPlayer(), model, socket),
-                new LocalPlayerController(model.getOtherPlayer(), model, Constants.PLAYER_2_CONTROLS));
+        match = new GameMatch(model,
+                new RemotePlayerController(model.getCurrentPlayer(), model, socket),
+                new LocalPlayerController(model.getOtherPlayer(), model));
 
     }
 

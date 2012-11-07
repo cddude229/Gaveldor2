@@ -151,7 +151,8 @@ public class PlayBoardState extends PlayerControllerState {
                 case MOVING:
                     if (pc.selectedPieceMove == null){
                         for (Point p : pc.selectedPiece.getValidMoves()) {
-                            if (pc.model.isValidPosition(p) && pc.model.getPieceByPosition(p) == null) {
+                            Piece piece = pc.model.getPieceByPosition(p);
+                            if (pc.model.isValidPosition(p) && (piece == null || piece == pc.selectedPiece)) {
                                 pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
                             }
                         }
