@@ -34,10 +34,10 @@ public class GameModel {
         map = Map.loadMap(name);
     }
     
-    private Piece lastMoved;
-    private Point lastMovedPosition;
-    //TODO lastMovedDirection
-    private long sinceLastMoved;
+    public Piece lastMoved;
+    public Point lastMovedPosition;
+    public int lastMovedDirection;
+    public long sinceLastMoved;
 
     public void setup() {
         pieces = map.createPieces(players);
@@ -162,6 +162,8 @@ public class GameModel {
             assert piece.turnState == TurnState.MOVING;
             lastMoved = piece;
             lastMovedPosition = piece.getPosition();
+            System.out.println(lastMovedPosition);
+            lastMovedDirection = piece.getDirection();
             sinceLastMoved = 0;
             piece.setPosition(movePacket.destination);
             piece.setDirection(movePacket.direction);
@@ -171,7 +173,6 @@ public class GameModel {
                 Piece target = getPieceByID(movePacket.targetID);
                 assert target != null;
                 assert !piece.owner.equals(target.owner);
-                piece.turnState = TurnState.ATTACKING;
                 minigame = new MinigameModel(piece, target);
             }
             break;

@@ -43,11 +43,10 @@ public abstract class PlayerController extends StateBasedGame{
     }
     
     public void setDisplayCenter(GameContainer container, int tileX, int tileY){
-        System.out.println(tileX + ", " + tileY);
         setDisplayPoint(container,
-                tileX * Constants.TILE_WIDTH_SPACING + Constants.TILE_WIDTH / 2 - container.getWidth() / 2,
-                tileY * Constants.TILE_HEIGHT_SPACING + Constants.TILE_HEIGHT / 2 - container.getHeight() / 2);
-    }
+                getPixelX(tileX, container.getWidth(), .5f),
+                getPixelY(tileY, container.getHeight(), .5f));
+        }
     
     
     public void renderControllerWon(Graphics g) throws SlickException {
@@ -55,12 +54,12 @@ public abstract class PlayerController extends StateBasedGame{
         g.drawString("Player " + model.getCurrentPlayer().id + " Wins!", 0, 0);
     }
     
-    public static float getPixelX(int x, int width, float centerX){
-        return x * Constants.TILE_WIDTH_SPACING + (Constants.TILE_WIDTH - width) * centerX;
+    public static int getPixelX(int x, int width, float centerX){
+        return Math.round(x * Constants.TILE_WIDTH_SPACING + (Constants.TILE_WIDTH - width) * centerX);
     }
     
-    public static float getPixelY(int y, int height, float centerY){
-        return y * Constants.TILE_HEIGHT_SPACING + (Constants.TILE_HEIGHT - height) * centerY;
+    public static int getPixelY(int y, int height, float centerY){
+        return Math.round(y * Constants.TILE_HEIGHT_SPACING + (Constants.TILE_HEIGHT - height) * centerY);
     }
 
     public void renderAtPosition(Image image, Graphics g, int x, int y, float centerX, float centerY) {
@@ -84,11 +83,32 @@ public abstract class PlayerController extends StateBasedGame{
             }
         }
     }
+    
+    public boolean isAnimatingMove(){
+        return model.lastMoved != null && model.sinceLastMoved < Constants.BOARD_MOVE_ANIMATE_TIME;
+    }
+    
+    public void renderPiece(GameContainer container, Graphics g, Piece p){
+        if (p.equals(model.lastMoved) && isAnimatingMove()){
+            float frac = 1f * model.sinceLastMoved / Constants.BOARD_MOVE_ANIMATE_TIME;
+            System.out.println("old: " + model.lastMovedPosition);
+            System.out.println("new: " + p.getPosition());
+            int x = Math.round(getPixelX(model.lastMovedPosition.x, p.getSprite().getWidth(), .5f) * (1f - frac)
+                    + getPixelX(p.getPosition().x, p.getSprite().getWidth(), .5f) * frac);
+            int y = Math.round(getPixelY(model.lastMovedPosition.y, p.getSprite().getHeight(), 1f) * (1f - frac)
+                    + getPixelY(p.getPosition().y, p.getSprite().getHeight(), 1f) * frac);
+            setDisplayPoint(container,
+                    x + (p.getSprite().getWidth() - container.getWidth()) / 2,
+                    y + (p.getSprite().getHeight()- container.getHeight()) / 2);
+            g.drawImage(p.getSprite(), x - displayX, y - displayY);
+        } else{
+            renderAtPosition(p.getSprite(), g, p.getPosition().x, p.getPosition().y, .5f, 1f);
+        }
+    }
 
-    public void renderPieces(Graphics g) {
+    public void renderPieces(GameContainer container, Graphics g) {
         for (Piece p : model.getPieces()) {
-            Image sprite = p.getSprite();
-            renderAtPosition(sprite, g, p.getPosition().x, p.getPosition().y, .5f, 1f);
+            renderPiece(container, g, p);
         }
     }
     

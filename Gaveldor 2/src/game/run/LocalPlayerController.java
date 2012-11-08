@@ -28,8 +28,9 @@ public class LocalPlayerController extends PlayerController {
         }
     }
 
-    public void renderPieces(Graphics g) {
-        for (Piece p : model.getPieces()) {
+    @Override
+    public void renderPiece(GameContainer container, Graphics g, Piece p) {
+        if (p.equals(selectedPiece)){
             Point pos = p.getPosition();
             int dir = p.getDirection();
             if (p.equals(selectedPiece)){
@@ -41,6 +42,8 @@ public class LocalPlayerController extends PlayerController {
                 }
             }
             renderAtPosition(p.getSprite(dir), g, pos.x, pos.y, .5f, 1f);
+        } else{
+            super.renderPiece(container, g, p);
         }
     }
 
