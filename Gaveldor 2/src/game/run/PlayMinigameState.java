@@ -45,10 +45,13 @@ public class PlayMinigameState extends PlayerControllerState {
         renderSide(container, pc, g, pc.model.getPlayer2(), false);
         if (pc.model.getMinigame().hasBothMoves()){
             if (pc.model.getMinigame().isSuccessfulAttack()){
+                g.drawString("Hit!", 0, 600);
                 if (!hasPlayedAttackSound){
                     pc.model.getMinigame().attackingPiece.pieceType.getAttackSound().play();
                     hasPlayedAttackSound = true;
                 }
+            } else{
+                g.drawString("Blocked!", 0, 600);
             }
         }
     }
@@ -64,7 +67,11 @@ public class PlayMinigameState extends PlayerControllerState {
         g.drawImage(piece.getSprite(leftSide ? 0 : 3), x, 200);
         MinigameModel.Move move = isAttacking ?
                 pc.model.getMinigame().attackingMove : pc.model.getMinigame().defendingMove;
-        g.drawString(move == null ? "Not yet..." : move.toString(), x, 500);
+        if (pc.model.getMinigame().hasBothMoves()){
+            g.drawString(move.toString(), x, 500);
+        } else{
+            g.drawString("Not yet...", x, 500);
+        }
     }
 
     @Override
