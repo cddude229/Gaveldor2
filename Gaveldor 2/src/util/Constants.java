@@ -23,7 +23,7 @@ public class Constants {
     public static final int  TILE_WIDTH_SPACING = (int) (TILE_WIDTH / 2);
     public static final int TILE_HEIGHT_SPACING = (int)(TILE_HEIGHT * 3 / 4);
     
-    public static final int REMOTE_CONNECTION_PORT = 400;
+    public static final int REMOTE_CONNECTION_PORT = 1400;
     
 
     // Action.java
