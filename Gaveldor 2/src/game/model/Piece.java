@@ -12,7 +12,7 @@ public abstract class Piece {
     public final PieceType pieceType;
 
     public static enum TurnState {
-        MOVING, ATTACKING, DONE;
+        MOVING, DONE;
     }
 
     public TurnState turnState = TurnState.MOVING;

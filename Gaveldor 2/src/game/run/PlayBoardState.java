@@ -83,7 +83,7 @@ public class PlayBoardState extends PlayerControllerState {
     @Override
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
         pc.renderBoard(container, g);
-        pc.renderPieces(g);
+        pc.renderPieces(container, g);
         if (isLocal){
             renderLocal(container, (LocalPlayerController)pc, g);
         }
@@ -140,134 +140,137 @@ public class PlayBoardState extends PlayerControllerState {
     }
     
     public void renderLocal(GameContainer container, LocalPlayerController pc, Graphics g) throws SlickException {
-        Point position = PlayBoardState.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
-                + pc.displayY);
-        if (pc.model.isValidPosition(position)) {
-            pc.renderAtPosition(hoverOverlay, g, position.x, position.y, 0f, 0f);
-        }
-
-        if (pc.selectedPiece != null) {
-            if (pc.player.equals(pc.selectedPiece.owner)){
-                switch (pc.selectedPiece.turnState) {
-                case MOVING:
-                    if (pc.selectedPieceMove == null){
-                        for (Point p : pc.selectedPiece.getValidMoves()) {
-                            // Don't do anything if pos isn't even valid
-                            if(pc.model.isValidPosition(p) == false){
-                                continue;
-                            }
-                            
-                            // Ok, load stuff and check terrain?
-                            Piece piece = pc.model.getPieceByPosition(p);
-                            TerrainType t = pc.model.map.getTerrain(p);
-                            if(t != null && t.enterable(pc.selectedPiece) == false){
-                                continue; // Skip this square for rendering movement
-                            }
-
-                            // Go go go!
-                            if (piece == null || piece == pc.selectedPiece) {
-                                pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
-                            }
-                        }
-                    } else if (pc.selectedPieceFace == -1){
-                        pc.renderAtPosition(faceableArrows, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0.5f, 0.5f);
-                        // TODO: add full tile overlays
-                    } else{
-                        for (Point pos : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
-                            if (pc.model.isValidPosition(pos)) {
-                                Piece p = pc.model.getPieceByPosition(pos);
-                                if (p != null && !p.owner.equals(pc.selectedPiece.owner)){
-                                    pc.renderAtPosition(attackableOverlay, g, pos.x, pos.y, 0f, 0f);
+        if (pc.isAnimatingMove()){
+            
+        } else{
+            Point position = PlayBoardState.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
+                    + pc.displayY);
+            if (pc.model.isValidPosition(position)) {
+                pc.renderAtPosition(hoverOverlay, g, position.x, position.y, 0f, 0f);
+            }
+    
+            if (pc.selectedPiece != null) {
+                if (pc.player.equals(pc.selectedPiece.owner)){
+                    switch (pc.selectedPiece.turnState) {
+                    case MOVING:
+                        if (pc.selectedPieceMove == null){
+                            for (Point p : pc.selectedPiece.getValidMoves()) {
+                                // Don't do anything if pos isn't even valid
+                                if(pc.model.isValidPosition(p) == false){
+                                    continue;
+                                }
+                                
+                                // Ok, load stuff and check terrain?
+                                Piece piece = pc.model.getPieceByPosition(p);
+                                TerrainType t = pc.model.map.getTerrain(p);
+                                if(t != null && t.enterable(pc.selectedPiece) == false){
+                                    continue; // Skip this square for rendering movement
+                                }
+    
+                                // Go go go!
+                                if (piece == null || piece == pc.selectedPiece) {
+                                    pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
                                 }
                             }
+                        } else if (pc.selectedPieceFace == -1){
+                            pc.renderAtPosition(faceableArrows, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0.5f, 0.5f);
+                            // TODO: add full tile overlays
+                        } else{
+                            for (Point pos : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
+                                if (pc.model.isValidPosition(pos)) {
+                                    Piece p = pc.model.getPieceByPosition(pos);
+                                    if (p != null && !p.owner.equals(pc.selectedPiece.owner)){
+                                        pc.renderAtPosition(attackableOverlay, g, pos.x, pos.y, 0f, 0f);
+                                    }
+                                }
+                            }
+                            //TODO: use different overlay
+                            pc.renderAtPosition(attackableOverlay, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0f, 0f);
                         }
-                        //TODO: use different overlay
-                        pc.renderAtPosition(attackableOverlay, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0f, 0f);
+                        break;
+                    case DONE:
+                        // do nothing
+                        break;
+                    default:
+                        throw new RuntimeException();
                     }
-                    break;
-                case ATTACKING:
-                    throw new RuntimeException();
-                case DONE:
-                    // do nothing
-                    break;
-                default:
-                    throw new RuntimeException();
-                }
-            } else{
-                for (Point p : pc.selectedPiece.getValidMoves()) {
-                    if (pc.model.isValidPosition(p)) {
-                        pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
+                } else{
+                    for (Point p : pc.selectedPiece.getValidMoves()) {
+                        if (pc.model.isValidPosition(p)) {
+                            pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
+                        }
                     }
                 }
             }
+            renderLocalSidebar(container, pc, g);
         }
-        renderLocalSidebar(container, pc, g);
     }
 
     @Override
     public void updateLocal(GameContainer container, LocalPlayerController pc, int delta) throws SlickException {
-        if (pc.isCurrentPC()){
+        if (pc.isCurrentPC() && !pc.isAnimatingMove()){
             container.getInput().addListener(stickyListener);
         } else{
             container.getInput().removeListener(stickyListener);
         }
         
         if (pc.isCurrentPC()){
-            pc.updateMousePan(container, pc, delta);
-            updateLocalSidebar(container, pc, delta);
-            
-            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-                Point position = PlayBoardState.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
-                        + pc.displayY);
-                Piece piece = pc.model.getPieceByPosition(position);
+            if (pc.isAnimatingMove()){
+                //TODO
+            } else{
+                pc.updateMousePan(container, pc, delta);
+                updateLocalSidebar(container, pc, delta);
                 
-                // Get terrain type, but only if valid position (index out of bounds error otherwise)
-                TerrainType t = null;
-                if(pc.model.isValidPosition(position)){
-                    t = pc.model.map.getTerrain(position);
-                }
-                
-                if (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner)){
-                    if (piece != null && !(pc.player.equals(piece.owner) && piece.turnState == TurnState.DONE)) {
-                        pc.selectedPiece = piece;
-                        pc.setDisplayCenter(container, piece.getPosition().x, piece.getPosition().y);
+                if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON) &&
+                        container.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
+                    Point position = PlayBoardState.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
+                            + pc.displayY);
+                    Piece piece = pc.model.getPieceByPosition(position);
+                    
+                    // Get terrain type, but only if valid position (index out of bounds error otherwise)
+                    TerrainType t = null;
+                    if(pc.model.isValidPosition(position)){
+                        t = pc.model.map.getTerrain(position);
                     }
-                } else {
-                    switch (pc.selectedPiece.turnState) {
-                    case MOVING:
-                        if (pc.selectedPieceMove == null){
-                            if (pc.model.isValidPosition(position)
-                                    && Arrays.asList(pc.selectedPiece.getValidMoves()).contains(position)
-                                    && (piece == null || piece == pc.selectedPiece)
-                                    && (t == null || t.enterable(pc.selectedPiece))) {
-                                pc.selectedPieceMove = position;
-                            }
-                        } else if (pc.selectedPieceFace == -1){
-                            int direction = Piece.pointsToDirection(position, pc.selectedPieceMove);
-                            if (direction != -1) {
-                                pc.selectedPieceFace = direction;
-                            }
-                        } else{
-                            if (pc.model.isValidPosition(position)
-                                    && (Arrays.asList(pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)).contains(position) && piece != null
-                                    && !piece.owner.equals(pc.selectedPiece.owner)) || position.equals(pc.selectedPieceMove)) {
-                                pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove,
-                                        pc.selectedPieceFace, position.equals(pc.selectedPieceMove) ? null : piece));
-                                if (position.equals(pc.selectedPieceMove)){
-                                    pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
-                                } else{
-                                    pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, piece));
-                                    pc.actionQueue.add(new Action.MinigameStartAction());
-                                }
-                                clearSelection(pc);
-                            }
+                    
+                    if (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner)){
+                        if (piece != null && !(pc.player.equals(piece.owner) && piece.turnState == TurnState.DONE)) {
+                            pc.selectedPiece = piece;
+                            pc.setDisplayCenter(container, piece.getPosition().x, piece.getPosition().y);
                         }
-                        break;
-                    case ATTACKING:
-                        throw new RuntimeException();
-                    case DONE:
-                    default:
-                        throw new RuntimeException();
+                    } else {
+                        switch (pc.selectedPiece.turnState) {
+                        case MOVING:
+                            if (pc.selectedPieceMove == null){
+                                if (pc.model.isValidPosition(position)
+                                        && Arrays.asList(pc.selectedPiece.getValidMoves()).contains(position)
+                                        && (piece == null || piece == pc.selectedPiece)
+                                        && (t == null || t.enterable(pc.selectedPiece))) {
+                                    pc.selectedPieceMove = position;
+                                }
+                            } else if (pc.selectedPieceFace == -1){
+                                int direction = Piece.pointsToDirection(position, pc.selectedPieceMove);
+                                if (direction != -1) {
+                                    pc.selectedPieceFace = direction;
+                                }
+                            } else{
+                                if (pc.model.isValidPosition(position)
+                                        && (Arrays.asList(pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)).contains(position) && piece != null
+                                        && !piece.owner.equals(pc.selectedPiece.owner)) || position.equals(pc.selectedPieceMove)) {
+                                    if (position.equals(pc.selectedPieceMove)){
+                                        pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
+                                    } else{
+                                        pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, piece));
+                                        pc.actionQueue.add(new Action.MinigameStartAction());
+                                    }
+                                    clearSelection(pc);
+                                }
+                            }
+                            break;
+                        case DONE:
+                        default:
+                            throw new RuntimeException();
+                        }
                     }
                 }
             }

@@ -20,7 +20,7 @@ public class PlayGameState extends BasicGameState {
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         TerrainType.initTiles();
-        PieceType.initSprites();
+        PieceType.init();
     }
 
     @Override
