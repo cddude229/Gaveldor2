@@ -91,8 +91,6 @@ public abstract class PlayerController extends StateBasedGame{
     public void renderPiece(GameContainer container, Graphics g, Piece p){
         if (p.equals(model.lastMoved) && isAnimatingMove()){
             float frac = 1f * model.sinceLastMoved / Constants.BOARD_MOVE_ANIMATE_TIME;
-            System.out.println("old: " + model.lastMovedPosition);
-            System.out.println("new: " + p.getPosition());
             int x = Math.round(getPixelX(model.lastMovedPosition.x, p.getSprite().getWidth(), .5f) * (1f - frac)
                     + getPixelX(p.getPosition().x, p.getSprite().getWidth(), .5f) * frac);
             int y = Math.round(getPixelY(model.lastMovedPosition.y, p.getSprite().getHeight(), 1f) * (1f - frac)

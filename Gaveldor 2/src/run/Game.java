@@ -11,7 +11,9 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 
 import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -68,12 +70,36 @@ public class Game extends StateBasedGame {
         addState(new HostMatchMakingState());
         addState(new JoinMatchMakingState());
     }
+    
+    private static class LetterboxGame extends BasicGame{
+        
+        private final org.newdawn.slick.Game game;
+        public final int width, height;
+        public LetterboxGame(Game game, int width, int height){
+            super(game.getTitle());
+            this.game = game;
+            this.width = width;
+            this.height = height;
+        }
+        @Override
+        public void init(GameContainer container) throws SlickException {
+            game.init(container);
+        }
+        @Override
+        public void render(GameContainer container, Graphics g) throws SlickException {
+            game.render(container, g);
+        }
+        @Override
+        public void update(GameContainer container, int delta) throws SlickException {
+            game.update(container, delta);
+        }
+    }
 
     public static void main(String[] args) throws SlickException, IOException, URISyntaxException {
         Resources.setupLWJGLNatives("/lwjgl_natives");
 
-        Game start = new Game();
-        AppGameContainer app = new AppGameContainer(start);
+        org.newdawn.slick.Game game = new Game();
+        AppGameContainer app = new AppGameContainer(game);
         app.setVerbose(false);
         app.setDisplayMode(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, false);
         app.setVSync(true);
