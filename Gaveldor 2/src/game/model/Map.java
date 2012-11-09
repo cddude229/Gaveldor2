@@ -61,8 +61,8 @@ public class Map {
         Set<Piece> piecesNew = new HashSet<Piece>();
         for (Piece p : pieces) {
             try {
-                piecesNew.add(p.getClass().getConstructor(Player.class, Point.class, int.class)
-                        .newInstance(players[p.owner.id], p.getPosition(), p.id));
+                piecesNew.add(p.getClass().getConstructor(Player.class, Point.class, int.class, int.class)
+                        .newInstance(players[p.owner.id], p.getPosition(), p.id, p.getDirection()));
             } catch (Exception e) {
                 if (e instanceof RuntimeException) {
                     throw (RuntimeException) e;
@@ -152,23 +152,24 @@ public class Map {
                     switch (rowLine.charAt(i)) {
     
                     case '1':
-                        pieces.add(new Infantry(p1, new Point(x, y), idCounter++));
+                        
+                        pieces.add(new Infantry(p1, new Point(x, y), idCounter++, 1));
                         break;
                     case '2':
-                        pieces.add(new Archer(p1, new Point(x, y), idCounter++));
+                        pieces.add(new Archer(p1, new Point(x, y), idCounter++, 2));
                         break;
                     case '3':
-                        pieces.add(new Cavalry(p1, new Point(x, y), idCounter++));
+                        pieces.add(new Cavalry(p1, new Point(x, y), idCounter++, 2));
                         break;
                     case 'a':
     
-                        pieces.add(new Infantry(p2, new Point(x, y), idCounter++));
+                        pieces.add(new Infantry(p2, new Point(x, y), idCounter++, 5));
                         break;
                     case 'b':
-                        pieces.add(new Archer(p2, new Point(x, y), idCounter++));
+                        pieces.add(new Archer(p2, new Point(x, y), idCounter++, 4));
                         break;
                     case 'c':
-                        pieces.add(new Cavalry(p2, new Point(x, y), idCounter++));
+                        pieces.add(new Cavalry(p2, new Point(x, y), idCounter++, 4));
                         break;
                     }
                 }

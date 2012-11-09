@@ -7,6 +7,10 @@ public class Cavalry extends Piece {
     public Cavalry(Player owner, Point p, int id) {
         super(owner, p, id, PieceType.CAVALRY);
     }
+    
+    public Cavalry(Player owner, Point p, int id, int dir) {
+        super(owner, p, id, PieceType.CAVALRY, dir);
+    }
 
     @Override
     public void attack(Piece opponent) {

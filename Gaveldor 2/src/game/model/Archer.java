@@ -7,6 +7,10 @@ public class Archer extends Piece {
     public Archer(Player owner, Point p, int id) {
         super(owner, p, id, PieceType.ARCHER);
     }
+    
+    public Archer(Player owner, Point p, int id, int dir) {
+        super(owner, p, id, PieceType.ARCHER, dir);
+    }
 
     @Override
     public void attack(Piece opponent) {

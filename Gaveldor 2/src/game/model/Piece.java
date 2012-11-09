@@ -30,6 +30,15 @@ public abstract class Piece {
         this.id = id;
         this.pieceType = pieceType;
     }
+    
+    public Piece(Player owner, Point p, int id, PieceType pieceType, int dir) {
+        this.owner = owner;
+        currentHealth = defaultHealth();
+        setPosition(p);
+        this.id = id;
+        this.pieceType = pieceType;
+        this.currentDirection = (dir%6);
+    }
 
     /**
      * Remaining health of the piece. 0 if dead.

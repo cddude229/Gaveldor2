@@ -6,6 +6,10 @@ public class Infantry extends Piece {
     public Infantry(Player owner, Point p, int id) {
         super(owner, p, id, PieceType.INFANTRY);
     }
+    
+    public Infantry(Player owner, Point p, int id, int dir) {
+        super(owner, p, id, PieceType.INFANTRY, dir);
+    }
 
     @Override
     public void attack(Piece opponent) {
