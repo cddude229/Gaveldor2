@@ -11,9 +11,8 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -58,6 +57,27 @@ public class Game extends StateBasedGame {
                 new LocalPlayerController(model.getOtherPlayer(), model));
 
     }
+    
+    private void makeFullscreen(AppGameContainer container) throws SlickException{
+        int width = container.getScreenWidth(), height = container.getScreenHeight();
+        if (width >= Constants.WINDOW_WIDTH && height >= Constants.WINDOW_HEIGHT){
+            container.setDisplayMode(width, height, true);
+        }
+    }
+    
+    private void makeWindowed(AppGameContainer container) throws SlickException{
+        container.setDisplayMode(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, false);
+    }
+    
+    public void toggleFullscreenCheck(AppGameContainer container) throws SlickException{
+        if (container.getInput().isKeyPressed(Input.KEY_F) && container.getInput().isKeyDown(Input.KEY_F)){
+            if (container.isFullscreen()){
+                makeWindowed(container);
+            } else{
+                makeFullscreen(container);
+            }
+        }
+    }
 
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
@@ -70,41 +90,17 @@ public class Game extends StateBasedGame {
         addState(new HostMatchMakingState());
         addState(new JoinMatchMakingState());
     }
-    
-    private static class LetterboxGame extends BasicGame{
-        
-        private final org.newdawn.slick.Game game;
-        public final int width, height;
-        public LetterboxGame(Game game, int width, int height){
-            super(game.getTitle());
-            this.game = game;
-            this.width = width;
-            this.height = height;
-        }
-        @Override
-        public void init(GameContainer container) throws SlickException {
-            game.init(container);
-        }
-        @Override
-        public void render(GameContainer container, Graphics g) throws SlickException {
-            game.render(container, g);
-        }
-        @Override
-        public void update(GameContainer container, int delta) throws SlickException {
-            game.update(container, delta);
-        }
-    }
 
     public static void main(String[] args) throws SlickException, IOException, URISyntaxException {
         Resources.setupLWJGLNatives("/lwjgl_natives");
 
-        org.newdawn.slick.Game game = new Game();
-        AppGameContainer app = new AppGameContainer(game);
-        app.setVerbose(false);
-        app.setDisplayMode(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, false);
-        app.setVSync(true);
-        app.setShowFPS(false);
-        app.start();
+        Game game = new Game();
+        AppGameContainer container = new AppGameContainer(game);
+        container.setVerbose(false);
+        game.makeWindowed(container);
+        container.setVSync(true);
+        container.setShowFPS(false);
+        container.start();
     }
 
 }

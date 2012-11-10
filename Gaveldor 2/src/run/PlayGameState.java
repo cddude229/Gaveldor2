@@ -5,6 +5,7 @@ import game.model.PieceType;
 import game.model.TerrainType;
 import game.run.GameMatch;
 
+import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -59,8 +60,8 @@ public class PlayGameState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        ((Game)game).toggleFullscreenCheck((AppGameContainer)container);
         updateActions(container, game, delta);
-//        match.ui.update(container, game, delta);
         match.model.applyDelta(delta);
         match.getCurrentPC().update(container, delta);
         match.getOtherPC().update(container, delta);

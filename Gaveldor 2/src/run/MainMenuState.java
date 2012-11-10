@@ -4,6 +4,7 @@ import game.run.GameException;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -68,6 +69,7 @@ public class MainMenuState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        ((Game)game).toggleFullscreenCheck((AppGameContainer)container);
         for (SimpleButton button : buttons) {
             button.update(container, delta);
         }
