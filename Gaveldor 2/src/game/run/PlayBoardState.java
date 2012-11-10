@@ -32,6 +32,8 @@ public class PlayBoardState extends PlayerControllerState {
     private Image hoverOverlay, movableOverlay, faceableArrows, attackableOverlay;
     
     private Button[] sidebarButtons;
+    
+    private boolean wasAnimatingMove = false;
 
     @Override
     public void init(GameContainer container, PlayerController pc) throws SlickException {
@@ -78,6 +80,11 @@ public class PlayBoardState extends PlayerControllerState {
         for (Button b : sidebarButtons){
             stickyListener.add(b);
         }
+    }
+    
+    @Override
+    public void enter(GameContainer container, PlayerController pc) throws SlickException{
+        wasAnimatingMove = false;
     }
 
     @Override
@@ -142,6 +149,11 @@ public class PlayBoardState extends PlayerControllerState {
     public void renderLocal(GameContainer container, LocalPlayerController pc, Graphics g) throws SlickException {
         if (pc.isAnimatingMove()){
             
+        } else if (wasAnimatingMove){
+            if (pc.model.getMinigame() != null){
+                pc.actionQueue.add(new Action.MinigameStartAction());
+            }
+            wasAnimatingMove = false;
         } else{
             Point position = PlayBoardState.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
                     + pc.displayY);
@@ -257,13 +269,11 @@ public class PlayBoardState extends PlayerControllerState {
                                 if (pc.model.isValidPosition(position)
                                         && (Arrays.asList(pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)).contains(position) && piece != null
                                         && !piece.owner.equals(pc.selectedPiece.owner)) || position.equals(pc.selectedPieceMove)) {
-                                    if (position.equals(pc.selectedPieceMove)){
-                                        pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
-                                    } else{
-                                        pc.actionQueue.add(new Action.BoardMoveAction(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, piece));
-                                        pc.actionQueue.add(new Action.MinigameStartAction());
-                                    }
+                                    pc.actionQueue.add(new Action.BoardMoveAction(
+                                            pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace,
+                                            position.equals(pc.selectedPieceMove)? null: piece));
                                     clearSelection(pc);
+                                    wasAnimatingMove = true;
                                 }
                             }
                             break;

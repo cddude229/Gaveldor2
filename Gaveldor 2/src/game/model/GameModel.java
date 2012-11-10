@@ -226,7 +226,11 @@ public class GameModel {
             sinceLastMoved += delta;
             break;
         case PLAYING_MINIGAME:
-            minigame.sinceMoveTimeStart += delta;
+            if (minigame.sinceMoveTimeStart == 0){ // a temp fix for the minigame loading issue
+                minigame.sinceMoveTimeStart = 1;
+            } else{
+                minigame.sinceMoveTimeStart += delta;
+            }
             if (minigame.hasBothMoves()){
                 minigame.sinceHasBothMoves += delta;
             }
