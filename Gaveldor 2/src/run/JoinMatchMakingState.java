@@ -4,9 +4,8 @@ import game.run.GameException;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
@@ -20,15 +19,10 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import util.Constants;
-
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
 import com.aem.sticky.button.SimpleButton;
 import com.aem.sticky.button.events.ClickListener;
-
-import de.htwg_konstanz.in.uce.hp.parallel.source.HolePunchingSource;
-import de.htwg_konstanz.in.uce.hp.parallel.source.TargetNotRegisteredException;
 
 public class JoinMatchMakingState extends BasicGameState {
 
@@ -39,7 +33,7 @@ public class JoinMatchMakingState extends BasicGameState {
     private static final int bHeight = 50;
     private String hostIP = "";
     
-    private HolePunchingSource socketSource = null;
+    private ServerSocket socketSource = null;
     private Socket socket = null;
     
     @Override
@@ -78,20 +72,7 @@ public class JoinMatchMakingState extends BasicGameState {
     public void enter(GameContainer container, StateBasedGame game) {
         container.getInput().addListener(listener);
         hostIP = getIPAddress();
-        
-        SocketAddress mediatorSocketAddress = new InetSocketAddress(
-                "18.189.2.61",Constants.REMOTE_CONNECTION_PORT);
-        String targetID = "myTarget";
-        socketSource = new HolePunchingSource();
-        //TODO
-        try {
-            socket = socketSource.getSocket(targetID, mediatorSocketAddress);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TargetNotRegisteredException e) {
-            e.printStackTrace();
-        }
-        System.out.println(socket.getInetAddress());
+
     }
     
     @Override
