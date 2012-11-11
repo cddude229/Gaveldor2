@@ -79,7 +79,6 @@ public class HostMatchMakingState extends BasicGameState {
         container.getInput().removeListener(listener);
         try {
             if (serverSocket != null){
-                serverSocket.stop();
                 serverSocket = null;
             }
             if (socket != null){
