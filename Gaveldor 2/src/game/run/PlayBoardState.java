@@ -30,6 +30,7 @@ public class PlayBoardState extends PlayerControllerState {
     }
     
     private Image hoverOverlay, movableOverlay, faceableArrows, attackableOverlay;
+    private GameContainer gameContainer;
     
     private Button[] sidebarButtons;
     
@@ -37,12 +38,13 @@ public class PlayBoardState extends PlayerControllerState {
 
     @Override
     public void init(GameContainer container, PlayerController pc) throws SlickException {
+        gameContainer = container;
         if (isLocal){
             initLocal(container, (LocalPlayerController)pc);
         }
     }
     
-    public void initLocal(final GameContainer container, final LocalPlayerController pc) throws SlickException{
+    public void initLocal(GameContainer container, final LocalPlayerController pc) throws SlickException{
         hoverOverlay = Resources.getImage("/assets/graphics/ui/hover.png").getScaledCopy(.5f);
         movableOverlay = Resources.getImage("/assets/graphics/ui/movable.png").getScaledCopy(.5f);
         faceableArrows = Resources.getImage("/assets/graphics/ui/arrows.png").getScaledCopy(.5f);
@@ -79,8 +81,7 @@ public class PlayBoardState extends PlayerControllerState {
                 Helpful.makeButton(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH / 2, 550, "Mute", new ClickListener(){
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
-                        mute(container);
-                        
+                        mute();  
                     }
                     @Override
                     public void onRightClick(Button clicked, float mx, float my) {
@@ -340,12 +341,17 @@ public class PlayBoardState extends PlayerControllerState {
         return new Point(ix - iz, iy);
     }
     
-    public void mute(GameContainer container) {
-        if (container.getMusicVolume() == 0) {
-            container.setSoundOn(true);
+    public void mute() {
+        System.out.println("Reached mute!");
+        if (gameContainer.isMusicOn() | gameContainer.isSoundOn()) {
+            gameContainer.setMusicOn(false);
+            gameContainer.setSoundOn(false);
+            System.out.println("Trying to mute");
         }
         else {
-            container.setSoundOn(false);
+            System.out.println("Trying to unmute.");
+            gameContainer.setSoundOn(true);
+            gameContainer.setMusicOn(true);
         }
         
     }
