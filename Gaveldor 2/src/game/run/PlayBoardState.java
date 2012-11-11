@@ -42,7 +42,7 @@ public class PlayBoardState extends PlayerControllerState {
         }
     }
     
-    public void initLocal(GameContainer container, final LocalPlayerController pc) throws SlickException{
+    public void initLocal(final GameContainer container, final LocalPlayerController pc) throws SlickException{
         hoverOverlay = Resources.getImage("/assets/graphics/ui/hover.png").getScaledCopy(.5f);
         movableOverlay = Resources.getImage("/assets/graphics/ui/movable.png").getScaledCopy(.5f);
         faceableArrows = Resources.getImage("/assets/graphics/ui/arrows.png").getScaledCopy(.5f);
@@ -68,6 +68,19 @@ public class PlayBoardState extends PlayerControllerState {
                         if (pc.selectedPiece != null){
                             clearSelection(pc);
                         }
+                    }
+                    @Override
+                    public void onRightClick(Button clicked, float mx, float my) {
+                    }
+                    @Override
+                    public void onDoubleClick(Button clicked, float mx, float my) {
+                    }
+                }),
+                Helpful.makeButton(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH / 2, 550, "Mute", new ClickListener(){
+                    @Override
+                    public void onClick(Button clicked, float mx, float my) {
+                        mute(container);
+                        
                     }
                     @Override
                     public void onRightClick(Button clicked, float mx, float my) {
@@ -325,5 +338,15 @@ public class PlayBoardState extends PlayerControllerState {
         iy -= 1;
         ix -= 1;
         return new Point(ix - iz, iy);
+    }
+    
+    public void mute(GameContainer container) {
+        if (container.getMusicVolume() == 0) {
+            container.setSoundOn(true);
+        }
+        else {
+            container.setSoundOn(false);
+        }
+        
     }
 }
