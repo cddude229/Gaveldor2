@@ -31,6 +31,7 @@ public class PlayBoardState extends PlayerControllerState {
     
     private Image hoverOverlay, movableOverlay, faceableArrows, attackableOverlay;
     private GameContainer gameContainer;
+    //private PlayerController stateGame;
     
     private Button[] sidebarButtons;
     
@@ -39,6 +40,7 @@ public class PlayBoardState extends PlayerControllerState {
     @Override
     public void init(GameContainer container, PlayerController pc) throws SlickException {
         gameContainer = container;
+        //stateGame = pc;
         if (isLocal){
             initLocal(container, (LocalPlayerController)pc);
         }
@@ -82,6 +84,18 @@ public class PlayBoardState extends PlayerControllerState {
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
                         mute();  
+                    }
+                    @Override
+                    public void onRightClick(Button clicked, float mx, float my) {
+                    }
+                    @Override
+                    public void onDoubleClick(Button clicked, float mx, float my) {
+                    }
+                }),
+                Helpful.makeButton(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH / 2, 650, "Exit Game", new ClickListener(){
+                    @Override
+                    public void onClick(Button clicked, float mx, float my) {
+                         gameContainer.exit();
                     }
                     @Override
                     public void onRightClick(Button clicked, float mx, float my) {
