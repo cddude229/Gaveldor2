@@ -23,7 +23,7 @@ import com.aem.sticky.button.Button;
 import com.aem.sticky.button.SimpleButton;
 import com.aem.sticky.button.events.ClickListener;
 
-public class HostMatchMakingState extends BasicGameState {
+public class MatchMakingState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
     private SimpleButton backBtn;

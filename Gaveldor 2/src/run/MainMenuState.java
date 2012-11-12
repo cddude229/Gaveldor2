@@ -104,7 +104,7 @@ public class MainMenuState extends BasicGameState {
         //create possible locations for buttons
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 7; i++) {
             locations.add(new int[] { this.getxLoc(container, bWidth), yLoc });
             yLoc += 75;
         }
@@ -183,7 +183,7 @@ public class MainMenuState extends BasicGameState {
                 buttons.get(i).addListener(new ClickListener() {
 
                     public void onClick(Button clicked, float mx, float my) {
-                        game.enterState(HostMatchMakingState.STATE_ID);
+                        game.enterState(MatchMakingState.STATE_ID);
                     }
 
                     public void onDoubleClick(Button clicked, float mx, float my) {}
@@ -195,7 +195,7 @@ public class MainMenuState extends BasicGameState {
                 buttons.get(i).addListener(new ClickListener() {
 
                     public void onClick(Button clicked, float mx, float my) {
-                        game.enterState(JoinMatchMakingState.STATE_ID);
+                        game.enterState(InstructionState.STATE_ID);
                     }
 
                     public void onDoubleClick(Button clicked, float mx, float my) {}
@@ -207,18 +207,6 @@ public class MainMenuState extends BasicGameState {
                 buttons.get(i).addListener(new ClickListener() {
 
                     public void onClick(Button clicked, float mx, float my) {
-                        game.enterState(InstructionState.STATE_ID);
-                    }
-
-                    public void onDoubleClick(Button clicked, float mx, float my) {}
-                    public void onRightClick(Button clicked, float mx, float my) {}
-                });
-                break;
-
-            case 6:
-                buttons.get(i).addListener(new ClickListener() {
-
-                    public void onClick(Button clicked, float mx, float my) {
                         game.enterState(CreditsState.STATE_ID);
                     }
 
@@ -227,7 +215,7 @@ public class MainMenuState extends BasicGameState {
                 });
                 break;
 
-            case 7:
+            case 6:
                 buttons.get(i).addListener(new ClickListener(){
                     public void onClick(Button clicked, float mx, float my) {
                         container.exit();
@@ -249,7 +237,7 @@ public class MainMenuState extends BasicGameState {
      */
     public ArrayList<Image> makeImages() throws SlickException {
         ArrayList<Image> images = new ArrayList<Image>();
-        for (int i = 0; i <8; i++){
+        for (int i = 0; i <7; i++){
             Image im = new Image(bWidth, bHeight);
             im.getGraphics().setColor(Color.blue);
             im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
@@ -272,22 +260,18 @@ public class MainMenuState extends BasicGameState {
                 clickPlay.getGraphics().drawString("Join a Match", 0, 0);
                 break;
             case 3:
-                im.getGraphics().drawString("Host matchmaking", 0, 0);
-                clickPlay.getGraphics().drawString("Host matchmaking", 0, 0);
+                im.getGraphics().drawString("Matchmaking", 0, 0);
+                clickPlay.getGraphics().drawString("Matchmaking", 0, 0);
                 break;
             case 4:
-                im.getGraphics().drawString("Join matchmaking", 0, 0);
-                clickPlay.getGraphics().drawString("Join matchmaking", 0, 0);
-                break;
-            case 5:
                 im.getGraphics().drawString("Instructions", 0, 0);
                 clickPlay.getGraphics().drawString("Instructions", 0, 0);
                 break;
-            case 6:
+            case 5:
                 im.getGraphics().drawString("Credits", 0, 0);
                 clickPlay.getGraphics().drawString("Credits", 0, 0);
                 break;
-            case 7:
+            case 6:
                 im.getGraphics().drawString("Exit", 0, 0);
                 clickPlay.getGraphics().drawString("Exit", 0, 0);
                 break;
