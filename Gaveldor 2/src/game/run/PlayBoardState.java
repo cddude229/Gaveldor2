@@ -166,7 +166,6 @@ public class PlayBoardState extends PlayerControllerState {
         g.drawString(pc.player.toString(), container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 50);
         renderMinimap(container, g, pc, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0);
         for (Button b : sidebarButtons){
-            System.out.println(b.toString());
             //End Turn button
             if (b.equals(sidebarButtons[0])) {
                 if (pc.selectedPiece == null) {
