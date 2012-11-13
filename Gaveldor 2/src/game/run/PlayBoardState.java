@@ -57,7 +57,9 @@ public class PlayBoardState extends PlayerControllerState {
                 Helpful.makeButton(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH / 2, 250, "End Turn", new ClickListener(){
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
-                        endTurn(pc);
+                        if (pc.selectedPiece == null) {
+                            endTurn(pc);   
+                        }
                     }
                     @Override
                     public void onRightClick(Button clicked, float mx, float my) {
@@ -66,7 +68,7 @@ public class PlayBoardState extends PlayerControllerState {
                     public void onDoubleClick(Button clicked, float mx, float my) {
                     }
                 }),
-                Helpful.makeButton(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH / 2, 350, "Cancel", new ClickListener(){
+                Helpful.makeButton(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH / 2, 250, "Cancel", new ClickListener(){
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
                         if (pc.selectedPiece != null){
@@ -164,7 +166,22 @@ public class PlayBoardState extends PlayerControllerState {
         g.drawString(pc.player.toString(), container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 50);
         renderMinimap(container, g, pc, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0);
         for (Button b : sidebarButtons){
-            b.render(container, g);
+            System.out.println(b.toString());
+            //End Turn button
+            if (b.equals(sidebarButtons[0])) {
+                if (pc.selectedPiece == null) {
+                    b.render(container,g);
+                }
+            }
+            //Cancel button
+            else if (b.equals(sidebarButtons[1])) {
+                if (pc.selectedPiece != null) {
+                    b.render(container,g);
+                }
+            }
+            else {
+                b.render(container, g);
+            }
         }
     }
     
@@ -375,14 +392,11 @@ public class PlayBoardState extends PlayerControllerState {
     }
     
     public void mute() {
-        System.out.println("Reached mute!");
         if (gameContainer.isMusicOn() | gameContainer.isSoundOn()) {
             gameContainer.setMusicOn(false);
             gameContainer.setSoundOn(false);
-            System.out.println("Trying to mute");
         }
         else {
-            System.out.println("Trying to unmute.");
             gameContainer.setSoundOn(true);
             gameContainer.setMusicOn(true);
         }
