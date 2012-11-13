@@ -8,8 +8,12 @@ import org.newdawn.slick.SlickException;
 
 import util.Constants;
 
+import com.aem.sticky.button.Button;
+
 public class DisconnectedState extends PlayerControllerState {
 
+    private Button backButton;
+    
     public DisconnectedState(boolean isLocal) {
         super(GameState.DISCONNECTED, isLocal);
     }

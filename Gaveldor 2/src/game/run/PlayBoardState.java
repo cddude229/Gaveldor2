@@ -252,8 +252,12 @@ public class PlayBoardState extends PlayerControllerState {
                     }
                 } else{
                     for (Point p : pc.selectedPiece.getValidMoves()) {
-                        if (pc.model.isValidPosition(p)) {
-                            pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
+                        for (int dir = 0; dir < 5; dir = dir + 1) {
+                            for (Point loc : pc.selectedPiece.getValidAttacks(p,dir)) {
+                                if (pc.model.isValidPosition(loc)) {
+                                    pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
+                                }
+                            }
                         }
                     }
                 }
