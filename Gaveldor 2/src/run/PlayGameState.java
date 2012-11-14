@@ -1,6 +1,7 @@
 package run;
 
 import game.model.Action;
+import game.model.GameModel.GameState;
 import game.model.PieceType;
 import game.model.TerrainType;
 import game.run.GameMatch;
@@ -8,6 +9,7 @@ import game.run.GameMatch;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -66,6 +68,12 @@ public class PlayGameState extends BasicGameState {
         match.getCurrentPC().update(container, delta);
         match.getOtherPC().update(container, delta);
         updateActions(container, game, delta);
+        
+        if(match.model.gameState == GameState.WON){
+            if (container.getInput().isKeyPressed(Input.KEY_ESCAPE)){
+                game.enterState(MainMenuState.STATE_ID);
+            }
+        }
     }
 
     @Override
