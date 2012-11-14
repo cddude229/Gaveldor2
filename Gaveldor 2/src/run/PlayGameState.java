@@ -69,7 +69,7 @@ public class PlayGameState extends BasicGameState {
         match.getOtherPC().update(container, delta);
         updateActions(container, game, delta);
         
-        if(match.model.gameState == GameState.WON){
+        if((match.model.gameState == GameState.WON) || (match.model.gameState == GameState.DISCONNECTED)){
             if (container.getInput().isKeyPressed(Input.KEY_ESCAPE)){
                 game.enterState(MainMenuState.STATE_ID);
             }
