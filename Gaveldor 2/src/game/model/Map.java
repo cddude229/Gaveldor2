@@ -146,7 +146,7 @@ public class Map {
                 rowLine = rowLine.replaceAll("2a", "y");
                 rowLine = rowLine.replaceAll("2c", "z");
     
-                System.out.println(rowLine);
+                // System.out.println(rowLine);
                 
                 for (int i = 0; /*(i < mapWidth) &&*/ (i < rowLine.length()); i++) {
                     int x = (i/2) * 2 + j % 2;
@@ -154,27 +154,27 @@ public class Map {
                     switch (rowLine.charAt(i)) {
     
                     case 'd':
-                        System.out.println(rowLine.charAt(i+1));
+                        // System.out.println(rowLine.charAt(i+1));
                         pieces.add(new Infantry(p1, new Point(x, y), idCounter++, rowLine.charAt(i+1)));
                         break;
                     case 'e':
-                        System.out.println(rowLine.charAt(i+1));
+                        // System.out.println(rowLine.charAt(i+1));
                         pieces.add(new Archer(p1, new Point(x, y), idCounter++, rowLine.charAt(i+1)));
                         break;
                     case 'f':
-                        System.out.println(rowLine.charAt(i+1));
+                        // System.out.println(rowLine.charAt(i+1));
                         pieces.add(new Cavalry(p1, new Point(x, y), idCounter++, rowLine.charAt(i+1)));
                         break;
                     case 'x':
-                        System.out.println(rowLine.charAt(i+1));
+                        // System.out.println(rowLine.charAt(i+1));
                         pieces.add(new Infantry(p2, new Point(x, y), idCounter++, rowLine.charAt(i+1)));
                         break;
                     case 'y':
-                        System.out.println(rowLine.charAt(i+1));
+                        // System.out.println(rowLine.charAt(i+1));
                         pieces.add(new Archer(p2, new Point(x, y), idCounter++, rowLine.charAt(i+1)));
                         break;
                     case 'z':
-                        System.out.println(rowLine.charAt(i+1));
+                        // System.out.println(rowLine.charAt(i+1));
                         pieces.add(new Cavalry(p2, new Point(x, y), idCounter++, rowLine.charAt(i+1)));
                         break;
                     }
