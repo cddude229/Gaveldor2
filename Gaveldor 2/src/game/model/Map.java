@@ -137,39 +137,45 @@ public class Map {
                 rowLine = rowLine.replaceAll("\\s", ""); // remove spaces
     
                 // make player one piece tokens into single char
-                rowLine = rowLine.replaceAll("1i", "1");
-                rowLine = rowLine.replaceAll("1a", "2");
-                rowLine = rowLine.replaceAll("1c", "3");
+                rowLine = rowLine.replaceAll("1i", "d");
+                rowLine = rowLine.replaceAll("1a", "e");
+                rowLine = rowLine.replaceAll("1c", "f");
     
                 // same for player two
-                rowLine = rowLine.replaceAll("2i", "a");
-                rowLine = rowLine.replaceAll("2a", "b");
-                rowLine = rowLine.replaceAll("2c", "c");
+                rowLine = rowLine.replaceAll("2i", "x");
+                rowLine = rowLine.replaceAll("2a", "y");
+                rowLine = rowLine.replaceAll("2c", "z");
     
-                for (int i = 0; (i < mapWidth) && (i < rowLine.length()); i++) {
-                    int x = i * 2 + j % 2;
+                System.out.println(rowLine);
+                
+                for (int i = 0; /*(i < mapWidth) &&*/ (i < rowLine.length()); i++) {
+                    int x = (i/2) * 2 + j % 2;
                     int y = j;
                     switch (rowLine.charAt(i)) {
     
-                    case '1':
-                        
-                        pieces.add(new Infantry(p1, new Point(x, y), idCounter++, 1));
+                    case 'd':
+                        System.out.println(rowLine.charAt(i+1));
+                        pieces.add(new Infantry(p1, new Point(x, y), idCounter++, rowLine.charAt(i+1)));
                         break;
-                    case '2':
-                        pieces.add(new Archer(p1, new Point(x, y), idCounter++, 2));
+                    case 'e':
+                        System.out.println(rowLine.charAt(i+1));
+                        pieces.add(new Archer(p1, new Point(x, y), idCounter++, rowLine.charAt(i+1)));
                         break;
-                    case '3':
-                        pieces.add(new Cavalry(p1, new Point(x, y), idCounter++, 2));
+                    case 'f':
+                        System.out.println(rowLine.charAt(i+1));
+                        pieces.add(new Cavalry(p1, new Point(x, y), idCounter++, rowLine.charAt(i+1)));
                         break;
-                    case 'a':
-    
-                        pieces.add(new Infantry(p2, new Point(x, y), idCounter++, 5));
+                    case 'x':
+                        System.out.println(rowLine.charAt(i+1));
+                        pieces.add(new Infantry(p2, new Point(x, y), idCounter++, rowLine.charAt(i+1)));
                         break;
-                    case 'b':
-                        pieces.add(new Archer(p2, new Point(x, y), idCounter++, 4));
+                    case 'y':
+                        System.out.println(rowLine.charAt(i+1));
+                        pieces.add(new Archer(p2, new Point(x, y), idCounter++, rowLine.charAt(i+1)));
                         break;
-                    case 'c':
-                        pieces.add(new Cavalry(p2, new Point(x, y), idCounter++, 4));
+                    case 'z':
+                        System.out.println(rowLine.charAt(i+1));
+                        pieces.add(new Cavalry(p2, new Point(x, y), idCounter++, rowLine.charAt(i+1)));
                         break;
                     }
                 }
