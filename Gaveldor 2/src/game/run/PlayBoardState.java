@@ -210,34 +210,51 @@ public class PlayBoardState extends PlayerControllerState {
                     switch (pc.selectedPiece.turnState) {
                     case MOVING:
                         if (pc.selectedPieceMove == null){
+//                            for (Point p : pc.selectedPiece.getValidMoves()) {
+//                                // Don't do anything if pos isn't even valid
+//                                if(pc.model.isValidPosition(p) == false){
+//                                    continue;
+//                                }
+//                                
+//                                // Ok, load stuff and check terrain?
+//                                Piece piece = pc.model.getPieceByPosition(p);
+//                                TerrainType t = pc.model.map.getTerrain(p);
+//                                if(t != null && t.enterable(pc.selectedPiece) == false){
+//                                    continue; // Skip this square for rendering movement
+//                                }
+//    
+//                                // Go go go!
+//                                if (piece == null || piece == pc.selectedPiece) {
+//                                    pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
+//                                }
+//                            }
                             for (Point p : pc.selectedPiece.getValidMoves()) {
-                                // Don't do anything if pos isn't even valid
-                                if(pc.model.isValidPosition(p) == false){
-                                    continue;
-                                }
-                                
-                                // Ok, load stuff and check terrain?
-                                Piece piece = pc.model.getPieceByPosition(p);
-                                TerrainType t = pc.model.map.getTerrain(p);
-                                if(t != null && t.enterable(pc.selectedPiece) == false){
-                                    continue; // Skip this square for rendering movement
-                                }
-    
-                                // Go go go!
-                                if (piece == null || piece == pc.selectedPiece) {
+                                if (pc.model.isValidPosition(p)) {
                                     pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
+                                    for (int dir = 0; dir < 6; dir = dir + 1) {
+                                        for (Point loc : pc.selectedPiece.getValidAttacks(p, dir)) {
+                                            if (pc.model.isValidPosition(loc) && !pc.selectedPiece.isValidMove(loc)) {
+                                                pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         } else if (pc.selectedPieceFace == -1){
                             pc.renderAtPosition(faceableArrows, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0.5f, 0.5f);
                             // TODO: add full tile overlays
                         } else{
-                            for (Point pos : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
-                                if (pc.model.isValidPosition(pos)) {
-                                    Piece p = pc.model.getPieceByPosition(pos);
-                                    if (p != null && !p.owner.equals(pc.selectedPiece.owner)){
-                                        pc.renderAtPosition(attackableOverlay, g, pos.x, pos.y, 0f, 0f);
-                                    }
+//                            for (Point pos : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
+//                                if (pc.model.isValidPosition(pos)) {
+//                                    Piece p = pc.model.getPieceByPosition(pos);
+//                                    if (p != null && !p.owner.equals(pc.selectedPiece.owner)){
+//                                        pc.renderAtPosition(attackableOverlay, g, pos.x, pos.y, 0f, 0f);
+//                                    }
+//                                }
+//                            }
+                            for (Point loc : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
+                                if (pc.model.isValidPosition(loc)) {
+                                    pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
                                 }
                             }
                             //TODO: use different overlay
@@ -252,10 +269,13 @@ public class PlayBoardState extends PlayerControllerState {
                     }
                 } else{
                     for (Point p : pc.selectedPiece.getValidMoves()) {
-                        for (int dir = 0; dir < 5; dir = dir + 1) {
-                            for (Point loc : pc.selectedPiece.getValidAttacks(p,dir)) {
-                                if (pc.model.isValidPosition(loc)) {
-                                    pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
+                        if (pc.model.isValidPosition(p)) {
+                            pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
+                            for (int dir = 0; dir < 6; dir = dir + 1) {
+                                for (Point loc : pc.selectedPiece.getValidAttacks(p, dir)) {
+                                    if (pc.model.isValidPosition(loc) && !pc.selectedPiece.isValidMove(loc)) {
+                                        pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
+                                    }
                                 }
                             }
                         }

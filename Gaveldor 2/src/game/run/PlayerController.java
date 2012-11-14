@@ -6,6 +6,7 @@ import game.model.Piece;
 import game.model.Player;
 import game.model.TerrainType;
 
+import org.newdawn.slick.Game;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -16,6 +17,8 @@ import util.Constants;
 
 public abstract class PlayerController extends StateBasedGame{
 
+    public Game game;
+    
     public final Player player;
 
     public final GameModel model; // for getting game state info only (no updating)
@@ -112,5 +115,10 @@ public abstract class PlayerController extends StateBasedGame{
     
     public boolean isCurrentPC(){
         return player.equals(model.getCurrentPlayer());
+    }
+    
+    public void update(GameContainer container, Game game, int delta) throws SlickException{
+        this.game = game;
+        update(container, delta);
     }
 }

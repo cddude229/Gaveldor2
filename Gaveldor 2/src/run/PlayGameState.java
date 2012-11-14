@@ -65,8 +65,8 @@ public class PlayGameState extends BasicGameState {
         ((Game)game).toggleFullscreenCheck((AppGameContainer)container);
         updateActions(container, game, delta);
         match.model.applyDelta(delta);
-        match.getCurrentPC().update(container, delta);
-        match.getOtherPC().update(container, delta);
+        match.getCurrentPC().update(container, game, delta);
+        match.getOtherPC().update(container, game, delta);
         updateActions(container, game, delta);
         
         if((match.model.gameState == GameState.WON) || (match.model.gameState == GameState.DISCONNECTED)){
