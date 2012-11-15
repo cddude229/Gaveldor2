@@ -303,12 +303,12 @@ public abstract class Piece {
      * 
      * @return
      */
-    public Image getSprite(int direction) {
-        return pieceType.getSprite(owner.id, getHealth(), direction);
+    public Image getSprite(int direction, int status) {
+        return pieceType.getSprite(owner.id, getHealth(), direction, status);
     }
     
     public Image getSprite(){
-        return getSprite(getDirection());
+        return getSprite(getDirection(), this.turnState == TurnState.DONE ? 1 : 0);
     }
 
     public static int pointsToDirection(Point to, Point from) {

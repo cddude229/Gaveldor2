@@ -64,7 +64,7 @@ public class PlayMinigameState extends PlayerControllerState {
         boolean isAttacking = pc.model.getCurrentPlayer().equals(player);
         Piece piece = isAttacking ?
                 pc.model.getMinigame().attackingPiece : pc.model.getMinigame().defendingPiece;
-        g.drawImage(piece.getSprite(leftSide ? 0 : 3), x, 200);
+        g.drawImage(piece.getSprite(leftSide ? 0 : 3, 0), x, 200);
         MinigameModel.Move move = isAttacking ?
                 pc.model.getMinigame().attackingMove : pc.model.getMinigame().defendingMove;
         if (pc.model.getMinigame().hasBothMoves()){

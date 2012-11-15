@@ -98,10 +98,11 @@ public abstract class PlayerController extends StateBasedGame{
                     + getPixelX(p.getPosition().x, p.getSprite().getWidth(), .5f) * frac);
             int y = Math.round(getPixelY(model.lastMovedPosition.y, p.getSprite().getHeight(), 1f) * (1f - frac)
                     + getPixelY(p.getPosition().y, p.getSprite().getHeight(), 1f) * frac);
+            Image sprite = p.getSprite(p.getDirection(), 0);
             setDisplayPoint(container,
-                    x + (p.getSprite().getWidth() - container.getWidth()) / 2,
-                    y + (p.getSprite().getHeight()- container.getHeight()) / 2);
-            g.drawImage(p.getSprite(), x - displayX, y - displayY);
+                    x + (sprite.getWidth() - container.getWidth()) / 2,
+                    y + (sprite.getHeight()- container.getHeight()) / 2);
+            g.drawImage(sprite, x - displayX, y - displayY);
         } else{
             renderAtPosition(p.getSprite(), g, p.getPosition().x, p.getPosition().y, .5f, 1f);
         }

@@ -43,7 +43,7 @@ public class LocalPlayerController extends PlayerController {
                     dir = selectedPieceFace;
                 }
             }
-            renderAtPosition(p.getSprite(dir), g, pos.x, pos.y, .5f, 1f);
+            renderAtPosition(p.getSprite(dir, 0), g, pos.x, pos.y, .5f, 1f);
         } else{
             super.renderPiece(container, g, p);
         }

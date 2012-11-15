@@ -258,7 +258,7 @@ public class PlayBoardState extends PlayerControllerState {
                                 }
                             }
                             //TODO: use different overlay
-                            pc.renderAtPosition(attackableOverlay, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0f, 0f);
+                            pc.renderAtPosition(movableOverlay, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0f, 0f);
                         }
                         break;
                     case DONE:
