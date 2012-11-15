@@ -11,6 +11,7 @@ import java.util.Queue;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import util.Constants;
@@ -43,7 +44,8 @@ public class LocalPlayerController extends PlayerController {
                     dir = selectedPieceFace;
                 }
             }
-            renderAtPosition(p.getSprite(dir, 0), g, pos.x, pos.y, .5f, 1f);
+            Image sprite = p.getSprite(dir, p.owner.equals(player) ? 2 : 0);
+            renderAtPosition(sprite, g, pos.x, pos.y, .5f, 1f);
         } else{
             super.renderPiece(container, g, p);
         }

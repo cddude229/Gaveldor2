@@ -58,7 +58,7 @@ public class PlayBoardState extends PlayerControllerState {
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
                         if (pc.selectedPiece == null) {
-                            endTurn(pc);   
+                            endTurn(pc);
                         }
                     }
                     @Override
@@ -333,24 +333,31 @@ public class PlayBoardState extends PlayerControllerState {
                                 if (direction != -1) {
                                     pc.selectedPieceFace = direction;
                                     
-                                    //Code to end turn if no attack choices
-                                    boolean turnEnd = true;
-                                    Point[] attacks = pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace);
-                                    for (int i = 0 ; i < attacks.length; i = i + 1) {
-                                        if (pc.model.getPieceByPosition(attacks[i]) != null) {
-                                            if (!pc.model.getPieceByPosition(attacks[i]).owner.equals(pc.selectedPiece.owner)) {
-                                                turnEnd = false;
-                                            }
-                                        }
-                                    }
-                                    if (turnEnd) {
-                                        pc.selectedPiece.turnState = Piece.TurnState.DONE;
+                                    if (Arrays.asList(pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)).isEmpty()){
                                         pc.actionQueue.add(new Action.BoardMoveAction(
-                                                pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace,
-                                                null));
+                                                pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
                                         clearSelection(pc);
                                         wasAnimatingMove = true;
                                     }
+                                    
+//                                    //Code to end turn if no attack choices
+//                                    boolean turnEnd = true;
+//                                    Point[] attacks = pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace);
+//                                    for (int i = 0 ; i < attacks.length; i = i + 1) {
+//                                        if (pc.model.getPieceByPosition(attacks[i]) != null) {
+//                                            if (!pc.model.getPieceByPosition(attacks[i]).owner.equals(pc.selectedPiece.owner)) {
+//                                                turnEnd = false;
+//                                            }
+//                                        }
+//                                    }
+//                                    if (turnEnd) {
+//                                        pc.selectedPiece.turnState = Piece.TurnState.DONE;
+//                                        pc.actionQueue.add(new Action.BoardMoveAction(
+//                                                pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace,
+//                                                null));
+//                                        clearSelection(pc);
+//                                        wasAnimatingMove = true;
+//                                    }
                                 }
                             } else{
                                 if (pc.model.isValidPosition(position)
@@ -358,7 +365,7 @@ public class PlayBoardState extends PlayerControllerState {
                                         && !piece.owner.equals(pc.selectedPiece.owner)) || position.equals(pc.selectedPieceMove)) {
                                     pc.actionQueue.add(new Action.BoardMoveAction(
                                             pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace,
-                                            position.equals(pc.selectedPieceMove)? null: piece));
+                                            position.equals(pc.selectedPieceMove) ? null: piece));
                                     clearSelection(pc);
                                     wasAnimatingMove = true;
                                 }

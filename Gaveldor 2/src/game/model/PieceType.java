@@ -23,7 +23,7 @@ public enum PieceType {
     
     private PieceType(int defaultHealth, String attackSoundPath){
         this.defaultHealth = defaultHealth;
-        sprites = new Image[2][defaultHealth][6][2];
+        sprites = new Image[2][defaultHealth][6][3];
         this.attackSoundPath = attackSoundPath;
     }
     
@@ -58,6 +58,13 @@ public enum PieceType {
                             im = im.getFlippedCopy(true, false);
                         }
                         type.sprites[player - 1][health - 1][direction][1] = im;
+                        
+                        im = src.getScaledCopy(.5f);
+                        im.setAlpha(0x77);
+                        if (m[direction] >= 3){
+                            im = im.getFlippedCopy(true, false);
+                        }
+                        type.sprites[player - 1][health - 1][direction][2] = im;
                     }
                 }
             }
@@ -68,7 +75,7 @@ public enum PieceType {
     
     /**
      * 
-     * @param status 0 for normal, 1 for grayscale
+     * @param status 0 for normal, 1 for grayscale, 2 for translucent
      */
     public Image getSprite(int player, int health, int direction, int status){
         return sprites[player - 1][health - 1][direction][status];
