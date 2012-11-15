@@ -303,77 +303,80 @@ public class PlayBoardState extends PlayerControllerState {
                 
                 if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON) &&
                         container.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
-                    Point position = PlayBoardState.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
-                            + pc.displayY);
-                    Piece piece = pc.model.getPieceByPosition(position);
-                    
-                    // Get terrain type, but only if valid position (index out of bounds error otherwise)
-                    TerrainType t = null;
-                    if(pc.model.isValidPosition(position)){
-                        t = pc.model.map.getTerrain(position);
-                    }
-                    
-                    if (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner)){
-                        if (piece != null && !(pc.player.equals(piece.owner) && piece.turnState == TurnState.DONE)) {
-                            pc.selectedPiece = piece;
-                            pc.setDisplayCenter(container, piece.getPosition().x, piece.getPosition().y);
+                    if (container.getInput().getMouseX() < container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH){
+                        
+                        Point position = PlayBoardState.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
+                                + pc.displayY);
+                        Piece piece = pc.model.getPieceByPosition(position);
+                        
+                        // Get terrain type, but only if valid position (index out of bounds error otherwise)
+                        TerrainType t = null;
+                        if(pc.model.isValidPosition(position)){
+                            t = pc.model.map.getTerrain(position);
                         }
-                    } else {
-                        switch (pc.selectedPiece.turnState) {
-                        case MOVING:
-                            if (pc.selectedPieceMove == null){
-                                if (pc.model.isValidPosition(position)
-                                        && Arrays.asList(pc.selectedPiece.getValidMoves()).contains(position)
-                                        && (piece == null || piece == pc.selectedPiece)
-                                        && (t == null || t.enterable(pc.selectedPiece))) {
-                                    pc.selectedPieceMove = position;
-                                }
-                            } else if (pc.selectedPieceFace == -1){
-                                int direction = Piece.pointsToDirection(position, pc.selectedPieceMove);
-                                if (direction != -1) {
-                                    pc.selectedPieceFace = direction;
-                                    
-                                    if (Arrays.asList(pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)).isEmpty()){
+                        
+                        if (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner)){
+                            if (piece != null && !(pc.player.equals(piece.owner) && piece.turnState == TurnState.DONE)) {
+                                pc.selectedPiece = piece;
+                                pc.setDisplayCenter(container, piece.getPosition().x, piece.getPosition().y);
+                            }
+                        } else {
+                            switch (pc.selectedPiece.turnState) {
+                            case MOVING:
+                                if (pc.selectedPieceMove == null){
+                                    if (pc.model.isValidPosition(position)
+                                            && Arrays.asList(pc.selectedPiece.getValidMoves()).contains(position)
+                                            && (piece == null || piece == pc.selectedPiece)
+                                            && (t == null || t.enterable(pc.selectedPiece))) {
+                                        pc.selectedPieceMove = position;
+                                    }
+                                } else if (pc.selectedPieceFace == -1){
+                                    int direction = Piece.pointsToDirection(position, pc.selectedPieceMove);
+                                    if (direction != -1) {
+                                        pc.selectedPieceFace = direction;
+                                        
+                                        if (Arrays.asList(pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)).isEmpty()){
+                                            pc.actionQueue.add(new Action.BoardMoveAction(
+                                                    pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
+                                            clearSelection(pc);
+                                            wasAnimatingMove = true;
+                                        }
+                                        
+    //                                    //Code to end turn if no attack choices
+    //                                    boolean turnEnd = true;
+    //                                    Point[] attacks = pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace);
+    //                                    for (int i = 0 ; i < attacks.length; i = i + 1) {
+    //                                        if (pc.model.getPieceByPosition(attacks[i]) != null) {
+    //                                            if (!pc.model.getPieceByPosition(attacks[i]).owner.equals(pc.selectedPiece.owner)) {
+    //                                                turnEnd = false;
+    //                                            }
+    //                                        }
+    //                                    }
+    //                                    if (turnEnd) {
+    //                                        pc.selectedPiece.turnState = Piece.TurnState.DONE;
+    //                                        pc.actionQueue.add(new Action.BoardMoveAction(
+    //                                                pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace,
+    //                                                null));
+    //                                        clearSelection(pc);
+    //                                        wasAnimatingMove = true;
+    //                                    }
+                                    }
+                                } else{
+                                    if (pc.model.isValidPosition(position)
+                                            && (Arrays.asList(pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)).contains(position) && piece != null
+                                            && !piece.owner.equals(pc.selectedPiece.owner)) || position.equals(pc.selectedPieceMove)) {
                                         pc.actionQueue.add(new Action.BoardMoveAction(
-                                                pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
+                                                pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace,
+                                                position.equals(pc.selectedPieceMove) ? null: piece));
                                         clearSelection(pc);
                                         wasAnimatingMove = true;
                                     }
-                                    
-//                                    //Code to end turn if no attack choices
-//                                    boolean turnEnd = true;
-//                                    Point[] attacks = pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace);
-//                                    for (int i = 0 ; i < attacks.length; i = i + 1) {
-//                                        if (pc.model.getPieceByPosition(attacks[i]) != null) {
-//                                            if (!pc.model.getPieceByPosition(attacks[i]).owner.equals(pc.selectedPiece.owner)) {
-//                                                turnEnd = false;
-//                                            }
-//                                        }
-//                                    }
-//                                    if (turnEnd) {
-//                                        pc.selectedPiece.turnState = Piece.TurnState.DONE;
-//                                        pc.actionQueue.add(new Action.BoardMoveAction(
-//                                                pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace,
-//                                                null));
-//                                        clearSelection(pc);
-//                                        wasAnimatingMove = true;
-//                                    }
                                 }
-                            } else{
-                                if (pc.model.isValidPosition(position)
-                                        && (Arrays.asList(pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)).contains(position) && piece != null
-                                        && !piece.owner.equals(pc.selectedPiece.owner)) || position.equals(pc.selectedPieceMove)) {
-                                    pc.actionQueue.add(new Action.BoardMoveAction(
-                                            pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace,
-                                            position.equals(pc.selectedPieceMove) ? null: piece));
-                                    clearSelection(pc);
-                                    wasAnimatingMove = true;
-                                }
+                                break;
+                            case DONE:
+                            default:
+                                throw new RuntimeException();
                             }
-                            break;
-                        case DONE:
-                        default:
-                            throw new RuntimeException();
                         }
                     }
                 }

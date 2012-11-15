@@ -59,8 +59,17 @@ public enum PieceType {
                         }
                         type.sprites[player - 1][health - 1][direction][1] = im;
                         
-                        im = src.getScaledCopy(.5f);
-                        im.setAlpha(0x77);
+                        buf = new ImageBuffer(src.getWidth(), src.getHeight());
+                        for (int i = 0; i < src.getWidth(); i++){
+                            for (int j = 0; j < src.getHeight(); j++){
+                                Color c = src.getColor(i, j);
+                                buf.setRGBA(i, j,
+                                        c.getRed(), c.getGreen(), c.getRed(),
+                                        Math.min(0x77, c.getAlpha()));
+                            }
+                        }
+                        im = buf.getImage();
+                        im = im.getScaledCopy(.5f);
                         if (m[direction] >= 3){
                             im = im.getFlippedCopy(true, false);
                         }
