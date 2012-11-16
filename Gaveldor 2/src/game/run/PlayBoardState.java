@@ -166,7 +166,7 @@ public class PlayBoardState extends PlayerControllerState {
         g.drawString(pc.player.toString(), container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 200);
         renderMinimap(container, g, pc, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0);
         
-        g.drawString("TUTORIAL", container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 300);
+        g.drawString(Constants.BASIC_TUTORIAL, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 300);
         
         for (Button b : sidebarButtons){
             //End Turn button

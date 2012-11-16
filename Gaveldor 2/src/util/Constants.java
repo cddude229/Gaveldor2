@@ -73,4 +73,11 @@ public class Constants {
     public static final ControlScheme
             PLAYER_1_CONTROLS = new ControlScheme(Input.KEY_A, Input.KEY_S, Input.KEY_D),
             PLAYER_2_CONTROLS = new ControlScheme(Input.KEY_J, Input.KEY_K, Input.KEY_L);
+    
+    // PlayBoardState
+    public static final String BASIC_TUTORIAL = 
+            "Click to select piece\n" +
+    		"Click to move\n" +
+    		"Click to face\n" +
+    		"Click where to attack";
 }
