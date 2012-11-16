@@ -154,8 +154,8 @@ public class PlayBoardState extends PlayerControllerState {
         g.setColor(Color.white);
         float rl = Math.max(pc.displayX * scale + xi, x), rt = Math.max(pc.displayY * scale + yi, y),
                 rr = Math.min((pc.displayX + container.getWidth()) * scale + xi, x + minimapWidth),
-                rb = Math.min((pc.displayY + container.getWidth()) * scale + yi, y + minimapHeight);
-        
+                rb = Math.min((pc.displayY + container.getHeight()) * scale + yi, y + minimapHeight);
+        System.out.println(rr);
         g.drawRect(rl, rt, rr - rl, rb - rt);
     }
     
