@@ -79,5 +79,9 @@ public class Constants {
             "Click to select piece\n" +
     		"Click to move\n" +
     		"Click to face\n" +
-    		"Click where to attack";
+    		"Click where to attack\n" +
+    		"     or\n" +
+    		"Click the piece\n\n" +
+    		"Hit END TURN once\n" +
+    		"you've made all moves";
 }
