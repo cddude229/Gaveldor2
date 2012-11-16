@@ -20,12 +20,12 @@ public class SimpleButton extends ButtonSkeleton implements ButtonListener, Clic
     private ClickListener clickListener;
     private ButtonListener buttonListener;
 
-    private Shape shape;
+//    private Shape shape;
     private Image current, up, down;
     private Sound click;
 
     public SimpleButton(Shape s, Image up, Image down, Sound click) {
-        shape = s;
+//        shape = s;
         setShape(s);
         this.up = up;
         this.down = down;
@@ -50,7 +50,10 @@ public class SimpleButton extends ButtonSkeleton implements ButtonListener, Clic
     @Override
     public void render(GameContainer container, Graphics g) {
         if (current != null){
-            current.draw(shape.getX(), shape.getY());
+            if (getShape() == null){
+                System.out.println("GOGO");
+            }
+            current.draw(getShape().getX(), getShape().getY());
         }
     }
 

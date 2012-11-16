@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
 import com.aem.sticky.button.Button;
@@ -24,6 +25,17 @@ public class Helpful {
             offset += array.length;
         }
         return result;
+    }
+    
+    public static Image makeTestImage(int width, int height, Color color, String text) throws SlickException{
+        Image im = new Image(width, height);
+        im.getGraphics().setColor(color);
+        im.getGraphics().fillRect(0, 0, width, height);
+        im.getGraphics().setColor(Color.white);
+        im.getGraphics().setFont(Constants.TEST_FONT);
+        im.getGraphics().drawString(text, 0, 0);
+        im.getGraphics().flush();
+        return im;
     }
     
     public static Button makeButton(int x, int y, String text, ClickListener listener){

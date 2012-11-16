@@ -35,6 +35,10 @@ public class ButtonSkeleton implements Button {
     public void setShape(Shape s) {
         shape = s;
     }
+    
+    public Shape getShape(){
+        return shape;
+    }
 
     public void mouseClicked(int button, int x, int y, int clickCount) {
         if (!contains(x, y)) {

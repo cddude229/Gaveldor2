@@ -15,9 +15,12 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 
 import util.Constants;
 import util.Helpful;
+import util.LayoutButton;
 import util.Resources;
 
 import com.aem.sticky.button.Button;
@@ -46,6 +49,35 @@ public class PlayBoardState extends PlayerControllerState {
         }
     }
     
+    private class SidebarButton extends LayoutButton{
+        
+        private static final int WIDTH = 200, HEIGHT = 50;
+        
+        private final int y;
+        
+        public SidebarButton(int y, String text, ClickListener listener) throws SlickException{
+            super(
+                    Helpful.makeTestImage(WIDTH, HEIGHT, Color.blue, text),
+                    Helpful.makeTestImage(WIDTH, HEIGHT, Color.green, text),
+                    null);
+            this.y = y;
+            addListener(listener);
+        }
+        
+        @Override
+        public void setShape(Shape s){
+            System.out.println("s: " + s);
+            super.setShape(s);
+        }
+
+        @Override
+        public Shape calculateShape(GameContainer container) {
+            return new Rectangle(
+                    container.getWidth() - (Constants.BOARD_SIDEBAR_WIDTH + WIDTH) / 2,
+                    y, WIDTH, HEIGHT);
+        }
+    }
+    
     public void initLocal(GameContainer container, final LocalPlayerController pc) throws SlickException{
         hoverOverlay = Resources.getImage("/assets/graphics/ui/hover.png").getScaledCopy(.5f);
         movableOverlay = Resources.getImage("/assets/graphics/ui/movable.png").getScaledCopy(.5f);
@@ -54,7 +86,7 @@ public class PlayBoardState extends PlayerControllerState {
         
 
         sidebarButtons = new Button[]{
-                Helpful.makeButton(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH / 2, 250, "End Turn", new ClickListener(){
+                new SidebarButton(250, "End Turn", new ClickListener(){
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
                         if (pc.selectedPiece == null) {
@@ -68,7 +100,7 @@ public class PlayBoardState extends PlayerControllerState {
                     public void onDoubleClick(Button clicked, float mx, float my) {
                     }
                 }),
-                Helpful.makeButton(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH / 2, 250, "Cancel", new ClickListener(){
+                new SidebarButton(250, "Cancel", new ClickListener(){
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
                         if (pc.selectedPiece != null){
@@ -82,7 +114,7 @@ public class PlayBoardState extends PlayerControllerState {
                     public void onDoubleClick(Button clicked, float mx, float my) {
                     }
                 }),
-                Helpful.makeButton(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH / 2, 550, "Mute", new ClickListener(){
+                new SidebarButton(550, "Mute", new ClickListener(){
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
                         mute();  
@@ -94,7 +126,7 @@ public class PlayBoardState extends PlayerControllerState {
                     public void onDoubleClick(Button clicked, float mx, float my) {
                     }
                 }),
-                Helpful.makeButton(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH / 2, 650, "Exit Game", new ClickListener(){
+                new SidebarButton(650, "Exit Game", new ClickListener(){
                     @Override
                     public void onClick(Button clicked, float mx, float my) {
                          gameContainer.exit();
@@ -155,7 +187,6 @@ public class PlayBoardState extends PlayerControllerState {
         float rl = Math.max(pc.displayX * scale + xi, x), rt = Math.max(pc.displayY * scale + yi, y),
                 rr = Math.min((pc.displayX + container.getWidth()) * scale + xi, x + minimapWidth),
                 rb = Math.min((pc.displayY + container.getHeight()) * scale + yi, y + minimapHeight);
-        System.out.println(rr);
         g.drawRect(rl, rt, rr - rl, rb - rt);
     }
     
