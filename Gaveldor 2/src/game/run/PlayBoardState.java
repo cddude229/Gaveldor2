@@ -163,8 +163,11 @@ public class PlayBoardState extends PlayerControllerState {
         g.setColor(new Color(0x77000000));
         g.fillRect(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0, Constants.BOARD_SIDEBAR_WIDTH, container.getHeight());
         g.setColor(Color.white);
-        g.drawString(pc.player.toString(), container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 50);
+        g.drawString(pc.player.toString(), container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 200);
         renderMinimap(container, g, pc, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0);
+        
+        g.drawString("TUTORIAL", container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 300);
+        
         for (Button b : sidebarButtons){
             //End Turn button
             if (b.equals(sidebarButtons[0])) {
