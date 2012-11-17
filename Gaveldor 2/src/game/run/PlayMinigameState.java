@@ -11,6 +11,7 @@ import game.model.Player;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import util.Constants;
@@ -40,7 +41,6 @@ public class PlayMinigameState extends PlayerControllerState {
         //TODO: render minigame visuals
         g.setFont(Constants.TEST_FONT);
         g.setColor(Color.white);
-        g.drawString("MINIGAME", 0, 0);
         renderSide(container, pc, g, pc.model.getPlayer1(), true);
         renderSide(container, pc, g, pc.model.getPlayer2(), false);
         if (pc.model.getMinigame().hasBothMoves()){
@@ -56,21 +56,70 @@ public class PlayMinigameState extends PlayerControllerState {
         }
     }
     
+    private int transformX(GameContainer container, int x, int width, boolean leftSide){
+        if (leftSide){
+            return x;
+        } else{
+            return container.getWidth() - x - width;
+        }
+    }
+    
+    private void drawStringSide(GameContainer container, Graphics g, String text, int x, int y, boolean leftSide){
+        x = transformX(container, x, g.getFont().getWidth(text), leftSide);
+        g.drawString(text, x, y);
+    }
+    
+    private void drawImageSide(GameContainer container, Graphics g, Image im, int x, int y, boolean leftSide){
+        x = transformX(container, x, im.getWidth(), leftSide);
+        g.drawImage(im, x, y);
+    }
+    
+    private void drawRectSide(GameContainer container, Graphics g, int x, int y, int width, int height, boolean leftSide){
+        x = transformX(container, x, width, leftSide);
+        g.drawRect(x, y, width, height);
+    }
+    
+    private void fillRectSide(GameContainer container, Graphics g, int x, int y, int width, int height, boolean leftSide){
+        x = transformX(container, x, width, leftSide);
+        g.fillRect(x, y, width, height);
+    }
+    
     private void renderSide(GameContainer container, PlayerController pc, Graphics g, Player player, boolean leftSide) throws SlickException{
-        int x = leftSide ? 0 : 400;
+        int backX = 50;
         g.setFont(Constants.TEST_FONT);
         g.setColor(Color.white);
-        g.drawString(player.toString(), x, 100);
+        drawStringSide(container, g, player.toString(), backX, 100, leftSide);
         boolean isAttacking = pc.model.getCurrentPlayer().equals(player);
         Piece piece = isAttacking ?
                 pc.model.getMinigame().attackingPiece : pc.model.getMinigame().defendingPiece;
-        g.drawImage(piece.getSprite(leftSide ? 0 : 3, 0), x, 200);
+        drawImageSide(container, g, piece.getSprite(leftSide ? 0 : 3, 0), backX, 200, leftSide);
+
+
+        int frontX = 300;
+        for (int y : new int[]{150, 300, 450}){
+            drawRectSide(container, g, frontX, y, 200, 100, leftSide);
+        }
+        ControlScheme controls = player.equals(pc.model.getPlayer1()) ? Constants.PLAYER_1_CONTROLS : Constants.PLAYER_2_CONTROLS;
+        drawStringSide(container, g, controls.minigameHighKey, frontX + 50, 150, leftSide);
+        drawStringSide(container, g, controls.minigameMidKey, frontX + 50, 300, leftSide);
+        drawStringSide(container, g, controls.minigameLowKey, frontX + 50, 450, leftSide);
         MinigameModel.Move move = isAttacking ?
                 pc.model.getMinigame().attackingMove : pc.model.getMinigame().defendingMove;
         if (pc.model.getMinigame().hasBothMoves()){
-            g.drawString(move.toString(), x, 500);
+            switch (move){
+            case HIGH:
+                fillRectSide(container, g, frontX, 150, 200, 100, leftSide);
+                break;
+            case MID:
+                fillRectSide(container, g, frontX, 300, 200, 100, leftSide);
+                break;
+            case LOW:
+                fillRectSide(container, g, frontX, 450, 200, 100, leftSide);
+                break;
+            case NONE:
+                break;
+            }
         } else{
-            g.drawString("Not yet...", x, 500);
         }
     }
 

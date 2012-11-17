@@ -48,7 +48,7 @@ public enum PieceType {
                         for (int i = 0; i < src.getWidth(); i++){
                             for (int j = 0; j < src.getHeight(); j++){
                                 Color c = src.getColor(i, j);
-                                int v = (c.getRed() + c.getGreen() + c.getBlue())/3;
+                                int v = (c.getRed() + c.getGreen() + c.getBlue()) / 3;
                                 buf.setRGBA(i, j, v, v, v, c.getAlpha());
                             }
                         }
@@ -63,9 +63,8 @@ public enum PieceType {
                         for (int i = 0; i < src.getWidth(); i++){
                             for (int j = 0; j < src.getHeight(); j++){
                                 Color c = src.getColor(i, j);
-                                buf.setRGBA(i, j,
-                                        c.getRed(), c.getGreen(), c.getRed(),
-                                        Math.min(0x77, c.getAlpha()));
+                                int v = (c.getRed() + c.getGreen() + c.getBlue()) / 3 + 0x40;
+                                buf.setRGBA(i, j, v, v, v, c.getAlpha());
                             }
                         }
                         im = buf.getImage();

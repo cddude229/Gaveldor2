@@ -43,6 +43,7 @@ public class LocalPlayerController extends PlayerController {
                     dir = selectedPieceFace;
                 }
             }
+            System.out.println(p.owner.equals(player));
             Image sprite = p.getSprite(dir, p.owner.equals(player) ? 2 : 0);
             renderAtPosition(sprite, g, pos.x, pos.y, .5f, 1f);
         } else{
@@ -62,9 +63,9 @@ public class LocalPlayerController extends PlayerController {
             frac = Math.min(frac,  1);
         }
         if (frac < .1) {
-            return Math.round(-(.1f - frac) * .025f * size * delta);
+            return Math.round(-(.1f - frac) * .01f * size * delta);
         } else if (frac >= .9) {
-            return Math.round((frac - .9f) * .025f * size * delta);
+            return Math.round((frac - .9f) * .01f * size * delta);
         } else{
             return 0;
         }

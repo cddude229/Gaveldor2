@@ -63,12 +63,6 @@ public class PlayBoardState extends PlayerControllerState {
             this.y = y;
             addListener(listener);
         }
-        
-        @Override
-        public void setShape(Shape s){
-            System.out.println("s: " + s);
-            super.setShape(s);
-        }
 
         @Override
         public Shape calculateShape(GameContainer container) {
