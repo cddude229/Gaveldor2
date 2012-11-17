@@ -12,9 +12,8 @@ import java.util.Queue;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-
-import util.Constants;
 
 public class LocalPlayerController extends PlayerController {
 
@@ -50,28 +49,36 @@ public class LocalPlayerController extends PlayerController {
             super.renderPiece(container, g, p);
         }
     }
+    
+    private int deltaMousePanAxis(GameContainer container, int size, int mousePos, int lowKey, int highKey, int delta){
+        float frac;
+        if (container.getInput().isKeyDown(lowKey)){
+            frac = 0;
+        } else if (container.getInput().isKeyDown(highKey)){
+            frac = 1;
+        } else{
+            frac = 1f * mousePos / size;
+            frac = Math.max(frac, 0);
+            frac = Math.min(frac,  1);
+        }
+        if (frac < .1) {
+            return Math.round(-(.1f - frac) * .025f * size * delta);
+        } else if (frac >= .9) {
+            return Math.round((frac - .9f) * .025f * size * delta);
+        } else{
+            return 0;
+        }
+    }
 
     public void updateMousePan(GameContainer container, LocalPlayerController pc, int delta) {
-        double placementX = (double)container.getInput().getMouseX() / container.getWidth();
-        double placementY = (double)container.getInput().getMouseY() / container.getHeight();
-        placementX = Math.max(placementX, 0);
-        placementX = Math.min(placementX, 1);
-        int x = displayX, y = displayY;
-        if (placementX < .1) {
-            x -= (.1 - placementX) * .25 * Constants.WINDOW_WIDTH;
-        } else if (placementX >= .9) {
-            x += (placementX - .9) * .25 * Constants.WINDOW_HEIGHT;
-        }
-
-        placementY = Math.max(placementY, 0);
-        placementY = Math.min(placementY, 1);
-        if (placementY < .1) {
-            y -= (.1 - placementY) * .25 * Constants.WINDOW_WIDTH;
-        } else if (placementY >= .9) {
-            y += (placementY - .9) * .25 * Constants.WINDOW_HEIGHT;
-        }
-        
-        pc.setDisplayPoint(container, x, y);
+        pc.setDisplayPoint(container,
+                pc.displayX + deltaMousePanAxis(container,
+                        container.getWidth(), container.getInput().getMouseX(), Input.KEY_LEFT, Input.KEY_RIGHT,
+                delta),
+                pc.displayY + deltaMousePanAxis(container,
+                        container.getHeight(), container.getInput().getMouseY(), Input.KEY_UP, Input.KEY_DOWN,
+                delta)
+        );
     }
 
     @Override
