@@ -357,6 +357,7 @@ public class PlayBoardState extends PlayerControllerState {
                                             && (piece == null || piece == pc.selectedPiece)
                                             && (t == null || t.enterable(pc.selectedPiece))) {
                                         pc.selectedPieceMove = position;
+                                        pc.setDisplayCenter(container, position.x, position.y);
                                     }
                                 } else if (pc.selectedPieceFace == -1){
                                     int direction = Piece.pointsToDirection(position, pc.selectedPieceMove);

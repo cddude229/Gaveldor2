@@ -51,7 +51,9 @@ public class PlayMinigameState extends PlayerControllerState {
                     hasPlayedAttackSound = true;
                 }
             } else{
-                g.drawString("Blocked!", 0, 600);
+                g.drawString(
+                        pc.model.getMinigame().attackingMove == MinigameModel.Move.NONE ?
+                                "Fumble!" : "Block!", 0, 600);
             }
         }
     }
@@ -94,32 +96,48 @@ public class PlayMinigameState extends PlayerControllerState {
                 pc.model.getMinigame().attackingPiece : pc.model.getMinigame().defendingPiece;
         drawImageSide(container, g, piece.getSprite(leftSide ? 0 : 3, 0), backX, 200, leftSide);
 
-
-        int frontX = 300;
-        for (int y : new int[]{150, 300, 450}){
-            drawRectSide(container, g, frontX, y, 200, 100, leftSide);
-        }
+        
+        int frontX = 500;
+        
         ControlScheme controls = player.equals(pc.model.getPlayer1()) ? Constants.PLAYER_1_CONTROLS : Constants.PLAYER_2_CONTROLS;
-        drawStringSide(container, g, controls.minigameHighKey, frontX + 50, 150, leftSide);
-        drawStringSide(container, g, controls.minigameMidKey, frontX + 50, 300, leftSide);
-        drawStringSide(container, g, controls.minigameLowKey, frontX + 50, 450, leftSide);
-        MinigameModel.Move move = isAttacking ?
-                pc.model.getMinigame().attackingMove : pc.model.getMinigame().defendingMove;
-        if (pc.model.getMinigame().hasBothMoves()){
-            switch (move){
-            case HIGH:
-                fillRectSide(container, g, frontX, 150, 200, 100, leftSide);
-                break;
-            case MID:
-                fillRectSide(container, g, frontX, 300, 200, 100, leftSide);
-                break;
-            case LOW:
-                fillRectSide(container, g, frontX, 450, 200, 100, leftSide);
-                break;
-            case NONE:
-                break;
-            }
+        
+
+        int width, height;
+        MinigameModel.Move move;
+        if (isAttacking){
+            width = 200;
+            height = 50;
+            move = pc.model.getMinigame().attackingMove;
         } else{
+            width = 50;
+            height = 125;
+            move = pc.model.getMinigame().defendingMove;
+        }
+        
+        for (MinigameModel.Move m : new MinigameModel.Move[]{
+                MinigameModel.Move.HIGH, MinigameModel.Move.MID, MinigameModel.Move.LOW}){
+            int y = 150 * (m.ordinal() + 1);
+            int x = frontX - width;
+            if (pc.model.getMinigame().hasBothMoves() && m == move){
+                if (isAttacking){
+                    float frac = 1f * pc.model.getMinigame().sinceHasBothMoves / Constants.MINIGAME_WAIT_TIME;
+                    x += 50 * Math.min(2 * frac, 1);
+                }
+                g.setColor(Color.gray);
+                fillRectSide(container, g, x, y - height / 2, width, height, leftSide);
+            } else{
+                if (pc.model.getMinigame().hasBothMoves() && !isAttacking && m == pc.model.getMinigame().attackingMove){
+                    g.setColor(Color.red);
+                    fillRectSide(container, g, x, y - height / 2, width, height, leftSide);
+                } else{
+                    g.setColor(Color.white);
+                    drawRectSide(container, g, x, y - height / 2, width, height, leftSide);
+                }
+                if (!pc.model.getMinigame().hasBothMoves()){
+                    drawStringSide(container, g,
+                            controls.keys.get(m), x + 5, y - g.getFont().getHeight(controls.keys.get(m)) / 2, leftSide);
+                }
+            }
         }
     }
 

@@ -47,7 +47,7 @@ public abstract class PlayerController extends StateBasedGame{
     
     public void setDisplayCenter(GameContainer container, int tileX, int tileY){
         setDisplayPoint(container,
-                getPixelX(tileX, container.getWidth(), .5f),
+                getPixelX(tileX, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH / 2, .5f),
                 getPixelY(tileY, container.getHeight(), .5f));
         }
     

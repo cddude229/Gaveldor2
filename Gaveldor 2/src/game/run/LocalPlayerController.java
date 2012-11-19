@@ -43,7 +43,6 @@ public class LocalPlayerController extends PlayerController {
                     dir = selectedPieceFace;
                 }
             }
-            System.out.println(p.owner.equals(player));
             Image sprite = p.getSprite(dir, p.owner.equals(player) ? 2 : 0);
             renderAtPosition(sprite, g, pos.x, pos.y, .5f, 1f);
         } else{
