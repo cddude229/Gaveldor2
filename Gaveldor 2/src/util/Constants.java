@@ -19,7 +19,7 @@ public class Constants {
     // the actual size of the tiles in-file
     public static final int TILE_WIDTH = 200, TILE_HEIGHT = 150;
     // the size to be used to get proper tile placement
-    public static final int  TILE_WIDTH_SPACING = (int) (TILE_WIDTH / 2);
+    public static final int TILE_WIDTH_SPACING  = (int) (TILE_WIDTH / 2);
     public static final int TILE_HEIGHT_SPACING = (int)(TILE_HEIGHT * 3 / 4);
     
     public static final int REMOTE_CONNECTION_PORT = 1400;
@@ -83,4 +83,8 @@ public class Constants {
     		"Click the piece\n\n" +
     		"Hit END TURN once\n" +
     		"you've made all moves";
+    
+    
+    // FEATURE FLAGS
+    public static final boolean archer2xVsCavalry = true;
 }

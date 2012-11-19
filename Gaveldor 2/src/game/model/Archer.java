@@ -21,7 +21,7 @@ public class Archer extends Piece {
             power *= 2;
 
         // Archers do double damage to cavalry
-        if (opponent.pieceType == PieceType.CAVALRY) {
+        if (opponent.pieceType == PieceType.CAVALRY && Constants.archer2xVsCavalry) {
             power *= 2;
         }
 
