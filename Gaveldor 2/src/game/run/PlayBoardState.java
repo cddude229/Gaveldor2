@@ -5,9 +5,9 @@ import game.model.GameModel.GameState;
 import game.model.Piece;
 import game.model.Piece.TurnState;
 import game.model.Point;
-import game.model.TerrainType;
 
 import java.util.Arrays;
+import java.util.Set;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -238,32 +238,13 @@ public class PlayBoardState extends PlayerControllerState {
                     switch (pc.selectedPiece.turnState) {
                     case MOVING:
                         if (pc.selectedPieceMove == null){
-//                            for (Point p : pc.selectedPiece.getValidMoves()) {
-//                                // Don't do anything if pos isn't even valid
-//                                if(pc.model.isValidPosition(p) == false){
-//                                    continue;
-//                                }
-//                                
-//                                // Ok, load stuff and check terrain?
-//                                Piece piece = pc.model.getPieceByPosition(p);
-//                                TerrainType t = pc.model.map.getTerrain(p);
-//                                if(t != null && t.enterable(pc.selectedPiece) == false){
-//                                    continue; // Skip this square for rendering movement
-//                                }
-//    
-//                                // Go go go!
-//                                if (piece == null || piece == pc.selectedPiece) {
-//                                    pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
-//                                }
-//                            }
-                            for (Point p : pc.selectedPiece.getValidMoves()) {
-                                if (pc.model.isValidPosition(p)) {
-                                    pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
-                                    for (int dir = 0; dir < 6; dir = dir + 1) {
-                                        for (Point loc : pc.selectedPiece.getValidAttacks(p, dir)) {
-                                            if (pc.model.isValidPosition(loc) && !pc.selectedPiece.isValidMove(loc)) {
-                                                pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
-                                            }
+                            Set<Point> moves = pc.model.findValidMoves(pc.selectedPiece).keySet();
+                            for (Point p : moves) {
+                                pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
+                                for (int dir = 0; dir < 6; dir = dir + 1) {
+                                    for (Point loc : pc.selectedPiece.getValidAttacks(p, dir)) {
+                                        if (pc.model.isValidPosition(loc) && moves.contains(loc) == false) {
+                                            //pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
                                         }
                                     }
                                 }
@@ -272,14 +253,6 @@ public class PlayBoardState extends PlayerControllerState {
                             pc.renderAtPosition(faceableArrows, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0.5f, 0.5f);
                             // TODO: add full tile overlays
                         } else{
-//                            for (Point pos : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
-//                                if (pc.model.isValidPosition(pos)) {
-//                                    Piece p = pc.model.getPieceByPosition(pos);
-//                                    if (p != null && !p.owner.equals(pc.selectedPiece.owner)){
-//                                        pc.renderAtPosition(attackableOverlay, g, pos.x, pos.y, 0f, 0f);
-//                                    }
-//                                }
-//                            }
                             for (Point loc : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
                                 if (pc.model.isValidPosition(loc)) {
                                     pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
@@ -296,14 +269,13 @@ public class PlayBoardState extends PlayerControllerState {
                         throw new RuntimeException();
                     }
                 } else{
-                    for (Point p : pc.selectedPiece.getValidMoves()) {
-                        if (pc.model.isValidPosition(p)) {
-                            pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
-                            for (int dir = 0; dir < 6; dir = dir + 1) {
-                                for (Point loc : pc.selectedPiece.getValidAttacks(p, dir)) {
-                                    if (pc.model.isValidPosition(loc) && !pc.selectedPiece.isValidMove(loc)) {
-                                        pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
-                                    }
+                    Set<Point> moves = pc.model.findValidMoves(pc.selectedPiece).keySet();
+                    for (Point p : moves) {
+                        pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
+                        for (int dir = 0; dir < 6; dir = dir + 1) {
+                            for (Point loc : pc.selectedPiece.getValidAttacks(p, dir)) {
+                                if (pc.model.isValidPosition(loc) && moves.contains(loc) == false) {
+                                    pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
                                 }
                             }
                         }
@@ -337,12 +309,6 @@ public class PlayBoardState extends PlayerControllerState {
                                 + pc.displayY);
                         Piece piece = pc.model.getPieceByPosition(position);
                         
-                        // Get terrain type, but only if valid position (index out of bounds error otherwise)
-                        TerrainType t = null;
-                        if(pc.model.isValidPosition(position)){
-                            t = pc.model.map.getTerrain(position);
-                        }
-                        
                         if (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner)){
                             if (piece != null && !(pc.player.equals(piece.owner) && piece.turnState == TurnState.DONE)) {
                                 pc.selectedPiece = piece;
@@ -352,10 +318,8 @@ public class PlayBoardState extends PlayerControllerState {
                             switch (pc.selectedPiece.turnState) {
                             case MOVING:
                                 if (pc.selectedPieceMove == null){
-                                    if (pc.model.isValidPosition(position)
-                                            && Arrays.asList(pc.selectedPiece.getValidMoves()).contains(position)
-                                            && (piece == null || piece == pc.selectedPiece)
-                                            && (t == null || t.enterable(pc.selectedPiece))) {
+                                    if (pc.model.findValidMoves(pc.selectedPiece).containsKey(position)) {
+                                        // findValidMoves checks terrain, piece, and position validity
                                         pc.selectedPieceMove = position;
                                         pc.setDisplayCenter(container, position.x, position.y);
                                     }

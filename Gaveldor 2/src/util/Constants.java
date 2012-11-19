@@ -34,17 +34,17 @@ public class Constants {
     // Piece.java
     public static final int INFANTRY_ATTACK_POWER   = 1;
     public static final int INFANTRY_ATTACK_RANGE   = 1;
-    public static final int INFANTRY_MOVE_RANGE     = 1;
+    public static final int INFANTRY_MOVE_RANGE     = 2;
     public static final int INFANTRY_HEALTH_POINTS  = 3;
     
     public static final int ARCHER_ATTACK_POWER     = 1;
     public static final int ARCHER_ATTACK_RANGE     = 2;
-    public static final int ARCHER_MOVE_RANGE       = 1;
+    public static final int ARCHER_MOVE_RANGE       = 2;
     public static final int ARCHER_HEALTH_POINTS    = 2;
     
     public static final int CAVALRY_ATTACK_POWER    = 1;
     public static final int CAVALRY_ATTACK_RANGE    = 1;
-    public static final int CAVALRY_MOVE_RANGE      = 2;
+    public static final int CAVALRY_MOVE_RANGE      = 3;
     public static final int CAVALRY_HEALTH_POINTS   = 4;
     
     // Player.java

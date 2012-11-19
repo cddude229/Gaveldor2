@@ -147,52 +147,6 @@ public abstract class Piece {
     }
 
     /**
-     * Can the piece move to this spot?
-     * 
-     * @param p
-     * @return
-     */
-    final public boolean isValidMove(Point p) {
-        return isValidMove(p, this.getPosition());
-    }
-    
-    final public boolean isValidMove(Point p, Point currentPoint){
-        for (Point p2 : getValidMoves(currentPoint)) {
-            if (p.equals(p2)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Return a list of all the pieces valid moves
-     * 
-     * @return
-     */
-    final public Point[] getValidMoves(Point p){
-        switch (defaultMoveRange()) {
-        case 1:
-            return Helpful.arrayConcatAll(
-                    Piece.getPointsFromPoint(p, 1),
-                    Piece.getPointsFromPoint(p, 0)
-            );
-        case 2:
-            return Helpful.arrayConcatAll(
-                    Piece.getPointsFromPoint(p, 2),
-                    Piece.getPointsFromPoint(p, 1),
-                    Piece.getPointsFromPoint(p, 0)
-            );
-        default:
-            throw new RuntimeException("Support for move dist>2 currently not supported");
-        }
-    }
-
-    final public Point[] getValidMoves() {
-        return getValidMoves(this.getPosition());
-    }
-
-    /**
      * Can the piece attack this spot, if a unit is there?
      * 
      * @param p

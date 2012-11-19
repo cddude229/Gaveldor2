@@ -7,6 +7,10 @@ import game.model.Action.TurnEndAction;
 import game.model.Piece.TurnState;
 import game.run.GameException;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class GameModel {
@@ -98,6 +102,114 @@ public class GameModel {
             return false;
         }
         return true;
+    }
+    
+    public boolean isValidMove(Piece unit, Point p){
+        return isValidMove(unit, p, unit.getPosition(), true);
+    }
+    public boolean isValidMove(Piece unit, Point p, boolean blocking){
+        return isValidMove(unit, p, unit.getPosition(), blocking);
+    }
+    public boolean isValidMove(Piece unit, Point p, Point currentPoint, boolean blocking){
+        return findValidMoves(unit, currentPoint, blocking).containsKey(p);
+    }
+
+    /**
+     * Find valid moves for given piece at current time
+     * @param unit
+     * @return
+     */
+    public HashMap<Point, List<Point>> findValidMoves(Piece unit){
+        return findValidMoves(unit, true);
+    }
+    
+    /**
+     * Find valid moves for given piece
+     * @param unit The unit in question
+     * @param blocking If true, filter out points with opponent in them
+     * @return
+     */
+    public HashMap<Point, List<Point>> findValidMoves(Piece unit, boolean blocking){
+        return findValidMoves(unit, unit.getPosition(), blocking);
+    }
+    
+    /**
+     * Find valid moves for given piece at point p
+     * @param unit The unit in question
+     * @param p Point we're currently checking from
+     * @param blocking If true, filter out points with opponent in them
+     * @return
+     */
+    public HashMap<Point, List<Point>> findValidMoves(Piece unit, Point p, boolean blocking){
+        HashMap<Point, List<Point>> returnMap = findValidMoves(unit.defaultMoveRange(), unit, p, blocking);
+        
+        // Apply our filters
+        
+        // First, remove any spots that contain units besides ourself
+        Set<Point> points = returnMap.keySet();
+        Set<Point> removal = new HashSet<Point>();
+        for(Point examiningPoint : points){
+            Piece unitAtPoint = getPieceByPosition(examiningPoint);
+            if(unitAtPoint != null && unitAtPoint.equals(unit) == false){
+                removal.add(examiningPoint);
+            }
+        }
+        
+        points.removeAll(removal);
+        
+        return returnMap;
+    }
+    
+    /**
+     * HELPER: Find valid moves recursively for unit at point p with distance dist left
+     * @param dist The remaining distance to check
+     * @param unit The currently selected unit
+     * @param p The point we're recursing from
+     * @param blocking If true, filter out points with opponent in them
+     * @return
+     */
+    private HashMap<Point, List<Point>> findValidMoves(int dist, Piece unit, Point p, boolean blocking){
+        HashMap<Point, List<Point>> returnMap = new HashMap<Point, List<Point>>();
+        Piece unitAtPoint = getPieceByPosition(p);
+        TerrainType terrain = map.getTerrain(p);
+        
+        // Can we enter the terrain? If not, skip
+        // Is this spot inhabited by a unit on the other team? (do we care?)
+        if(terrain == null || terrain.enterable(unit)){
+            if(blocking == false || unitAtPoint == null || unit.owner.equals(unitAtPoint.owner)){
+                // We can move through our own pieces (or just don't care)
+                List<Point> path = new ArrayList<Point>();
+                path.add(p);
+                returnMap.put(p, path);
+            }
+        }
+        
+        // Check case where we don't need to recurse
+        if(dist <= 0){
+            return returnMap;
+        }
+        
+        // Ok, now case of distance remaining
+        Point[] points = Piece.getPointsFromPoint(p, 1);
+        for(Point recursePoint : points){
+            if(isValidPosition(recursePoint) == false) continue; // Only scan valid spots
+            
+            // Load our points to check
+            HashMap<Point, List<Point>> checkPoints = findValidMoves(dist-1, unit, recursePoint, blocking);
+            
+            // Iterate over
+            for(Point toMerge : checkPoints.keySet()){
+                if(returnMap.containsKey(toMerge)) continue; // Don't merge if we already have a shorter path (BFS)
+                
+                List<Point> path = checkPoints.get(toMerge);
+                path.add(0, p); // Prepend
+                
+                returnMap.put(toMerge, path);
+            }
+        }
+        
+        // golden
+        return returnMap;
     }
 
     public Set<Piece> getPieces() {
