@@ -285,7 +285,7 @@ public class GameModel {
                 Piece target = getPieceByID(movePacket.targetID);
                 assert target != null;
                 assert !piece.owner.equals(target.owner);
-                minigame = new MinigameModel(piece, target);
+                minigame = new MinigameModel(piece, target, piece.isBackAttack(target));
             }
             break;
         case MINIGAME_START:

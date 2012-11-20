@@ -3,6 +3,8 @@ package game.model;
 
 public class MinigameModel{
     public final Piece attackingPiece, defendingPiece;
+    
+    public final boolean backAttack;
 
     public static enum Move {
         HIGH, MID, LOW, NONE;
@@ -13,9 +15,13 @@ public class MinigameModel{
     
     public long sinceHasBothMoves = 0;
     
-    public MinigameModel(Piece attacking, Piece defending){
+    public MinigameModel(Piece attacking, Piece defending, boolean backAttack){
         attackingPiece = attacking;
         defendingPiece = defending;
+        this.backAttack = backAttack;
+        if (backAttack){
+            defendingMove = Move.NONE;
+        }
     }
     
     public boolean hasBothMoves(){

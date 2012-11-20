@@ -16,8 +16,8 @@ public class Cavalry extends Piece {
     public void attack(Piece opponent) {
         int power = this.defaultAttackPower();
 
-        if (this.isBackAttack(opponent))
-            power *= 2;
+//        if (this.isBackAttack(opponent))
+//            power *= 2;
 
         opponent.loseHealth(power);
 

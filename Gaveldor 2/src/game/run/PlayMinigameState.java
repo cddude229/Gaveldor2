@@ -99,14 +99,12 @@ public class PlayMinigameState extends PlayerControllerState {
         boolean isAttacking = pc.model.getCurrentPlayer().equals(player);
         Piece piece = isAttacking ?
                 pc.model.getMinigame().attackingPiece : pc.model.getMinigame().defendingPiece;
-        drawImageSide(container, g, piece.getSprite(leftSide ? 0 : 3, 0), backX, 200, leftSide);
+        drawImageSide(container, g, piece.getSprite(leftSide ^ (!isAttacking && pc.model.getMinigame().backAttack) ? 0 : 3, 0), backX, 200, leftSide);
 
-        
         int frontX = 500;
         
         ControlScheme controls = player.equals(pc.model.getPlayer1()) ? Constants.PLAYER_1_CONTROLS : Constants.PLAYER_2_CONTROLS;
         
-
         int width, height;
         MinigameModel.Move move;
         if (isAttacking){
@@ -138,13 +136,14 @@ public class PlayMinigameState extends PlayerControllerState {
                     g.setColor(Color.white);
                     drawRectSide(container, g, frontX - width, y - height / 2, width, height, leftSide);
                 }
-                if (!pc.model.getMinigame().hasBothMoves()){
+                if (!pc.model.getMinigame().hasBothMoves() && !(!isAttacking && pc.model.getMinigame().backAttack)){
                     String str = controls.keys.get(m);
                     drawStringSide(container, g, str, frontX - g.getFont().getWidth(str) - 5, y - g.getFont().getHeight(str) / 2, leftSide);
                 }
             }
         }
-        String str = move == null ? (isAttacking ? "Attack!" : "Defend!") : "Done!";
+        String str = !isAttacking && pc.model.getMinigame().backAttack ? "Off Guard!"
+                : move == null ? (isAttacking ? "Attack!" : "Defend!") : "Done!";
         drawStringSide(container, g, str, frontX - g.getFont().getWidth(str), 600 - g.getFont().getHeight(str) / 2, leftSide);
     }
 
