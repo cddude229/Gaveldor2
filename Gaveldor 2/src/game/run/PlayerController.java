@@ -4,7 +4,10 @@ import game.model.Action;
 import game.model.GameModel;
 import game.model.Piece;
 import game.model.Player;
+import game.model.Point;
 import game.model.TerrainType;
+
+import java.util.List;
 
 import org.newdawn.slick.Game;
 import org.newdawn.slick.GameContainer;
@@ -88,17 +91,24 @@ public abstract class PlayerController extends StateBasedGame{
     }
     
     public boolean isAnimatingMove(){
-        return model.lastMoved != null && model.sinceLastMoved < Constants.BOARD_MOVE_ANIMATE_TIME;
+        if (model.lastMoved == null){
+            return false;
+        }
+        List<Point> path = model.findValidMoves(model.lastMoved, model.lastMovedPosition, true).get(model.lastMoved.getPosition());
+        return model.lastMoved != null && model.sinceLastMoved < Constants.BOARD_MOVE_ANIMATE_TIME * (path.size() - 1);
     }
     
     public void renderPiece(GameContainer container, Graphics g, Piece p){
         if (p.equals(model.lastMoved) && isAnimatingMove()){
-            float frac = 1f * model.sinceLastMoved / Constants.BOARD_MOVE_ANIMATE_TIME;
-            int x = Math.round(getPixelX(model.lastMovedPosition.x, p.getSprite().getWidth(), .5f) * (1f - frac)
-                    + getPixelX(p.getPosition().x, p.getSprite().getWidth(), .5f) * frac);
-            int y = Math.round(getPixelY(model.lastMovedPosition.y, p.getSprite().getHeight(), 1f) * (1f - frac)
-                    + getPixelY(p.getPosition().y, p.getSprite().getHeight(), 1f) * frac);
-            Image sprite = p.getSprite(p.getDirection(), 0);
+            List<Point> path = model.findValidMoves(model.lastMoved, model.lastMovedPosition, true).get(model.lastMoved.getPosition());
+            int step = (int)(model.sinceLastMoved / Constants.BOARD_MOVE_ANIMATE_TIME);
+            float frac = 1f * model.sinceLastMoved / Constants.BOARD_MOVE_ANIMATE_TIME - step;
+            Point cur = path.get(step), next = path.get(step + 1);
+            int x = Math.round(getPixelX(cur.x, p.getSprite().getWidth(), .5f) * (1f - frac)
+                    + getPixelX(next.x, p.getSprite().getWidth(), .5f) * frac);
+            int y = Math.round(getPixelY(cur.y, p.getSprite().getHeight(), 1f) * (1f - frac)
+                    + getPixelY(next.y, p.getSprite().getHeight(), 1f) * frac);
+            Image sprite = p.getSprite(Piece.pointsToDirection(next, cur), 0);
             setDisplayPoint(container,
                     x + (sprite.getWidth() - container.getWidth()) / 2,
                     y + (sprite.getHeight()- container.getHeight()) / 2);

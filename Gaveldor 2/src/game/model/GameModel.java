@@ -240,7 +240,7 @@ public class GameModel {
         }
         return null;
     }
-
+    
     public boolean hasAnyPieces(Player player) {
         for (Piece p : pieces) {
             if (p.owner.equals(player)) {

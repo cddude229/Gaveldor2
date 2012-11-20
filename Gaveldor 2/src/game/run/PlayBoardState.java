@@ -244,7 +244,7 @@ public class PlayBoardState extends PlayerControllerState {
                                 for (int dir = 0; dir < 6; dir = dir + 1) {
                                     for (Point loc : pc.selectedPiece.getValidAttacks(p, dir)) {
                                         if (pc.model.isValidPosition(loc) && moves.contains(loc) == false) {
-                                            //pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
+                                            pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
                                         }
                                     }
                                 }
