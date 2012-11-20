@@ -39,6 +39,11 @@ public class PlayMinigameState extends PlayerControllerState {
     @Override
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
         //TODO: render minigame visuals
+        if (!pc.model.getMinigame().hasBothMoves()){
+            g.setColor(Color.blue);
+            g.fillRect(50, 50, (container.getWidth() - 100) * Math.max(
+                    1 - 1f * pc.model.getMinigame().sinceMoveTimeStart / Constants.MINIGAME_MOVE_TIME, 0), 50);
+        }
         g.setFont(Constants.TEST_FONT);
         g.setColor(Color.white);
         renderSide(container, pc, g, pc.model.getPlayer1(), true);
@@ -113,32 +118,34 @@ public class PlayMinigameState extends PlayerControllerState {
             height = 125;
             move = pc.model.getMinigame().defendingMove;
         }
-        
+
         for (MinigameModel.Move m : new MinigameModel.Move[]{
                 MinigameModel.Move.HIGH, MinigameModel.Move.MID, MinigameModel.Move.LOW}){
             int y = 150 * (m.ordinal() + 1);
-            int x = frontX - width;
             if (pc.model.getMinigame().hasBothMoves() && m == move){
+                int x = frontX;
                 if (isAttacking){
                     float frac = 1f * pc.model.getMinigame().sinceHasBothMoves / Constants.MINIGAME_WAIT_TIME;
                     x += 50 * Math.min(2 * frac, 1);
                 }
                 g.setColor(Color.gray);
-                fillRectSide(container, g, x, y - height / 2, width, height, leftSide);
+                fillRectSide(container, g, x - width, y - height / 2, width, height, leftSide);
             } else{
                 if (pc.model.getMinigame().hasBothMoves() && !isAttacking && m == pc.model.getMinigame().attackingMove){
                     g.setColor(Color.red);
-                    fillRectSide(container, g, x, y - height / 2, width, height, leftSide);
+                    fillRectSide(container, g, frontX - width, y - height / 2, width, height, leftSide);
                 } else{
                     g.setColor(Color.white);
-                    drawRectSide(container, g, x, y - height / 2, width, height, leftSide);
+                    drawRectSide(container, g, frontX - width, y - height / 2, width, height, leftSide);
                 }
                 if (!pc.model.getMinigame().hasBothMoves()){
-                    drawStringSide(container, g,
-                            controls.keys.get(m), x + 5, y - g.getFont().getHeight(controls.keys.get(m)) / 2, leftSide);
+                    String str = controls.keys.get(m);
+                    drawStringSide(container, g, str, frontX - g.getFont().getWidth(str) - 5, y - g.getFont().getHeight(str) / 2, leftSide);
                 }
             }
         }
+        String str = move == null ? (isAttacking ? "Attack!" : "Defend!") : "Done!";
+        drawStringSide(container, g, str, frontX - g.getFont().getWidth(str), 600 - g.getFont().getHeight(str) / 2, leftSide);
     }
 
     @Override
