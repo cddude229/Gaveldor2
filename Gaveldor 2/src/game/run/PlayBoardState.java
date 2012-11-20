@@ -171,7 +171,7 @@ public class PlayBoardState extends PlayerControllerState {
             }
         }
         for (Piece p : pc.model.getPieces()) {
-            g.setColor(p.owner.id == 1 ? Color.blue : Color.orange); //TODO: add minimap assets
+            g.setColor(p.equals(pc.selectedPiece) ? Color.white : p.turnState == TurnState.DONE ? Color.gray : p.owner.id == 1 ? Color.blue : Color.orange); //TODO: add minimap assets
             g.fillOval(
                         PlayerController.getPixelX(p.getPosition().x, Constants.TILE_WIDTH, .5f) * scale + xi,
                         PlayerController.getPixelY(p.getPosition().y, Constants.TILE_HEIGHT, .5f) * scale + yi,
