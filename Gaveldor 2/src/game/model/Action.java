@@ -109,6 +109,7 @@ public abstract class Action implements Serializable {
     	public final Point destination;
         public final int direction;
         public final int targetID;
+        public final MinigameModel.Move minigameBonusMove;
     	
     	public BoardMoveAction(Piece piece, Point destination, int direction, Piece target) {
             super(ActionType.BOARD_MOVE);
@@ -116,6 +117,7 @@ public abstract class Action implements Serializable {
     		this.destination = destination;
     		this.direction = direction;
     		targetID = target == null ? -1 : target.id;
+    		minigameBonusMove = MinigameModel.Move.values()[(int)Math.floor(Math.random() * 3)];
     	}
     }
     

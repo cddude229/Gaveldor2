@@ -138,7 +138,13 @@ public class PlayMinigameState extends PlayerControllerState {
                 }
                 if (!pc.model.getMinigame().hasBothMoves() && !(!isAttacking && pc.model.getMinigame().backAttack)){
                     String str = controls.keys.get(m);
+                    g.setColor(Color.white);
                     drawStringSide(container, g, str, frontX - g.getFont().getWidth(str) - 5, y - g.getFont().getHeight(str) / 2, leftSide);
+                }
+                if (isAttacking && m == pc.model.getMinigame().bonusMove){
+                    System.out.println(m);
+                    g.setColor(Color.yellow);
+                    fillRectSide(container, g, frontX - width - 15, y - 5, 10, 10, leftSide);
                 }
             }
         }

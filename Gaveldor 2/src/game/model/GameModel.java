@@ -285,7 +285,7 @@ public class GameModel {
                 Piece target = getPieceByID(movePacket.targetID);
                 assert target != null;
                 assert !piece.owner.equals(target.owner);
-                minigame = new MinigameModel(piece, target, piece.isBackAttack(target));
+                minigame = new MinigameModel(piece, target, piece.isBackAttack(target), movePacket.minigameBonusMove);
             }
             break;
         case MINIGAME_START:
@@ -307,20 +307,28 @@ public class GameModel {
             break;
         case MINIGAME_END:
             assert minigame.hasBothMoves();
+            boolean again = false;
             if (minigame.isSuccessfulAttack()){
                 minigame.attackingPiece.attack(minigame.defendingPiece);
                 if (!minigame.defendingPiece.isAlive()) {
                     pieces.remove(minigame.defendingPiece);
+                } else if (minigame.attackingMove == minigame.bonusMove){
+                    again = true;
                 }
             }
-            minigame.attackingPiece.turnState = TurnState.DONE;
-            gameState = GameState.PLAYING_BOARD;
-            if (!hasAnyPieces(minigame.defendingPiece.owner)) {
-                setCurrentPlayer(minigame.defendingPiece.owner);
-                setCurrentPlayer(getOtherPlayer());
-                gameState = GameState.WON;
+            if (again){
+                minigame = new MinigameModel(
+                        minigame.attackingPiece, minigame.defendingPiece, false, MinigameModel.Move.NONE);
+            } else{
+                minigame.attackingPiece.turnState = TurnState.DONE;
+                gameState = GameState.PLAYING_BOARD;
+                if (!hasAnyPieces(minigame.defendingPiece.owner)) {
+                    setCurrentPlayer(minigame.defendingPiece.owner);
+                    setCurrentPlayer(getOtherPlayer());
+                    gameState = GameState.WON;
+                }
+                minigame = null;
             }
-            minigame = null;
             break;
         case TURN_END:
             TurnEndAction turnEndPacket = (TurnEndAction) action;

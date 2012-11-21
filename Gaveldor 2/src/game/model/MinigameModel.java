@@ -5,6 +5,7 @@ public class MinigameModel{
     public final Piece attackingPiece, defendingPiece;
     
     public final boolean backAttack;
+    public final Move bonusMove;
 
     public static enum Move {
         HIGH, MID, LOW, NONE;
@@ -15,10 +16,11 @@ public class MinigameModel{
     
     public long sinceHasBothMoves = 0;
     
-    public MinigameModel(Piece attacking, Piece defending, boolean backAttack){
+    public MinigameModel(Piece attacking, Piece defending, boolean backAttack, Move bonusMove){
         attackingPiece = attacking;
         defendingPiece = defending;
         this.backAttack = backAttack;
+        this.bonusMove = bonusMove;
         if (backAttack){
             defendingMove = Move.NONE;
         }
