@@ -47,26 +47,6 @@ public abstract class Action implements Serializable {
     	}
     }
     
-/*    public static class HeartBeatAction extends Action {
-    	
-        private static final long serialVersionUID = 989976207306981770L;
-
-        public HeartBeatAction(int player) {
-    		this.type = Type.HEART_BEAT;
-    		this.player = player;
-    	}
-    }
-    
-    public static class ResponseAction extends Action {
-
-        private static final long serialVersionUID = 9022778930576890264L;
-    	public Move move;
-    	
-    	public ResponseAction(Move move, int player) {
-    		this.move = move;
-    		this.player = player;
-    	}
-    } */
     
     public static class MinigameStartAction extends Action{
 

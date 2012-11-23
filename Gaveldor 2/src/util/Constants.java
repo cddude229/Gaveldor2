@@ -25,6 +25,8 @@ public class Constants {
     public static final int REMOTE_CONNECTION_PORT = 1400;
     
 
+    // This is just until map selection is online
+    public static final String defaultMap = "";
     // Action.java
     
     // Constants.java
