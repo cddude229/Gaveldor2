@@ -2,9 +2,6 @@ package run;
 
 import game.run.GameException;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -19,8 +16,6 @@ import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import util.Constants;
-
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
 import com.aem.sticky.button.SimpleButton;
@@ -30,16 +25,17 @@ public class MapSelectionState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
     
-    private static String Map = "basic";
+    private static String map = "/assets/maps/";
+    
     public static MatchType match;
-    private static enum MatchType {
+    public static enum MatchType {
         LOCAL,
         HOST,
         JOIN,
         MATCH
     }
     
-    private SimpleButton connectBtn;
+    private SimpleButton mapBtn;
     private SimpleButton backBtn;
     private TextField mapBox;
     private StickyListener listener;
@@ -47,46 +43,35 @@ public class MapSelectionState extends BasicGameState {
     private static final int bHeight = 50;
     private String instructionTxt;
     ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
-    
-    private Socket socket = null;
 
     @Override
     /**
      * Builds buttons and adds listeners to game. This isn't fully functional.
      */
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        instructionTxt = "Please enter the Host IP.";
+        instructionTxt = "Please enter map name.";
         listener = new StickyListener();
         buttons = this.buildButtons(container, game);
         for (SimpleButton button : buttons) {
             listener.add(button);
         }
-
+        
     }
 
-    
-    public void enter(GameContainer container, StateBasedGame game, MatchType type) {
+    @Override
+    public void enter(GameContainer container, StateBasedGame game) {
         container.getInput().addListener(listener);
-        match = type;
     }
     
     @Override
     public void leave(GameContainer container, StateBasedGame game){
         container.getInput().removeListener(listener);
-        try {
-            if (socket != null){
-                socket.close();
-                socket = null;
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g){
         backBtn.render(container, g);
-        connectBtn.render(container, g);
+        mapBtn.render(container, g);
         mapBox.render(container, g);
         g.drawString(instructionTxt, mapBox.getX(), mapBox.getY() -50);
     }
@@ -95,16 +80,6 @@ public class MapSelectionState extends BasicGameState {
     public void update(GameContainer container, StateBasedGame game, int delta){
         for (SimpleButton button : buttons) {
             button.update(container, delta);
-        }
-        if (socket != null && socket.isConnected()){
-            try {
-                ((Game)game).startClientRemoteMatch("/assets/maps/basic", socket);
-            } catch (GameException e) {
-                //TODO: display error message
-                throw new RuntimeException(e);
-            }
-            socket = null;
-            game.enterState(PlayGameState.STATE_ID);
         }
     }
 
@@ -141,7 +116,7 @@ public class MapSelectionState extends BasicGameState {
         }
         // create rectangles for buttons
         Rectangle backRect = new Rectangle(locations.get(5)[0] - 150, locations.get(5)[1], bWidth, bHeight);
-        Rectangle connectRect = new Rectangle(locations.get(5)[0] + 150, locations.get(5)[1], bWidth, bHeight);
+        Rectangle mapRect = new Rectangle(locations.get(5)[0] + 150, locations.get(5)[1], bWidth, bHeight);
 
         // create play Image
         Sound s = null;
@@ -150,17 +125,18 @@ public class MapSelectionState extends BasicGameState {
         mapBox = new TextField(container,defaultFont,locations.get(2)[0],locations.get(2)[1],bWidth,bHeight);
         mapBox.setBackgroundColor(Color.white);
         mapBox.setTextColor(Color.black);
+        mapBox.setText("basic");
         
         // add buttons
         backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
-        connectBtn = new SimpleButton(connectRect, images.get(2), images.get(3), s);
+        mapBtn = new SimpleButton(mapRect, images.get(2), images.get(3), s);
 
         // create listeners
         createListeners(container,game);
 
         // add to array of buttons
         ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
-        buttons.add(connectBtn);
+        buttons.add(mapBtn);
         buttons.add(backBtn);
         return buttons;
     }
@@ -179,24 +155,27 @@ public class MapSelectionState extends BasicGameState {
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });
-        connectBtn.addListener(new ClickListener(){
+        mapBtn.addListener(new ClickListener(){
             public void onClick(Button clicked, float mx, float my) {
-                socket = new Socket();
-                new Thread(new Runnable(){
-                    private final String ip = mapBox.getText();
-                    @Override
-                    public void run() {
-                        try {
-                            socket.connect(new InetSocketAddress(ip, Constants.REMOTE_CONNECTION_PORT));
-                        }catch (IOException e) {
-                          instructionTxt = "A connection could not be established. Please try again.";
-                          mapBox.setText("");
-                          mapBox.setCursorVisible(true);
-                        }
+                String entry = mapBox.getText();
+                System.out.println("clicked MAP");
+                System.out.println(entry);
+                mapBox.setText("Choose a Map");
+                if(isValidMap(entry)){
+                    map += entry;
+                    
+                    try {
+                        ((Game) game).startLocalMatch("/assets/maps/basic");
+                    } catch (GameException e) {
+                        e.printStackTrace();
+                        
                     }
-                }).start();
+                    game.enterState(PlayGameState.STATE_ID);
+                }
+                
+                
+                
             }
-
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });
@@ -220,8 +199,8 @@ public class MapSelectionState extends BasicGameState {
                 clickPlay.getGraphics().drawString("Back", 0, 0);
                 break;
             case 1:
-                im.getGraphics().drawString("Connect", 0, 0);
-                clickPlay.getGraphics().drawString("Connect", 0, 0);
+                im.getGraphics().drawString("Select", 0, 0);
+                clickPlay.getGraphics().drawString("Select", 0, 0);
                 break;
             }
             im.getGraphics().flush();
@@ -232,4 +211,7 @@ public class MapSelectionState extends BasicGameState {
         return images;
     }
 
+    public boolean isValidMap(String selection){
+        return selection.equals("basic");
+    }
 }

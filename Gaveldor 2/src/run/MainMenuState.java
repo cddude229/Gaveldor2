@@ -1,7 +1,5 @@
 package run;
 
-import game.run.GameException;
-
 import java.util.ArrayList;
 
 import org.newdawn.slick.AppGameContainer;
@@ -142,12 +140,16 @@ public class MainMenuState extends BasicGameState {
                 buttons.get(i).addListener(new ClickListener() {
 
                     public void onClick(Button clicked, float mx, float my) {
+                        /*
                         try {
                             ((Game) game).startLocalMatch("/assets/maps/basic");
                         } catch (GameException e) {
                             e.printStackTrace();
                         }
                         game.enterState(PlayGameState.STATE_ID);
+                        */
+                        // MapSelectionState.match = MapSelectionState.MatchType.LOCAL;
+                        game.enterState(MapSelectionState.STATE_ID);
                     }
 
                     public void onDoubleClick(Button clicked, float mx, float my) {}
