@@ -199,10 +199,15 @@ public class GameModel {
             
             // Iterate over
             for(Point toMerge : checkPoints.keySet()){
-                if(returnMap.containsKey(toMerge)) continue; // Don't merge if we already have a shorter path (BFS)
-                
                 List<Point> path = checkPoints.get(toMerge);
                 path.add(0, p); // Prepend
+
+                if(returnMap.containsKey(toMerge)){
+                    // We need to make sure the new path is shorter
+                    if(returnMap.get(toMerge).size() <= path.size()){
+                        continue; // Don't merge if we already have a shorter path (BFS)
+                    }
+                }
                 
                 returnMap.put(toMerge, path);
             }
