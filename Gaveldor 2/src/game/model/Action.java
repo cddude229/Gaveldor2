@@ -33,8 +33,11 @@ public abstract class Action implements Serializable {
     	
         private static final long serialVersionUID = 6305597468815847402L;
 
-        public GameStartAction() {
+        public final String mapName;
+        
+        public GameStartAction(String mapName) {
     		super(ActionType.GAME_START);
+    		this.mapName = mapName;
     	}
     }
     

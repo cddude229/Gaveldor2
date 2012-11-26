@@ -2,10 +2,10 @@ package game.model;
 
 import game.model.Action.BoardMoveAction;
 import game.model.Action.ForfeitAction;
+import game.model.Action.GameStartAction;
 import game.model.Action.MinigameMoveAction;
 import game.model.Action.TurnEndAction;
 import game.model.Piece.TurnState;
-import game.run.GameException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class GameModel {
     private final Player[] players;
     private int currentPlayerIndex = 0;
 
-    public final Map map;
+    public Map map;
     private Set<Piece> pieces;
 
     public static enum GameState {
@@ -32,10 +32,8 @@ public class GameModel {
     public GameState gameState = GameState.SETTING_UP;
     
     private MinigameModel minigame;
-    public GameModel(String name) throws GameException {
+    public GameModel(){
         players = new Player[]{new Player(1), new Player(2)};
-
-        map = Map.loadMap(name);
     }
     
     public Piece lastMoved;
@@ -43,7 +41,8 @@ public class GameModel {
     public int lastMovedDirection;
     public long sinceLastMoved;
 
-    public void setup() {
+    public void setup(String mapName){
+        map = Map.loadMap(mapName);
         pieces = map.createPieces(players);
         currentPlayerIndex = 0;
         lastMoved = null;
@@ -260,7 +259,8 @@ public class GameModel {
         Piece piece;
         switch (action.type) {
         case GAME_START:
-            setup();
+            GameStartAction gameStartPacket = (GameStartAction)action;
+            setup(gameStartPacket.mapName);
             gameState = GameState.PLAYING_BOARD;
             break;
         case DISCONNECT:

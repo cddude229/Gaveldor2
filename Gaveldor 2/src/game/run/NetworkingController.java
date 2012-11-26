@@ -2,7 +2,6 @@ package game.run;
 
 import game.model.Action;
 import game.model.Action.DisconnectAction;
-import game.model.Action.GameStartAction;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -19,7 +18,7 @@ public class NetworkingController {
         this.socket = socket;
         this.sendables = new ArrayDeque<Action>();
         this.receivables = new ArrayDeque<Action>();
-        receivables.add(new GameStartAction());
+//        receivables.add(new Action.GameStartAction());
     }
 
     public void start() {

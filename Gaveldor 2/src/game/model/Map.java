@@ -1,7 +1,5 @@
 package game.model;
 
-import game.run.GameException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -74,18 +72,18 @@ public class Map {
         return piecesNew;
     }
 
-    public static Map loadMap(String name) throws GameException {
+    public static Map loadMap(String name){
         try {
             TerrainType[][] terrain = loadTerrain(name);
             int width = terrain.length, height = terrain[0].length;
             Set<Piece> pieces = Map.loadPieces(name, width, height);
             return new Map(name, width, height, terrain, pieces);
         } catch (IOException e) {
-            throw new GameException("There was an I/O error while reading the map file", e);
+            throw new RuntimeException("There was an I/O error while reading the map file", e);
         }
     }
 
-    private static TerrainType[][] loadTerrain(String name) throws IOException, GameException {
+    private static TerrainType[][] loadTerrain(String name) throws IOException{
         BufferedReader reader = new BufferedReader(new InputStreamReader(Resources.getResourceAsStream(name + ".map")));
         try {
             List<TerrainType[]> rows = new ArrayList<TerrainType[]>();
@@ -97,7 +95,7 @@ public class Map {
                     width = rowLine.length();
                 } else {
                     if (width != rowLine.length()) {
-                        throw new GameException("Map file rows do not have uniform width");
+                        throw new IOException("Map file rows do not have uniform width");
                     }
                 }
                 TerrainType[] row = new TerrainType[2 * width];

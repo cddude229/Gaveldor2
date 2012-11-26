@@ -1,22 +1,23 @@
 package game.run;
 
+import game.model.Action;
 import game.model.GameModel;
 import game.model.Player;
 
 public class GameMatch {
     
-//    public final GameUI ui;
     public final GameModel model;
-    
     public final PlayerController pc1, pc2;
 
 
     
-    public GameMatch(GameModel model, PlayerController pc1, PlayerController pc2){
-//        this.ui = ui;
+    public GameMatch(GameModel model, PlayerController pc1, PlayerController pc2, String mapName){
         this.model = model;
         this.pc1 = pc1;
         this.pc2 = pc2;
+        if (pc1 instanceof LocalPlayerController && pc1.player.equals(model.getCurrentPlayer())){
+            ((LocalPlayerController)pc1).actionQueue.add(new Action.GameStartAction(mapName));
+        }
     }
     
     public PlayerController getPCByPlayer(Player player){

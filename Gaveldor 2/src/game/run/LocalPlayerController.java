@@ -25,9 +25,9 @@ public class LocalPlayerController extends PlayerController {
 
     public LocalPlayerController(Player player, GameModel model) {
         super(player, model);
-        if (player.equals(model.getCurrentPlayer())) {
-            actionQueue.add(new Action.GameStartAction());
-        }
+//        if (player.equals(model.getCurrentPlayer())) {
+//            actionQueue.add(new Action.GameStartAction());
+//        }
     }
 
     @Override
