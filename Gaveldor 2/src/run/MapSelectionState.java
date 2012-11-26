@@ -2,6 +2,9 @@ package run;
 
 import game.run.GameException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -15,6 +18,8 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import util.Resources;
 
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
@@ -161,16 +166,21 @@ public class MapSelectionState extends BasicGameState {
                 System.out.println("clicked MAP");
                 System.out.println(entry);
                 mapBox.setText("Choose a Map");
-                if(isValidMap(entry)){
-                    map += entry;
-                    
-                    try {
-                        ((Game) game).startLocalMatch("/assets/maps/basic");
-                    } catch (GameException e) {
-                        e.printStackTrace();
+                try {
+                    if(isValidMap(entry)){
+                        map += entry;
                         
+                        try {
+                            ((Game) game).startLocalMatch("/assets/maps/basic");
+                        } catch (GameException e) {
+                            e.printStackTrace();
+                            
+                        }
+                        game.enterState(PlayGameState.STATE_ID);
                     }
-                    game.enterState(PlayGameState.STATE_ID);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
                 
                 
@@ -211,7 +221,18 @@ public class MapSelectionState extends BasicGameState {
         return images;
     }
 
-    public boolean isValidMap(String selection){
-        return selection.equals("basic");
+    public boolean isValidMap(String selection) throws IOException{
+        ArrayList<String> validMaps = new ArrayList<String>();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(Resources.getResourceAsStream("/assets/maps/AllMaps.index")));
+        try {
+            String rowLine;
+            while(((rowLine = reader.readLine()) != null)){
+                validMaps.add(rowLine);
+            }
+        } finally {
+            reader.close();
+        }
+        
+        return validMaps.contains(selection);
     }
 }
