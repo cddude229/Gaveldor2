@@ -18,7 +18,6 @@ public class NetworkingController {
         this.socket = socket;
         this.sendables = new ArrayDeque<Action>();
         this.receivables = new ArrayDeque<Action>();
-//        receivables.add(new Action.GameStartAction());
     }
 
     public void start() {

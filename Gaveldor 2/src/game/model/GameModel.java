@@ -41,14 +41,6 @@ public class GameModel {
     public int lastMovedDirection;
     public long sinceLastMoved;
 
-    public void setup(String mapName){
-        map = Map.loadMap(mapName);
-        pieces = map.createPieces(players);
-        currentPlayerIndex = 0;
-        lastMoved = null;
-        minigame = null;
-    }
-
     public Player getPlayer1(){
         return players[0];
     }
@@ -260,7 +252,11 @@ public class GameModel {
         switch (action.type) {
         case GAME_START:
             GameStartAction gameStartPacket = (GameStartAction)action;
-            setup(gameStartPacket.mapName);
+            map = Map.loadMap(gameStartPacket.mapName);
+            pieces = map.createPieces(players);
+            currentPlayerIndex = 0;
+            lastMoved = null;
+            minigame = null;
             gameState = GameState.PLAYING_BOARD;
             break;
         case DISCONNECT:

@@ -26,6 +26,7 @@ public abstract class PlayerController extends StateBasedGame{
 
     public final GameModel model; // for getting game state info only (no updating)
 
+    public boolean justStarted = true;
     public int displayX = 0, displayY = 0;
 
     public PlayerController(Player player, GameModel model) {
@@ -48,23 +49,34 @@ public abstract class PlayerController extends StateBasedGame{
         displayY = Math.min(displayY, model.map.getPixelHeight() - container.getHeight() / 2);
     }
     
-    public void setDisplayCenter(GameContainer container, int tileX, int tileY){
+    public void setDisplayCenter(GameContainer container, float tileX, float tileY){
         setDisplayPoint(container,
                 getPixelX(tileX, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH / 2, .5f),
                 getPixelY(tileY, container.getHeight(), .5f));
-        }
+    }
     
+    public void setDisplayCenterPiecesAverage(GameContainer container){
+        int x = 0, y = 0, count = 0;
+        for (Piece p : model.getPieces()){
+            if (p.owner.equals(player)){
+                x += p.getPosition().x;
+                y += p.getPosition().y;
+                count++;
+            }
+        }
+        setDisplayCenter(container, 1f * x / count, 1f * y / count);
+    }
     
     public void renderControllerWon(Graphics g) throws SlickException {
         g.setFont(Constants.TEST_FONT);
         g.drawString("Player " + model.getCurrentPlayer().id + " Wins!", 0, 0);
     }
     
-    public static int getPixelX(int x, int width, float centerX){
+    public static int getPixelX(float x, int width, float centerX){
         return Math.round(x * Constants.TILE_WIDTH_SPACING + (Constants.TILE_WIDTH - width) * centerX);
     }
     
-    public static int getPixelY(int y, int height, float centerY){
+    public static int getPixelY(float y, int height, float centerY){
         return Math.round(y * Constants.TILE_HEIGHT_SPACING + (Constants.TILE_HEIGHT - height) * centerY);
     }
 
@@ -130,6 +142,10 @@ public abstract class PlayerController extends StateBasedGame{
     
     public void update(GameContainer container, Game game, int delta) throws SlickException{
         this.game = game;
+        if (justStarted){
+            setDisplayCenterPiecesAverage(container);
+        }
         update(container, delta);
+        justStarted = false;
     }
 }
