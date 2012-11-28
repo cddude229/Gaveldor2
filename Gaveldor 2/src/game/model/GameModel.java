@@ -359,7 +359,11 @@ public class GameModel {
         switch (gameState){
         case PLAYING_BOARD:
             sinceLastMoved += delta;
-            sinceTurnStart += delta;
+            if (sinceTurnStart == 0){ //TODO: a temp fix for the loading issue
+               sinceTurnStart = 1;
+            } else{
+                sinceTurnStart += delta;
+            }
             break;
         case PLAYING_MINIGAME:
             if (minigame.sinceMoveTimeStart == 0){ //TODO: a temp fix for the minigame loading issue

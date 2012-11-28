@@ -320,11 +320,11 @@ public class PlayBoardState extends PlayerControllerState {
                                 + pc.displayY);
                         Piece piece = pc.model.getPieceByPosition(position);
                         
-                        if (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner)){
-                            if (piece != null && !(pc.player.equals(piece.owner) && piece.turnState == TurnState.DONE)) {
-                                pc.selectedPiece = piece;
-                                pc.setDisplayCenter(container, piece.getPosition().x, piece.getPosition().y);
-                            }
+                        if (piece != null && (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner) ||
+                                pc.selectedPiece.turnState == Piece.TurnState.MOVING && pc.selectedPieceMove == null)){
+                            clearSelection(pc);
+                            pc.selectedPiece = piece;
+                            pc.setDisplayCenter(container, piece.getPosition().x, piece.getPosition().y);
                         } else {
                             switch (pc.selectedPiece.turnState) {
                             case MOVING:

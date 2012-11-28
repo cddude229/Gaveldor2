@@ -63,7 +63,7 @@ public enum PieceType {
                         for (int i = 0; i < src.getWidth(); i++){
                             for (int j = 0; j < src.getHeight(); j++){
                                 Color c = src.getColor(i, j);
-                                int v = (c.getRed() + c.getGreen() + c.getBlue()) / 3 + 0x40;
+                                int v = Math.min((c.getRed() + c.getGreen() + c.getBlue()) / 3 + 0x40, 0xFF);
                                 buf.setRGBA(i, j, v, v, v, c.getAlpha());
                             }
                         }

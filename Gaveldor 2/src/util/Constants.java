@@ -65,7 +65,7 @@ public class Constants {
     }
     
     //all times in milliseconds
-    public static final long MINIGAME_MOVE_TIME = 3000L;
+    public static final long MINIGAME_MOVE_TIME = 5000L;
     public static final long MINIGAME_WAIT_TIME = 1500L;
     public static final long BOARD_MOVE_ANIMATE_TIME = 500L;
     
@@ -91,5 +91,5 @@ public class Constants {
     public static final boolean ARCHER_2X_VS_CAVALRY = true;
     
     public static final boolean TURN_TIME_LIMIT_ON = true;
-    public static final long TURN_TIME_LIMIT_PER_PIECE = 5000L;
+    public static final long TURN_TIME_LIMIT_PER_PIECE = 10000L;
 }
