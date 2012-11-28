@@ -307,7 +307,7 @@ public class PlayBoardState extends PlayerControllerState {
             if (pc.isAnimatingMove()){
                 //TODO
             } else if (Constants.TURN_TIME_LIMIT_ON && pc.model.sinceTurnStart >= timeLimit(pc)){
-                pc.actionQueue.add(new Action.TurnEndAction(pc.player));
+                endTurn(pc);
             } else{
                 pc.updateMousePan(container, pc, delta);
                 updateLocalSidebar(container, pc, delta);
