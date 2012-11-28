@@ -284,6 +284,15 @@ public class PlayBoardState extends PlayerControllerState {
             }
             renderLocalSidebar(container, pc, g);
         }
+        if (Constants.TURN_TIME_LIMIT_ON){
+            float timeFrac = 1f * (timeLimit(pc) - pc.model.sinceTurnStart) / timeLimit(pc);
+            g.setColor(Color.red);
+            g.fillRect(0, container.getHeight() * (1 - timeFrac), 20, container.getHeight() * timeFrac);
+        }
+    }
+    
+    private long timeLimit(LocalPlayerController pc){
+        return Constants.TURN_TIME_LIMIT_PER_PIECE * pc.model.numberOfPieces(pc.player);
     }
 
     @Override
@@ -297,6 +306,8 @@ public class PlayBoardState extends PlayerControllerState {
         if (pc.isCurrentPC()){
             if (pc.isAnimatingMove()){
                 //TODO
+            } else if (Constants.TURN_TIME_LIMIT_ON && pc.model.sinceTurnStart >= timeLimit(pc)){
+                pc.actionQueue.add(new Action.TurnEndAction(pc.player));
             } else{
                 pc.updateMousePan(container, pc, delta);
                 updateLocalSidebar(container, pc, delta);

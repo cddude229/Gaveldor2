@@ -11,10 +11,13 @@ public class GameMatch {
 
 
     
-    public GameMatch(GameModel model, PlayerController pc1, PlayerController pc2, String mapName){
+    public GameMatch(GameModel model, PlayerController pc1, PlayerController pc2){
         this.model = model;
         this.pc1 = pc1;
         this.pc2 = pc2;
+    }
+    
+    public void startGameLocally(String mapName){
         if (pc1 instanceof LocalPlayerController && pc1.player.equals(model.getCurrentPlayer())){
             ((LocalPlayerController)pc1).actionQueue.add(new Action.GameStartAction(mapName));
         }

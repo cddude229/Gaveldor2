@@ -88,5 +88,8 @@ public class Constants {
     
     
     // FEATURE FLAGS
-    public static final boolean archer2xVsCavalry = true;
+    public static final boolean ARCHER_2X_VS_CAVALRY = true;
+    
+    public static final boolean TURN_TIME_LIMIT_ON = true;
+    public static final long TURN_TIME_LIMIT_PER_PIECE = 5000L;
 }

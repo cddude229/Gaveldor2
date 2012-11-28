@@ -87,7 +87,7 @@ public class JoinGameState extends BasicGameState {
         }
         if (socket != null && socket.isConnected()){
             try {
-                ((Game)game).startClientRemoteMatch("/assets/maps/basic", socket);
+                ((Game)game).startClientRemoteMatch(socket);
             } catch (GameException e) {
                 //TODO: display error message
                 throw new RuntimeException(e);

@@ -36,6 +36,8 @@ public class GameModel {
         players = new Player[]{new Player(1), new Player(2)};
     }
     
+    public long sinceTurnStart;
+    
     public Piece lastMoved;
     public Point lastMovedPosition;
     public int lastMovedDirection;
@@ -82,6 +84,7 @@ public class GameModel {
             }
         }
         lastMoved = null;
+        sinceTurnStart = 0;
         switchCurrentAndOtherPlayers();
     }
 
@@ -245,6 +248,16 @@ public class GameModel {
         }
         return false;
     }
+    
+    public int numberOfPieces(Player player) {
+        int c = 0;
+        for (Piece p : pieces) {
+            if (p.owner.equals(player)) {
+                c++;
+            }
+        }
+        return c;
+    }
 
     public void applyAction(Action action) {
         System.out.println(action.type);
@@ -256,6 +269,7 @@ public class GameModel {
             pieces = map.createPieces(players);
             currentPlayerIndex = 0;
             lastMoved = null;
+            sinceTurnStart = 0L;
             minigame = null;
             gameState = GameState.PLAYING_BOARD;
             break;
@@ -345,9 +359,10 @@ public class GameModel {
         switch (gameState){
         case PLAYING_BOARD:
             sinceLastMoved += delta;
+            sinceTurnStart += delta;
             break;
         case PLAYING_MINIGAME:
-            if (minigame.sinceMoveTimeStart == 0){ // a temp fix for the minigame loading issue
+            if (minigame.sinceMoveTimeStart == 0){ //TODO: a temp fix for the minigame loading issue
                 minigame.sinceMoveTimeStart = 1;
             } else{
                 minigame.sinceMoveTimeStart += delta;
