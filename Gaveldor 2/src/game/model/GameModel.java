@@ -210,6 +210,70 @@ public class GameModel {
         // golden
         return returnMap;
     }
+    
+    public boolean isValidAttack(Piece unit, Point target){
+        return isValidAttack(unit, target, unit.getPosition());
+    }
+    public boolean isValidAttack(Piece unit, Point target, Point currentPoint){
+        return findValidAttacks(unit, currentPoint).contains(target);
+    }
+
+    /**
+     * Find valid attacks for given piece at current time
+     * @param unit
+     * @return
+     */
+    public Set<Point> findValidAttacks(Piece unit){
+        return findValidAttacks(unit, unit.getPosition());
+    }
+    
+    /**
+     * Find valid attacks for given piece at point p
+     * @param unit The unit in question
+     * @param p Point we're currently checking from
+     * @return
+     */
+    public Set<Point> findValidAttacks(Piece unit, Point p){
+        Set<Point> points = findValidAttacks(unit.defaultAttackRange(), unit, p);
+        
+        // First, remove any spots that contain units besides ourself
+        Set<Point> keep = new HashSet<Point>();
+        for(Point examiningPoint : points){
+            Piece unitAtPoint = getPieceByPosition(examiningPoint);
+            if(unitAtPoint != null && unitAtPoint.owner.equals(unit.owner) == false){
+                keep.add(examiningPoint);
+            }
+        }
+        
+        return keep;
+    }
+    
+    /**
+     * HELPER: Find valid attacks recursively for unit at point p with distance dist left
+     * @param dist The remaining distance to check
+     * @param unit The currently selected unit
+     * @param p The point we're recursing from
+     * @return
+     */
+    private Set<Point> findValidAttacks(int dist, Piece unit, Point p){
+        Set<Point> points = new HashSet<Point>();
+        points.add(p);
+        
+        // Check case where we don't need to recurse
+        if(dist <= 0){
+            return points;
+        }
+        
+        // Ok, now case of distance remaining
+        Point[] checkPoints = Piece.getPointsFromPoint(p, 1);
+        for(Point recursePoint : checkPoints){
+            if(isValidPosition(recursePoint) == false) continue; // Only scan valid spots
+
+            points.addAll(findValidAttacks(dist-1, unit, recursePoint));
+        }
+
+        return points;
+    }
 
     public Set<Piece> getPieces() {
         return pieces;
