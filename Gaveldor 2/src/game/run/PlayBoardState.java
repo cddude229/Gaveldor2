@@ -36,7 +36,7 @@ public class PlayBoardState extends PlayerControllerState {
     private GameContainer gameContainer;
     //private PlayerController stateGame;
     
-    private Button[] sidebarButtons;
+    private SidebarButton[] sidebarButtons1, sidebarButtons2;
     
     private boolean wasAnimatingMove = false;
 
@@ -53,14 +53,16 @@ public class PlayBoardState extends PlayerControllerState {
         
         private static final int WIDTH = 200, HEIGHT = 50;
         
-        private final int y;
+        private final int y; //, playerId;
         
-        public SidebarButton(int y, String text, ClickListener listener) throws SlickException{
+        public SidebarButton(int y, String text, ClickListener listener, int playerId) throws SlickException{
             super(
-                    Helpful.makeTestImage(WIDTH, HEIGHT, Color.blue, text),
+                    Helpful.makeTestImage(WIDTH, HEIGHT, (playerId == 1?Color.blue:new Color(1.0f, 0.5f, 0.0f)), text),
                     Helpful.makeTestImage(WIDTH, HEIGHT, Color.green, text),
                     null);
             this.y = y;
+            //this.playerId = playerId;
+            this.
             addListener(listener);
         }
 
@@ -78,62 +80,73 @@ public class PlayBoardState extends PlayerControllerState {
         faceableArrows = Resources.getImage("/assets/graphics/ui/arrows.png").getScaledCopy(.5f);
         attackableOverlay = Resources.getImage("/assets/graphics/ui/attackable.png").getScaledCopy(.5f);
         
-
-        sidebarButtons = new Button[]{
-                new SidebarButton(250, "End Turn", new ClickListener(){
-                    @Override
-                    public void onClick(Button clicked, float mx, float my) {
-                        if (pc.selectedPiece == null) {
-                            endTurn(pc);
-                        }
-                    }
-                    @Override
-                    public void onRightClick(Button clicked, float mx, float my) {
-                    }
-                    @Override
-                    public void onDoubleClick(Button clicked, float mx, float my) {
-                    }
-                }),
-                new SidebarButton(250, "Cancel", new ClickListener(){
-                    @Override
-                    public void onClick(Button clicked, float mx, float my) {
-                        if (pc.selectedPiece != null){
-                            clearSelection(pc);
-                        }
-                    }
-                    @Override
-                    public void onRightClick(Button clicked, float mx, float my) {
-                    }
-                    @Override
-                    public void onDoubleClick(Button clicked, float mx, float my) {
-                    }
-                }),
-                new SidebarButton(550, "Mute", new ClickListener(){
-                    @Override
-                    public void onClick(Button clicked, float mx, float my) {
-                        mute();  
-                    }
-                    @Override
-                    public void onRightClick(Button clicked, float mx, float my) {
-                    }
-                    @Override
-                    public void onDoubleClick(Button clicked, float mx, float my) {
-                    }
-                }),
-                new SidebarButton(650, "Exit Game", new ClickListener(){
-                    @Override
-                    public void onClick(Button clicked, float mx, float my) {
-                         gameContainer.exit();
-                    }
-                    @Override
-                    public void onRightClick(Button clicked, float mx, float my) {
-                    }
-                    @Override
-                    public void onDoubleClick(Button clicked, float mx, float my) {
-                    }
-                }),
+        ClickListener endTurnListener = new ClickListener(){
+            @Override
+            public void onClick(Button clicked, float mx, float my) {
+                if (pc.selectedPiece == null) {
+                    endTurn(pc);
+                }
+            }
+            @Override
+            public void onRightClick(Button clicked, float mx, float my) {
+            }
+            @Override
+            public void onDoubleClick(Button clicked, float mx, float my) {
+            }
+        },
+        cancelListener = new ClickListener(){
+            @Override
+            public void onClick(Button clicked, float mx, float my) {
+                if (pc.selectedPiece != null){
+                    clearSelection(pc);
+                }
+            }
+            @Override
+            public void onRightClick(Button clicked, float mx, float my) {
+            }
+            @Override
+            public void onDoubleClick(Button clicked, float mx, float my) {
+            }
+        },
+        muteListener = new ClickListener(){
+            @Override
+            public void onClick(Button clicked, float mx, float my) {
+                mute();  
+            }
+            @Override
+            public void onRightClick(Button clicked, float mx, float my) {
+            }
+            @Override
+            public void onDoubleClick(Button clicked, float mx, float my) {
+            }
+        },
+        exitGameListener = new ClickListener(){
+            @Override
+            public void onClick(Button clicked, float mx, float my) {
+                 gameContainer.exit();
+            }
+            @Override
+            public void onRightClick(Button clicked, float mx, float my) {
+            }
+            @Override
+            public void onDoubleClick(Button clicked, float mx, float my) {
+            }
         };
-        for (Button b : sidebarButtons){
+        
+
+        sidebarButtons1 = new SidebarButton[]{
+                new SidebarButton(250, "End Turn", endTurnListener, 1),
+                new SidebarButton(250, "Cancel", cancelListener, 1),
+                new SidebarButton(550, "Mute", muteListener, 1),
+                new SidebarButton(650, "Exit Game", exitGameListener, 1),
+        };
+        sidebarButtons2 = new SidebarButton[]{
+                new SidebarButton(250, "End Turn", endTurnListener, 2),
+                new SidebarButton(250, "Cancel", cancelListener, 2),
+                new SidebarButton(550, "Mute", muteListener, 2),
+                new SidebarButton(650, "Exit Game", exitGameListener, 2),
+        };
+        for (Button b : sidebarButtons1){
             stickyListener.add(b);
         }
     }
@@ -193,17 +206,18 @@ public class PlayBoardState extends PlayerControllerState {
         
         g.drawString(Constants.BASIC_TUTORIAL, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 300);
         
+        Button[] sidebarButtons = (Constants.PLAYER2_ORANGE_SIDEBAR && pc.player.id == 2?sidebarButtons2:sidebarButtons1);
         for (Button b : sidebarButtons){
             //End Turn button
             if (b.equals(sidebarButtons[0])) {
                 if (pc.selectedPiece == null) {
-                    b.render(container,g);
+                    b.render(container, g);
                 }
             }
             //Cancel button
             else if (b.equals(sidebarButtons[1])) {
                 if (pc.selectedPiece != null) {
-                    b.render(container,g);
+                    b.render(container, g);
                 }
             }
             else {
@@ -213,7 +227,7 @@ public class PlayBoardState extends PlayerControllerState {
     }
     
     public void updateLocalSidebar(GameContainer container, LocalPlayerController pc, int delta){
-        for (Button b : sidebarButtons){
+        for (Button b : sidebarButtons1){
             b.update(container, delta);
         }
     }
