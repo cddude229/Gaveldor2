@@ -255,10 +255,12 @@ public class PlayBoardState extends PlayerControllerState {
                             Set<Point> moves = pc.model.findValidMoves(pc.selectedPiece).keySet();
                             for (Point p : moves) {
                                 pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
-                                for (int dir = 0; dir < 6; dir = dir + 1) {
-                                    for (Point loc : pc.selectedPiece.getValidAttacks(p, dir)) {
-                                        if (pc.model.isValidPosition(loc) && moves.contains(loc) == false) {
-                                            pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
+                                if(Constants.SHOW_ATTACK_WHILE_MOVING){
+                                    for (int dir = 0; dir < 6; dir = dir + 1) {
+                                        for (Point loc : pc.selectedPiece.getValidAttacks(p, dir)) {
+                                            if (pc.model.isValidPosition(loc) && moves.contains(loc) == false) {
+                                                pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
+                                            }
                                         }
                                     }
                                 }
