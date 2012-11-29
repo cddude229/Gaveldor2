@@ -268,7 +268,8 @@ public class PlayBoardState extends PlayerControllerState {
                             // TODO: add full tile overlays
                         } else{
                             for (Point loc : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
-                                if (pc.model.isValidPosition(loc)) {
+                                Piece atPoint = pc.model.getPieceByPosition(loc);
+                                if (pc.model.isValidPosition(loc) && atPoint != null && !atPoint.owner.equals(pc.player)) {
                                     pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
                                 }
                             }
