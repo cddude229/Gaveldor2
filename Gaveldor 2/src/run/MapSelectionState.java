@@ -83,6 +83,10 @@ public class MapSelectionState extends BasicGameState {
         mapBtn.render(container, g);
         mapBox.render(container, g);
         g.drawString(instructionTxt, mapBox.getX(), mapBox.getY() -50);
+        ArrayList<String> mapNames = getMapNames();
+        for( int i=0; i<mapNames.size(); i++ ){
+            g.drawString(mapNames.get(i), mapBox.getX(), mapBox.getY() - 125 - 25*i);
+        }
     }
 
     @Override
@@ -233,7 +237,7 @@ public class MapSelectionState extends BasicGameState {
        return getMapNames().contains(selection);
     }
     
-    public ArrayList<String> getMapNames() throws IOException {
+    public ArrayList<String> getMapNames(){
         ArrayList<String> validMaps = new ArrayList<String>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(Resources.getResourceAsStream("/assets/maps/AllMaps.index")));
         try {
@@ -241,8 +245,16 @@ public class MapSelectionState extends BasicGameState {
             while(((rowLine = reader.readLine()) != null)){
                 validMaps.add(rowLine);
             }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         } finally {
-            reader.close();
+            try {
+                reader.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
         
         return validMaps;
