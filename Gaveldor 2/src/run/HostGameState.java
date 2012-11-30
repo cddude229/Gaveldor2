@@ -122,9 +122,13 @@ public class HostGameState extends BasicGameState {
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         backBtn.update(container, delta);
+        if(MapSelectionState.map.equals("/assets/maps/")){
+            MapSelectionState.match = MapSelectionState.MatchType.HOST;
+            game.enterState(MapSelectionState.STATE_ID);
+        }
         if (socket != null && socket.isConnected()){
             try {
-                ((Game)game).startHostRemoteMatch("/assets/maps/basic", socket);
+                ((Game)game).startHostRemoteMatch(MapSelectionState.map, socket);
             } catch (GameException e) {
                 //TODO: display error message
                 throw new RuntimeException(e);

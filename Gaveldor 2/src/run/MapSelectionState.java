@@ -30,7 +30,7 @@ public class MapSelectionState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
     
-    private static String map = "/assets/maps/";
+    public static String map = "/assets/maps/";
     
     public static MatchType match;
     public static enum MatchType {
@@ -175,20 +175,28 @@ public class MapSelectionState extends BasicGameState {
         mapBtn.addListener(new ClickListener(){
             public void onClick(Button clicked, float mx, float my) {
                 String entry = mapBox.getText();
-                System.out.println("clicked MAP");
-                System.out.println(entry);
+                //System.out.println("clicked MAP");
+                //System.out.println(entry);
                 mapBox.setText("Choose a Map");
+               // map += entry;
+                
                 try {
                     if(isValidMap(entry)){
                         map += entry;
-                        
-                        try {
-                            ((Game) game).startLocalMatch("/assets/maps/"+entry);
-                        } catch (GameException e) {
-                            e.printStackTrace();
-                            
+                        switch(match){
+                        case LOCAL :
+                            try {
+                                ((Game) game).startLocalMatch(map);
+                                game.enterState(PlayGameState.STATE_ID);
+                            } catch (GameException e) {
+                                e.printStackTrace(); 
+                            }
+                            break;
+                        case HOST :
+                            game.enterState(HostGameState.STATE_ID);
+                            break;
                         }
-                        game.enterState(PlayGameState.STATE_ID);
+                        
                     }
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
