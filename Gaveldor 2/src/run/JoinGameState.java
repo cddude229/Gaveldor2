@@ -48,6 +48,7 @@ public class JoinGameState extends BasicGameState {
         instructionTxt = "Please enter the Host IP.";
         listener = new StickyListener();
         buttons = this.buildButtons(container, game);
+        ipBox.setAcceptingInput(false);
         for (SimpleButton button : buttons) {
             listener.add(button);
         }
@@ -57,11 +58,13 @@ public class JoinGameState extends BasicGameState {
     @Override
     public void enter(GameContainer container, StateBasedGame game) {
         container.getInput().addListener(listener);
+        ipBox.setAcceptingInput(true);
     }
     
     @Override
     public void leave(GameContainer container, StateBasedGame game){
         container.getInput().removeListener(listener);
+        ipBox.setAcceptingInput(false);
         try {
             if (socket != null){
                 socket.close();
@@ -69,7 +72,7 @@ public class JoinGameState extends BasicGameState {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }        
     }
 
     @Override

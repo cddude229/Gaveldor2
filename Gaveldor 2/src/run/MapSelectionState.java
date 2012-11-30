@@ -57,20 +57,24 @@ public class MapSelectionState extends BasicGameState {
         instructionTxt = "Please enter map name.";
         listener = new StickyListener();
         buttons = this.buildButtons(container, game);
+        mapBox.setAcceptingInput(false);
         for (SimpleButton button : buttons) {
             listener.add(button);
         }
+        
         
     }
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) {
         container.getInput().addListener(listener);
+        mapBox.setAcceptingInput(true);
     }
     
     @Override
     public void leave(GameContainer container, StateBasedGame game){
         container.getInput().removeListener(listener);
+        mapBox.setAcceptingInput(false);
     }
 
     @Override
@@ -130,8 +134,12 @@ public class MapSelectionState extends BasicGameState {
         mapBox = new TextField(container,defaultFont,locations.get(2)[0],locations.get(2)[1],bWidth,bHeight);
         mapBox.setBackgroundColor(Color.white);
         mapBox.setTextColor(Color.black);
-        mapBox.setText("basic");
-        
+        // mapBox.setText("basic");
+        /*
+        mapBox.setAcceptingInput(true);
+        mapBox.setCursorVisible(true);
+        mapBox.setMaxLength(25);
+        */
         // add buttons
         backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
         mapBtn = new SimpleButton(mapRect, images.get(2), images.get(3), s);
@@ -222,6 +230,10 @@ public class MapSelectionState extends BasicGameState {
     }
 
     public boolean isValidMap(String selection) throws IOException{
+       return getMapNames().contains(selection);
+    }
+    
+    public ArrayList<String> getMapNames() throws IOException {
         ArrayList<String> validMaps = new ArrayList<String>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(Resources.getResourceAsStream("/assets/maps/AllMaps.index")));
         try {
@@ -233,6 +245,6 @@ public class MapSelectionState extends BasicGameState {
             reader.close();
         }
         
-        return validMaps.contains(selection);
+        return validMaps;
     }
 }
