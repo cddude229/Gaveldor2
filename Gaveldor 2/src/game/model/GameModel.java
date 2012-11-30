@@ -3,7 +3,6 @@ package game.model;
 import game.model.Action.BoardMoveAction;
 import game.model.Action.ForfeitAction;
 import game.model.Action.GameStartAction;
-import game.model.Action.MinigameMoveAction;
 import game.model.Action.TurnEndAction;
 import game.model.Piece.TurnState;
 
@@ -368,46 +367,51 @@ public class GameModel {
             }
             break;
         case MINIGAME_START:
-            assert minigame != null;
-            gameState = GameState.PLAYING_MINIGAME;
-            break;
-        case MINIGAME_MOVE:
-            MinigameMoveAction mmmPacket = (MinigameMoveAction)action;
-            Player player = mmmPacket.playerID == players[0].id ? players[0] : players[1];
-            if (player.equals(getCurrentPlayer())){
-                assert player.equals(minigame.attackingPiece.owner);
-                assert minigame.attackingMove == null;
-                minigame.attackingMove = mmmPacket.move;
-            } else{
-                assert player.equals(minigame.defendingPiece.owner);
-                assert minigame.defendingMove == null;
-                minigame.defendingMove = mmmPacket.move;
+            minigame.attackingPiece.attack(minigame.defendingPiece);
+            if (!minigame.defendingPiece.isAlive()) {
+                pieces.remove(minigame.defendingPiece);
             }
-            break;
-        case MINIGAME_END:
-            assert minigame.hasBothMoves();
-            boolean again = false;
-            if (minigame.isSuccessfulAttack()){
-                minigame.attackingPiece.attack(minigame.defendingPiece);
-                if (!minigame.defendingPiece.isAlive()) {
-                    pieces.remove(minigame.defendingPiece);
-                } else if (minigame.attackingMove == minigame.bonusMove){
-                    again = true;
-                }
-            }
-            if (again){
-                minigame = new MinigameModel(
-                        minigame.attackingPiece, minigame.defendingPiece, false, MinigameModel.Move.NONE);
-            } else{
-                minigame.attackingPiece.turnState = TurnState.DONE;
-                gameState = GameState.PLAYING_BOARD;
-                if (!hasAnyPieces(minigame.defendingPiece.owner)) {
-                    setCurrentPlayer(minigame.defendingPiece.owner);
-                    setCurrentPlayer(getOtherPlayer());
-                    gameState = GameState.WON;
-                }
-                minigame = null;
-            }
+            minigame = null;
+//            assert minigame != null;
+//            gameState = GameState.PLAYING_MINIGAME;
+//            break;
+//        case MINIGAME_MOVE:
+//            MinigameMoveAction mmmPacket = (MinigameMoveAction)action;
+//            Player player = mmmPacket.playerID == players[0].id ? players[0] : players[1];
+//            if (player.equals(getCurrentPlayer())){
+//                assert player.equals(minigame.attackingPiece.owner);
+//                assert minigame.attackingMove == null;
+//                minigame.attackingMove = mmmPacket.move;
+//            } else{
+//                assert player.equals(minigame.defendingPiece.owner);
+//                assert minigame.defendingMove == null;
+//                minigame.defendingMove = mmmPacket.move;
+//            }
+//            break;
+//        case MINIGAME_END:
+//            assert minigame.hasBothMoves();
+//            boolean again = false;
+//            if (minigame.isSuccessfulAttack()){
+//                minigame.attackingPiece.attack(minigame.defendingPiece);
+//                if (!minigame.defendingPiece.isAlive()) {
+//                    pieces.remove(minigame.defendingPiece);
+//                } else if (minigame.attackingMove == minigame.bonusMove){
+//                    again = true;
+//                }
+//            }
+//            if (again){
+//                minigame = new MinigameModel(
+//                        minigame.attackingPiece, minigame.defendingPiece, false, MinigameModel.Move.NONE);
+//            } else{
+//                minigame.attackingPiece.turnState = TurnState.DONE;
+//                gameState = GameState.PLAYING_BOARD;
+//                if (!hasAnyPieces(minigame.defendingPiece.owner)) {
+//                    setCurrentPlayer(minigame.defendingPiece.owner);
+//                    setCurrentPlayer(getOtherPlayer());
+//                    gameState = GameState.WON;
+//                }
+//                minigame = null;
+//            }
             break;
         case TURN_END:
             TurnEndAction turnEndPacket = (TurnEndAction) action;
