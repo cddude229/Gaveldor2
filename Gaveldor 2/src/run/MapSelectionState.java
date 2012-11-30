@@ -183,7 +183,7 @@ public class MapSelectionState extends BasicGameState {
                         map += entry;
                         
                         try {
-                            ((Game) game).startLocalMatch("/assets/maps/basic");
+                            ((Game) game).startLocalMatch("/assets/maps/"+entry);
                         } catch (GameException e) {
                             e.printStackTrace();
                             
