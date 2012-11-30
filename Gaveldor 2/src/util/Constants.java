@@ -119,6 +119,6 @@ public class Constants {
     
     public static final boolean SHOW_ATTACK_WHILE_MOVING = true;
     
-    public static final boolean TURN_TIME_LIMIT_ON = true;
+    public static final boolean TURN_TIME_LIMIT_ON = false;
     public static final long TURN_TIME_LIMIT_PER_PIECE = 10000L;
 }

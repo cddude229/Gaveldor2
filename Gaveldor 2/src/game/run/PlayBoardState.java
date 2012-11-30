@@ -324,7 +324,6 @@ public class PlayBoardState extends PlayerControllerState {
         
         if (pc.isCurrentPC()){
             if (pc.isAnimatingMove()){
-                //TODO
             } else if (Constants.TURN_TIME_LIMIT_ON && pc.model.sinceTurnStart >= timeLimit(pc)){
                 endTurn(pc);
             } else{
@@ -339,12 +338,12 @@ public class PlayBoardState extends PlayerControllerState {
                                 + pc.displayY);
                         Piece piece = pc.model.getPieceByPosition(position);
                         
-                        if (piece != null && (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner) ||
-                                pc.selectedPiece.turnState == Piece.TurnState.MOVING && pc.selectedPieceMove == null)){
+                        if (piece != null && (!pc.player.equals(piece.owner) || piece.turnState != Piece.TurnState.DONE) && (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner) ||
+                                !pc.selectedPiece.equals(piece) && pc.selectedPiece.turnState == Piece.TurnState.MOVING && pc.selectedPieceMove == null)){
                             clearSelection(pc);
                             pc.selectedPiece = piece;
                             pc.setDisplayCenter(container, piece.getPosition().x, piece.getPosition().y);
-                        } else {
+                        } else if (pc.selectedPiece != null && pc.player.equals(pc.selectedPiece.owner)){
                             switch (pc.selectedPiece.turnState) {
                             case MOVING:
                                 if (pc.selectedPieceMove == null){

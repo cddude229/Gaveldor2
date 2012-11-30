@@ -121,7 +121,7 @@ public class MatchMakingState extends BasicGameState {
                 try {
                     ((Game)game).startHostRemoteMatch(mapName, socket);
                 } catch (GameException e) {
-                    // TODO
+                    // TODO: display error
                     throw new RuntimeException(e);
                 }
                 socket = null;
