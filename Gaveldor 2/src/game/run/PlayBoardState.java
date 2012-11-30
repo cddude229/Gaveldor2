@@ -7,6 +7,7 @@ import game.model.Piece.TurnState;
 import game.model.Point;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.newdawn.slick.Color;
@@ -256,15 +257,19 @@ public class PlayBoardState extends PlayerControllerState {
                         tutorialString = Constants.MOVING;
                         if (pc.selectedPieceMove == null){
                             Set<Point> moves = pc.model.findValidMoves(pc.selectedPiece).keySet();
+                            Set<Point> attacks = new HashSet<Point>();
                             for (Point p : moves) {
                                 pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
                                 if(Constants.SHOW_ATTACK_WHILE_MOVING){
                                     for (Point loc : pc.model.findValidAttacks(pc.selectedPiece, p)) {
-                                        if (moves.contains(loc) == false) {
-                                            pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
+                                        if (!moves.contains(loc) && !attacks.contains(loc)) {
+                                            attacks.add(loc);
                                         }
                                     }
                                 }
+                            }
+                            for (Point p : attacks){
+                                pc.renderAtPosition(attackableOverlay, g, p.x, p.y, 0f, 0f);
                             }
                         } else if (pc.selectedPieceFace == -1){
                             pc.renderAtPosition(faceableArrows, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0.5f, 0.5f);
