@@ -351,7 +351,7 @@ public class PlayBoardState extends PlayerControllerState {
                                     if (pc.model.findValidMoves(pc.selectedPiece).containsKey(position)) {
                                         // findValidMoves checks terrain, piece, and position validity
                                         pc.selectedPieceMove = position;
-                                        tutorialString = Constants.FACING;
+                                        //tutorialString = Constants.FACING;
                                         pc.setDisplayCenter(container, position.x, position.y);
                                     }
                                 } else if (pc.selectedPieceFace == -1){

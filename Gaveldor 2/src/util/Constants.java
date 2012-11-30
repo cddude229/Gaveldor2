@@ -94,15 +94,22 @@ public class Constants {
     		"Click the piece\n\n" +
     		"Hit END TURN once\n" +
     		"you've made all moves";
-    public static final String NONE_SELECTED =  "Click piece to select"+
+    public static final String NONE_SELECTED =  "Click piece to select\n\n"+
                                                 "Hit END TURN once\n" +
                                                 "you've made all moves";
+    public static final String MOVING = "Click to move\n" +
+                                        "Click to face\n" +
+                                        "Click where to attack\n" +
+                                        "     or\n" +
+                                        "Click the piece\n\n";
+    /*
     public static final String MOVING = "Click spot to\n move to";
     public static final String FACING = "Click space\n to face";
     public static final String ATTACK = "Click where to attack\n" +
                                         "     or\n" +
                                         "Click the piece\n";
     public static final String DONE = "Hit END TURN";
+    */
     
     
     // FEATURE FLAGS
