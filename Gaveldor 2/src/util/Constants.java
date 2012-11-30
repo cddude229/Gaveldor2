@@ -77,6 +77,7 @@ public class Constants {
             PLAYER_2_CONTROLS = new ControlScheme("J", "K", "L");
     
     // PlayBoardState
+    // Tutorial strings
     public static final String BASIC_TUTORIAL = 
             "Click to select piece\n" +
     		"Click to move\n" +
@@ -86,6 +87,15 @@ public class Constants {
     		"Click the piece\n\n" +
     		"Hit END TURN once\n" +
     		"you've made all moves";
+    public static final String NONE_SELECTED =  "Click piece to select"+
+                                                "Hit END TURN once\n" +
+                                                "you've made all moves";
+    public static final String MOVING = "Click spot to\n move to";
+    public static final String FACING = "Click space\n to face";
+    public static final String ATTACK = "Click where to attack\n" +
+                                        "     or\n" +
+                                        "Click the piece\n";
+    public static final String DONE = "Hit END TURN";
     
     
     // FEATURE FLAGS
