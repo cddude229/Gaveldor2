@@ -36,6 +36,8 @@ public class PlayBoardState extends PlayerControllerState {
     private GameContainer gameContainer;
     //private PlayerController stateGame;
     
+    public static String tutorialString = Constants.NONE_SELECTED;
+    
     private SidebarButton[] sidebarButtons1, sidebarButtons2;
     
     private boolean wasAnimatingMove = false;
@@ -204,7 +206,7 @@ public class PlayBoardState extends PlayerControllerState {
         g.drawString(pc.player.toString(), container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 200);
         renderMinimap(container, g, pc, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0);
         
-        g.drawString(Constants.BASIC_TUTORIAL, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 300);
+        g.drawString(tutorialString, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 300);
         
         Button[] sidebarButtons = (Constants.PLAYER2_ORANGE_SIDEBAR && pc.player.id == 2?sidebarButtons2:sidebarButtons1);
         for (Button b : sidebarButtons){
@@ -251,6 +253,7 @@ public class PlayBoardState extends PlayerControllerState {
                 if (pc.player.equals(pc.selectedPiece.owner)){
                     switch (pc.selectedPiece.turnState) {
                     case MOVING:
+                        tutorialString = Constants.MOVING;
                         if (pc.selectedPieceMove == null){
                             Set<Point> moves = pc.model.findValidMoves(pc.selectedPiece).keySet();
                             for (Point p : moves) {
@@ -279,6 +282,7 @@ public class PlayBoardState extends PlayerControllerState {
                         break;
                     case DONE:
                         // do nothing
+                        tutorialString = Constants.NONE_SELECTED;
                         break;
                     default:
                         throw new RuntimeException();
@@ -347,6 +351,7 @@ public class PlayBoardState extends PlayerControllerState {
                                     if (pc.model.findValidMoves(pc.selectedPiece).containsKey(position)) {
                                         // findValidMoves checks terrain, piece, and position validity
                                         pc.selectedPieceMove = position;
+                                        tutorialString = Constants.FACING;
                                         pc.setDisplayCenter(container, position.x, position.y);
                                     }
                                 } else if (pc.selectedPieceFace == -1){
@@ -416,6 +421,7 @@ public class PlayBoardState extends PlayerControllerState {
         pc.selectedPiece = null;
         pc.selectedPieceMove = null;
         pc.selectedPieceFace = -1;
+        tutorialString = Constants.NONE_SELECTED;
     }
 
     public static Point getTileCoords(int pixelX, int pixelY){
