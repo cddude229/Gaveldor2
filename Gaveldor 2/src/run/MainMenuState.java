@@ -34,8 +34,9 @@ public class MainMenuState extends BasicGameState {
      * Builds buttons and adds listeners to game. This isn't fully functional.
      */
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        Music music = new Music("assets/audio/music/DarkKnight.ogg");
+        Music music = new Music("assets/audio/music/TheHaunting.ogg");
         music.loop();
+        music.setVolume(util.Constants.MENU_VOLUME);
         this.container = container;
         this.game = game;
         listener = new StickyListener();
