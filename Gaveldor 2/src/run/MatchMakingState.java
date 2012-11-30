@@ -1,9 +1,11 @@
 package run;
 
 import game.run.GameException;
+import game.run.MatchmakingNetworkingController;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import util.Constants;
+
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
 import com.aem.sticky.button.SimpleButton;
@@ -31,8 +35,11 @@ public class MatchMakingState extends BasicGameState {
     private static final int bWidth = 200;
     private static final int bHeight = 50;
     private String hostIP = "";
+    public String mapName = "";
+    public boolean host = false;
+    public boolean setupDone = false;
     
-    private Socket serverSocket = null;
+    
     private Socket socket = null;
     
     @Override
@@ -70,7 +77,20 @@ public class MatchMakingState extends BasicGameState {
     @Override
     public void enter(GameContainer container, StateBasedGame game) {
         container.getInput().addListener(listener);
-        hostIP = getIPAddress();
+        socket = new Socket();
+        final MatchMakingState state = this;
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    socket.connect(new InetSocketAddress(Constants.MATCHMAKING_SERVER_IP, Constants.SERVER_PORT));
+                    new MatchmakingNetworkingController(socket,state).start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+        
         
     }
     
@@ -78,9 +98,6 @@ public class MatchMakingState extends BasicGameState {
     public void leave(GameContainer container, StateBasedGame game){
         container.getInput().removeListener(listener);
         try {
-            if (serverSocket != null){
-                serverSocket = null;
-            }
             if (socket != null){
                 socket.close();
                 socket = null;
@@ -93,22 +110,33 @@ public class MatchMakingState extends BasicGameState {
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         backBtn.render(container, g);
-        g.drawString("Waiting For Player to Connect", 300, 100);
-        g.drawString("Your External IP:" + hostIP, 300, 200);
+        g.drawString("Waiting For Another Player to Connect to MatchMaking", 300, 100);
     }
 
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-        if (socket != null && socket.isConnected()){
-            try {
-                ((Game)game).startHostRemoteMatch("/assets/maps/basic", socket);
-            } catch (GameException e) {
-                // TODO
-                throw new RuntimeException(e);
+        if (socket != null && setupDone){
+            if (host) {
+                try {
+                    ((Game)game).startHostRemoteMatch(mapName, socket);
+                } catch (GameException e) {
+                    // TODO
+                    throw new RuntimeException(e);
+                }
+                socket = null;
+                game.enterState(PlayGameState.STATE_ID);
             }
-            socket = null;
-            game.enterState(PlayGameState.STATE_ID);
+            else {
+                try {
+                    ((Game)game).startClientRemoteMatch(socket);
+                } catch (GameException e) {
+                    //TODO: display error message
+                    throw new RuntimeException(e);
+                }
+                socket = null;
+                game.enterState(PlayGameState.STATE_ID);
+            }
         }
     }
 

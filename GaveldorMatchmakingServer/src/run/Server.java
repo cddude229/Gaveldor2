@@ -1,13 +1,14 @@
 package run;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URISyntaxException;
+import game.model.ServerMessage.PlayerSelectMessage;
 
 public class Server extends Thread{
 	private static Server server;
-	private final static int PORT = 1400;
+	private final static int PORT = 1600;
 	private ServerSocket serverSocket;
 	private final static int max_connections = 500;
 	private Integer num_connections = 0;
@@ -52,7 +53,9 @@ public class Server extends Thread{
 	private void serve() throws IOException {
         while (true) {
             // Block until a client connects
+            System.out.println("Waiting for a connection");
             Socket firstSocket = serverSocket.accept();
+            System.out.println("Got a connection!");
             if (num_connections >= max_connections) {
             	// Too many connections. Close connection
             	firstSocket.close();
@@ -65,8 +68,12 @@ public class Server extends Thread{
             	secondSocket.close();
             	continue;
             }
+            String mapName = chooseMap();
+            sendStartMessage(firstSocket,mapName,true);
+            sendStartMessage(secondSocket,mapName,false);
+            
             RelayThread connection1 = new RelayThread(firstSocket,secondSocket,this);
-            RelayThread connection2 = new RelayThread(firstSocket,secondSocket,this);
+            RelayThread connection2 = new RelayThread(secondSocket,firstSocket,this);
             connection1.start();
             connection2.start();
             synchronized (num_connections) { 
@@ -75,7 +82,24 @@ public class Server extends Thread{
         }
     }
 	
-    public void connectionClosed() {
+    private void sendStartMessage(Socket socket, String mapName, boolean host) {
+    	PlayerSelectMessage output = new PlayerSelectMessage(host,mapName);
+        ObjectOutputStream out;
+		try {
+			out = new ObjectOutputStream(socket.getOutputStream());
+			out.flush();
+	        out.writeObject(output);
+	        out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private String chooseMap() {
+		return "/assets/maps/basic";
+	}
+
+	public void connectionClosed() {
 		synchronized (num_connections) { 
 			num_connections = num_connections - 2;
 		}
