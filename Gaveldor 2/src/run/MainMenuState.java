@@ -148,7 +148,7 @@ public class MainMenuState extends BasicGameState {
                         }
                         game.enterState(PlayGameState.STATE_ID);
                         */
-                        // MapSelectionState.match = MapSelectionState.MatchType.LOCAL;
+                        MapSelectionState.match = MapSelectionState.MatchType.LOCAL;
                         game.enterState(MapSelectionState.STATE_ID);
                     }
 
