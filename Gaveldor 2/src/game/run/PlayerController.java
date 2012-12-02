@@ -102,32 +102,26 @@ public abstract class PlayerController extends StateBasedGame{
         }
     }
     
-    public boolean isAnimatingMove(){
-        if (model.lastMoved == null){
-            return false;
-        }
-        List<Point> path = model.findValidMoves(model.lastMoved, model.lastMovedPosition, true).get(model.lastMoved.getPosition());
-        return model.lastMoved != null && model.sinceLastMoved < Constants.BOARD_MOVE_ANIMATE_TIME * (path.size() - 1);
+    public abstract boolean isAnimatingMove();
+    
+    public void renderPieceMoving(GameContainer container, Graphics g, Piece p, Point oldPos, Point newPos, long sinceStart){
+        List<Point> path = model.findValidMoves(p, oldPos, true).get(newPos);
+        int step = (int)(sinceStart / Constants.BOARD_MOVE_ANIMATE_TIME);
+        float frac = 1f * sinceStart / Constants.BOARD_MOVE_ANIMATE_TIME - step;
+        Point cur = path.get(step), next = path.get(step + 1);
+        int x = Math.round(getPixelX(cur.x, p.getSprite().getWidth(), .5f) * (1f - frac)
+                + getPixelX(next.x, p.getSprite().getWidth(), .5f) * frac);
+        int y = Math.round(getPixelY(cur.y, p.getSprite().getHeight(), 1f) * (1f - frac)
+                + getPixelY(next.y, p.getSprite().getHeight(), 1f) * frac);
+        Image sprite = p.getSprite(Piece.pointsToDirection(next, cur), 0);
+        setDisplayPoint(container,
+                x + (sprite.getWidth() - container.getWidth()) / 2,
+                y + (sprite.getHeight()- container.getHeight()) / 2);
+        g.drawImage(sprite, x - displayX, y - displayY);
     }
     
     public void renderPiece(GameContainer container, Graphics g, Piece p){
-        if (p.equals(model.lastMoved) && isAnimatingMove()){
-            List<Point> path = model.findValidMoves(model.lastMoved, model.lastMovedPosition, true).get(model.lastMoved.getPosition());
-            int step = (int)(model.sinceLastMoved / Constants.BOARD_MOVE_ANIMATE_TIME);
-            float frac = 1f * model.sinceLastMoved / Constants.BOARD_MOVE_ANIMATE_TIME - step;
-            Point cur = path.get(step), next = path.get(step + 1);
-            int x = Math.round(getPixelX(cur.x, p.getSprite().getWidth(), .5f) * (1f - frac)
-                    + getPixelX(next.x, p.getSprite().getWidth(), .5f) * frac);
-            int y = Math.round(getPixelY(cur.y, p.getSprite().getHeight(), 1f) * (1f - frac)
-                    + getPixelY(next.y, p.getSprite().getHeight(), 1f) * frac);
-            Image sprite = p.getSprite(Piece.pointsToDirection(next, cur), 0);
-            setDisplayPoint(container,
-                    x + (sprite.getWidth() - container.getWidth()) / 2,
-                    y + (sprite.getHeight()- container.getHeight()) / 2);
-            g.drawImage(sprite, x - displayX, y - displayY);
-        } else{
-            renderAtPosition(p.getSprite(), g, p.getPosition().x, p.getPosition().y, .5f, 1f);
-        }
+        renderAtPosition(p.getSprite(), g, p.getPosition().x, p.getPosition().y, .5f, 1f);
     }
 
     public void renderPieces(GameContainer container, Graphics g) {

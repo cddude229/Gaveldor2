@@ -7,6 +7,7 @@ import game.model.Player;
 import game.model.Point;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import org.newdawn.slick.GameContainer;
@@ -15,12 +16,15 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+import util.Constants;
+
 public class LocalPlayerController extends PlayerController {
 
     public final Queue<Action> actionQueue = new LinkedList<Action>();
 
     public Piece selectedPiece = null;
     public Point selectedPieceMove = null;
+    public long sinceSelectedPieceMove = 0L;
     public int selectedPieceFace = -1;
 
     public LocalPlayerController(Player player, GameModel model) {
@@ -28,20 +32,33 @@ public class LocalPlayerController extends PlayerController {
     }
 
     @Override
+    public boolean isAnimatingMove(){
+        if (selectedPieceMove == null){
+            return false;
+        }
+        List<Point> path = model.findValidMoves(selectedPiece, selectedPiece.getPosition(), true).get(selectedPieceMove);
+        return sinceSelectedPieceMove < Constants.BOARD_MOVE_ANIMATE_TIME * (path.size() - 1);
+    }
+    
+    @Override
     public void renderPiece(GameContainer container, Graphics g, Piece p) {
         if (p.equals(selectedPiece)){
-            Point pos = p.getPosition();
-            int dir = p.getDirection();
-            if (p.equals(selectedPiece)){
-                if (selectedPieceMove != null){
-                    pos = selectedPieceMove;
+            if (isAnimatingMove()){
+                renderPieceMoving(container, g, p, p.getPosition(), selectedPieceMove, sinceSelectedPieceMove);
+            } else{
+                Point pos = p.getPosition();
+                int dir = p.getDirection();
+                if (p.equals(selectedPiece)){
+                    if (selectedPieceMove != null){
+                        pos = selectedPieceMove;
+                    }
+                    if (selectedPieceFace != -1){
+                        dir = selectedPieceFace;
+                    }
                 }
-                if (selectedPieceFace != -1){
-                    dir = selectedPieceFace;
-                }
+                Image sprite = p.getSprite(dir, p.owner.equals(player) ? 2 : 0);
+                renderAtPosition(sprite, g, pos.x, pos.y, .5f, 1f);
             }
-            Image sprite = p.getSprite(dir, p.owner.equals(player) ? 2 : 0);
-            renderAtPosition(sprite, g, pos.x, pos.y, .5f, 1f);
         } else{
             super.renderPiece(container, g, p);
         }

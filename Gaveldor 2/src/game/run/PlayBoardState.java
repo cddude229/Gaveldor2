@@ -329,6 +329,7 @@ public class PlayBoardState extends PlayerControllerState {
         
         if (pc.isCurrentPC()){
             if (pc.isAnimatingMove()){
+                pc.sinceSelectedPieceMove += delta;
             } else if (Constants.TURN_TIME_LIMIT_ON && pc.model.sinceTurnStart >= timeLimit(pc)){
                 endTurn(pc);
             } else{
@@ -355,8 +356,10 @@ public class PlayBoardState extends PlayerControllerState {
                                     if (pc.model.findValidMoves(pc.selectedPiece).containsKey(position)) {
                                         // findValidMoves checks terrain, piece, and position validity
                                         pc.selectedPieceMove = position;
+                                        pc.sinceSelectedPieceMove = 0L;
+                                        wasAnimatingMove = true;
                                         //tutorialString = Constants.FACING;
-                                        pc.setDisplayCenter(container, position.x, position.y);
+//                                        pc.setDisplayCenter(container, position.x, position.y);
                                     }
                                 } else if (pc.selectedPieceFace == -1){
                                     int direction = Piece.pointsToDirection(position, pc.selectedPieceMove);
@@ -368,7 +371,6 @@ public class PlayBoardState extends PlayerControllerState {
                                             pc.actionQueue.add(new Action.BoardMoveAction(
                                                     pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
                                             clearSelection(pc);
-                                            wasAnimatingMove = true;
                                         }
                                     }
                                 } else{
@@ -379,7 +381,6 @@ public class PlayBoardState extends PlayerControllerState {
                                                 pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace,
                                                 position.equals(pc.selectedPieceMove) ? null: piece));
                                         clearSelection(pc);
-                                        wasAnimatingMove = true;
                                     }
                                 }
                                 break;
