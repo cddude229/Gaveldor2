@@ -141,14 +141,6 @@ public class MainMenuState extends BasicGameState {
                 buttons.get(i).addListener(new ClickListener() {
 
                     public void onClick(Button clicked, float mx, float my) {
-                        /*
-                        try {
-                            ((Game) game).startLocalMatch("/assets/maps/basic");
-                        } catch (GameException e) {
-                            e.printStackTrace();
-                        }
-                        game.enterState(PlayGameState.STATE_ID);
-                        */
                         MapSelectionState.match = MapSelectionState.MatchType.LOCAL;
                         game.enterState(MapSelectionState.STATE_ID);
                     }
@@ -256,6 +248,8 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 1:
+//                im = new Image("assets/graphics/buttons/mainmenu/host_match.png");
+//                clickPlay = new Image("assets/graphics/buttons/mainmenu/host_match_hover.png");
                 im = new Image(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
@@ -275,6 +269,8 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 2:
+//                im = new Image("assets/graphics/buttons/mainmenu/join_match.png");
+//                clickPlay = new Image("assets/graphics/buttons/mainmenu/join_match_hover.png");
                 im = new Image(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
@@ -294,6 +290,8 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 3:
+//                im = new Image("assets/graphics/buttons/mainmenu/matchmaking.png");
+//                clickPlay = new Image("assets/graphics/buttons/mainmenu/matchmaking_hover.png");
                 im = new Image(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
@@ -313,6 +311,8 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 4:
+//                im = new Image("assets/graphics/buttons/mainmenu/instructions.png");
+//                clickPlay = new Image("assets/graphics/buttons/mainmenu/instructions_hover.png");
                 im = new Image(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
@@ -332,6 +332,8 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 5:
+//                im = new Image("assets/graphics/buttons/mainmenu/credits.png");
+//                clickPlay = new Image("assets/graphics/buttons/mainmenu/credits_hover.png");
                 im = new Image(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
@@ -351,6 +353,8 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 6:
+//                im = new Image("assets/graphics/buttons/mainmenu/exit.png");
+//                clickPlay = new Image("assets/graphics/buttons/mainmenu/exit_hover.png");
                 im = new Image(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
