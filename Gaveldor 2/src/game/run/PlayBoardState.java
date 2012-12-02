@@ -363,31 +363,13 @@ public class PlayBoardState extends PlayerControllerState {
                                     if (direction != -1) {
                                         pc.selectedPieceFace = direction;
                                         
+                                        //TODO: replace with findValidAttack()
                                         if (Arrays.asList(pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)).isEmpty()){
                                             pc.actionQueue.add(new Action.BoardMoveAction(
                                                     pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
                                             clearSelection(pc);
                                             wasAnimatingMove = true;
                                         }
-                                        
-    //                                    //Code to end turn if no attack choices
-    //                                    boolean turnEnd = true;
-    //                                    Point[] attacks = pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace);
-    //                                    for (int i = 0 ; i < attacks.length; i = i + 1) {
-    //                                        if (pc.model.getPieceByPosition(attacks[i]) != null) {
-    //                                            if (!pc.model.getPieceByPosition(attacks[i]).owner.equals(pc.selectedPiece.owner)) {
-    //                                                turnEnd = false;
-    //                                            }
-    //                                        }
-    //                                    }
-    //                                    if (turnEnd) {
-    //                                        pc.selectedPiece.turnState = Piece.TurnState.DONE;
-    //                                        pc.actionQueue.add(new Action.BoardMoveAction(
-    //                                                pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace,
-    //                                                null));
-    //                                        clearSelection(pc);
-    //                                        wasAnimatingMove = true;
-    //                                    }
                                     }
                                 } else{
                                     if (pc.model.isValidPosition(position)

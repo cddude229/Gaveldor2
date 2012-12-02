@@ -152,6 +152,7 @@ public abstract class Piece {
      * @param p
      * @return
      */
+    @Deprecated
     final public boolean isValidAttack(Point p) {
         return isValidAttack(p, this.getPosition(), this.getDirection());
     }
@@ -167,9 +168,11 @@ public abstract class Piece {
     /**
      * Return list of valid locations that piece can face
      */
+    @Deprecated
     final public Point[] getValidFacings() {
         return getValidFacings(this.getPosition());
     }
+    @Deprecated
     final public Point[] getValidFacings(Point p){
         return Piece.getPointsFromPoint(p, 1);
     }
@@ -179,6 +182,7 @@ public abstract class Piece {
      * 
      * @return
      */
+    @Deprecated
     final public Point[] getValidAttacks(Point p, int dir) {
         Point[] ret;
         switch (defaultAttackRange()) {
@@ -210,7 +214,8 @@ public abstract class Piece {
             throw new RuntimeException("Not yet implemented for d >= 3");
         }
     }
-    
+
+    @Deprecated
     public final Point[] getValidAttacks(){
         return getValidAttacks(this.getPosition(), this.getDirection());
     }
