@@ -105,7 +105,7 @@ public class MainMenuState extends BasicGameState {
         int yLoc = 75;
         for (int i = 0; i < 7; i++) {
             locations.add(new int[] { this.getxLoc(container, bWidth), yLoc });
-            yLoc += 75;
+            yLoc += 100;
         }
         
         //create rectangles for buttons
@@ -240,49 +240,135 @@ public class MainMenuState extends BasicGameState {
      */
     public ArrayList<Image> makeImages() throws SlickException {
         ArrayList<Image> images = new ArrayList<Image>();
+        Image im;
+        Image clickPlay;
         for (int i = 0; i <7; i++){
-            Image im = new Image(bWidth, bHeight);
-            im.getGraphics().setColor(Color.blue);
-            im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-            im.getGraphics().setColor(Color.white);
-            Image clickPlay = new Image(bWidth, bHeight);
-            clickPlay.getGraphics().setColor(Color.green);
-            clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-            clickPlay.getGraphics().setColor(Color.white);
             switch (i){
+            
             case 0:
-                im.getGraphics().drawString("Play Local Match", 0, 0);
-                clickPlay.getGraphics().drawString("Play Local Match", 0, 0);
+                im = new Image("assets/graphics/buttons/mainmenu/local_match.png");
+                clickPlay = new Image("assets/graphics/buttons/mainmenu/local_match_hover.png");
+                
+                im.getGraphics().flush();
+                clickPlay.getGraphics().flush();
+                images.add(im);
+                images.add(clickPlay);
                 break;
+                
             case 1:
+                im = new Image(bWidth,bHeight);
+                im.getGraphics().setColor(Color.blue);
+                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                im.getGraphics().setColor(Color.white);
                 im.getGraphics().drawString("Host a Match", 0, 0);
+                
+                clickPlay = new Image(bWidth,bHeight);
+                clickPlay.getGraphics().setColor(Color.yellow);
+                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Host a Match", 0, 0);
+                
+                im.getGraphics().flush();
+                clickPlay.getGraphics().flush();
+                images.add(im);
+                images.add(clickPlay);
                 break;
+                
             case 2:
+                im = new Image(bWidth,bHeight);
+                im.getGraphics().setColor(Color.blue);
+                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                im.getGraphics().setColor(Color.white);
                 im.getGraphics().drawString("Join a Match", 0, 0);
+                
+                clickPlay = new Image(bWidth,bHeight);
+                clickPlay.getGraphics().setColor(Color.yellow);
+                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Join a Match", 0, 0);
+                
+                im.getGraphics().flush();
+                clickPlay.getGraphics().flush();
+                images.add(im);
+                images.add(clickPlay);
                 break;
+                
             case 3:
+                im = new Image(bWidth,bHeight);
+                im.getGraphics().setColor(Color.blue);
+                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                im.getGraphics().setColor(Color.white);
                 im.getGraphics().drawString("Matchmaking", 0, 0);
+                
+                clickPlay = new Image(bWidth,bHeight);
+                clickPlay.getGraphics().setColor(Color.yellow);
+                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Matchmaking", 0, 0);
+                
+                im.getGraphics().flush();
+                clickPlay.getGraphics().flush();
+                images.add(im);
+                images.add(clickPlay);
                 break;
+                
             case 4:
+                im = new Image(bWidth,bHeight);
+                im.getGraphics().setColor(Color.blue);
+                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                im.getGraphics().setColor(Color.white);
                 im.getGraphics().drawString("Instructions", 0, 0);
+                
+                clickPlay = new Image(bWidth,bHeight);
+                clickPlay.getGraphics().setColor(Color.yellow);
+                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Instructions", 0, 0);
+                
+                im.getGraphics().flush();
+                clickPlay.getGraphics().flush();
+                images.add(im);
+                images.add(clickPlay);
                 break;
+                
             case 5:
+                im = new Image(bWidth,bHeight);
+                im.getGraphics().setColor(Color.blue);
+                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                im.getGraphics().setColor(Color.white);
                 im.getGraphics().drawString("Credits", 0, 0);
+                
+                clickPlay = new Image(bWidth,bHeight);
+                clickPlay.getGraphics().setColor(Color.yellow);
+                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Credits", 0, 0);
+                
+                im.getGraphics().flush();
+                clickPlay.getGraphics().flush();
+                images.add(im);
+                images.add(clickPlay);
                 break;
+                
             case 6:
+                im = new Image(bWidth,bHeight);
+                im.getGraphics().setColor(Color.blue);
+                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                im.getGraphics().setColor(Color.white);
                 im.getGraphics().drawString("Exit", 0, 0);
+                
+                clickPlay = new Image(bWidth,bHeight);
+                clickPlay.getGraphics().setColor(Color.yellow);
+                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Exit", 0, 0);
+                
+                im.getGraphics().flush();
+                clickPlay.getGraphics().flush();
+                images.add(im);
+                images.add(clickPlay);
                 break;
             }
-            im.getGraphics().flush();
-            clickPlay.getGraphics().flush();
-            images.add(im);
-            images.add(clickPlay);
         }
         return images;
     }
