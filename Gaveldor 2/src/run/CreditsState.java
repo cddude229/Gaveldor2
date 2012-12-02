@@ -119,25 +119,29 @@ public class CreditsState extends BasicGameState {
     
     public ArrayList<Image> makeImages() throws SlickException {
         ArrayList<Image> images = new ArrayList<Image>();
+        Image im;
+        Image clickPlay;
         for (int i = 0; i <6; i++){
-            Image im = new Image(bWidth, bHeight);
-            im.getGraphics().setColor(Color.blue);
-            im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-            im.getGraphics().setColor(Color.white);
-            Image clickPlay = new Image(bWidth, bHeight);
-            clickPlay.getGraphics().setColor(Color.green);
-            clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-            clickPlay.getGraphics().setColor(Color.white);
             switch (i){
             case 0:
+//              im = new Image("assets/graphics/buttons/credits/credits_back.png");
+//              clickPlay = new Image("assets/graphics/buttons/credits/credits_back_hover.png");
+                im = new Image(bWidth, bHeight);
+                im.getGraphics().setColor(Color.blue);
+                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                im.getGraphics().setColor(Color.white);
+                clickPlay = new Image(bWidth, bHeight);
+                clickPlay.getGraphics().setColor(Color.yellow);
+                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                clickPlay.getGraphics().setColor(Color.black);
                 im.getGraphics().drawString("Back", 0, 0);
                 clickPlay.getGraphics().drawString("Back", 0, 0);
+                im.getGraphics().flush();
+                clickPlay.getGraphics().flush();
+                images.add(im);
+                images.add(clickPlay);
                 break;
             }
-            im.getGraphics().flush();
-            clickPlay.getGraphics().flush();
-            images.add(im);
-            images.add(clickPlay);
         }
         return images;
     }

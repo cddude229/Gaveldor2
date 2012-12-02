@@ -173,14 +173,16 @@ public class HostGameState extends BasicGameState {
     
     public ArrayList<Image> makeImages() throws SlickException {
         ArrayList<Image> images = new ArrayList<Image>();
+//      Image im = new Image("assets/graphics/buttons/hostmatch/host_match_back.png");
+//      Image clickPlay = new Image("assets/graphics/buttons/hostmatch/host_match_back_hover.png");
         Image im = new Image(bWidth, bHeight);
         im.getGraphics().setColor(Color.blue);
         im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
         im.getGraphics().setColor(Color.white);
         Image clickPlay = new Image(bWidth, bHeight);
-        clickPlay.getGraphics().setColor(Color.green);
+        clickPlay.getGraphics().setColor(Color.yellow);
         clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-        clickPlay.getGraphics().setColor(Color.white);
+        clickPlay.getGraphics().setColor(Color.black);
         im.getGraphics().drawString("Back", 0, 0);
         clickPlay.getGraphics().drawString("Back", 0, 0);
         im.getGraphics().flush();
