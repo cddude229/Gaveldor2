@@ -6,7 +6,6 @@ import game.model.Piece;
 import game.model.Piece.TurnState;
 import game.model.Point;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -275,7 +274,7 @@ public class PlayBoardState extends PlayerControllerState {
                             pc.renderAtPosition(faceableArrows, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0.5f, 0.5f);
                             // TODO: add full tile overlays
                         } else{
-                            for (Point loc : pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)) {
+                            for (Point loc : pc.model.findValidAttacks(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace)) {
                                 Piece atPoint = pc.model.getPieceByPosition(loc);
                                 if (pc.model.isValidPosition(loc) && atPoint != null && !atPoint.owner.equals(pc.player)) {
                                     pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
@@ -296,11 +295,9 @@ public class PlayBoardState extends PlayerControllerState {
                     Set<Point> moves = pc.model.findValidMoves(pc.selectedPiece).keySet();
                     for (Point p : moves) {
                         pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
-                        for (int dir = 0; dir < 6; dir = dir + 1) {
-                            for (Point loc : pc.selectedPiece.getValidAttacks(p, dir)) {
-                                if (pc.model.isValidPosition(loc) && moves.contains(loc) == false) {
-                                    pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
-                                }
+                        for (Point loc : pc.model.findValidAttacks(pc.selectedPiece, p)) {
+                            if (pc.model.isValidPosition(loc) && moves.contains(loc) == false) {
+                                pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
                             }
                         }
                     }
@@ -367,7 +364,8 @@ public class PlayBoardState extends PlayerControllerState {
                                         pc.selectedPieceFace = direction;
                                         
                                         //TODO: replace with findValidAttack()
-                                        if (Arrays.asList(pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)).isEmpty()){
+                                        if (pc.model.findValidAttacks(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace).isEmpty()){
+                                            System.out.println("No valid attacks");
                                             pc.actionQueue.add(new Action.BoardMoveAction(
                                                     pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace, null));
                                             clearSelection(pc);
@@ -375,7 +373,7 @@ public class PlayBoardState extends PlayerControllerState {
                                     }
                                 } else{
                                     if (pc.model.isValidPosition(position)
-                                            && (Arrays.asList(pc.selectedPiece.getValidAttacks(pc.selectedPieceMove, pc.selectedPieceFace)).contains(position) && piece != null
+                                            && (pc.model.findValidAttacks(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace).contains(position) && piece != null
                                             && !piece.owner.equals(pc.selectedPiece.owner)) || position.equals(pc.selectedPieceMove)) {
                                         pc.actionQueue.add(new Action.BoardMoveAction(
                                                 pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace,
