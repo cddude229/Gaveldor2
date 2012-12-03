@@ -121,4 +121,6 @@ public class Constants {
     
     public static final boolean TURN_TIME_LIMIT_ON = false;
     public static final long TURN_TIME_LIMIT_PER_PIECE = 10000L;
+    
+    public static final long ATTACK_DISPLAY_TIME = 2000L;
 }

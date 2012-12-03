@@ -9,6 +9,7 @@ import game.model.TerrainType;
 
 import java.util.List;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Game;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -122,6 +123,14 @@ public abstract class PlayerController extends StateBasedGame{
     
     public void renderPiece(GameContainer container, Graphics g, Piece p){
         renderAtPosition(p.getSprite(), g, p.getPosition().x, p.getPosition().y, .5f, 1f);
+        if (p.equals(model.lastMoved) && model.lastMovedAttackResult != null && model.sinceLastMoved < Constants.ATTACK_DISPLAY_TIME){
+            g.setColor(Color.white);
+            g.setFont(Constants.TEST_FONT);
+            String str = model.lastMovedAttackResult.name();
+            g.drawString(str,
+                    getPixelX(p.getPosition().x, g.getFont().getWidth(str), .5f) - displayX,
+                    getPixelY(p.getPosition().y, g.getFont().getLineHeight(), .5f) - displayY);
+        }
     }
 
     public void renderPieces(GameContainer container, Graphics g) {
