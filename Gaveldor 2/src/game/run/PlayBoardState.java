@@ -351,7 +351,6 @@ public class PlayBoardState extends PlayerControllerState {
                                         // findValidMoves checks terrain, piece, and position validity
                                         pc.selectedPieceMove = position;
                                         pc.sinceSelectedPieceMove = 0L;
-                                        wasAnimatingMove = true;
                                         //tutorialString = Constants.FACING;
 //                                        pc.setDisplayCenter(container, position.x, position.y);
                                     }

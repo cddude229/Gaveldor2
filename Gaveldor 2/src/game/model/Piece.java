@@ -159,7 +159,7 @@ public abstract class Piece {
      * 
      * @param opponent
      */
-    abstract public void attack(Piece opponent);
+    abstract public void attack(Piece opponent, GameModel.AttackResult result);
 
     /**
      * What's their default health?

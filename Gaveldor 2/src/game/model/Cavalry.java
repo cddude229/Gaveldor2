@@ -13,12 +13,22 @@ public class Cavalry extends Piece {
     }
 
     @Override
-    public void attack(Piece opponent) {
+    public void attack(Piece opponent, GameModel.AttackResult result) {
         int power = this.defaultAttackPower();
 
 //        if (this.isBackAttack(opponent))
 //            power *= 2;
-
+        switch (result){
+        case HIT:
+            break;
+        case CRIT:
+            power *= 2;
+            break;
+        case MISS:
+            power = 0;
+            break;
+        }
+        
         opponent.loseHealth(power);
 
     }

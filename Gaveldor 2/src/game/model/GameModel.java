@@ -27,6 +27,9 @@ public class GameModel {
             return ordinal();
         }
     }
+    
+
+    public static enum AttackResult{HIT, MISS, CRIT};
 
     public GameState gameState = GameState.SETTING_UP;
     
@@ -39,6 +42,7 @@ public class GameModel {
     public Piece lastMoved;
     public Point lastMovedPosition;
     public int lastMovedDirection;
+    public AttackResult lastMovedAttackResult;
     public long sinceLastMoved;
 
     public Player getPlayer1(){
@@ -408,19 +412,20 @@ public class GameModel {
             assert piece.turnState == TurnState.MOVING;
             lastMoved = piece;
             lastMovedPosition = piece.getPosition();
-            System.out.println(lastMovedPosition);
             lastMovedDirection = piece.getDirection();
             sinceLastMoved = 0;
             piece.setPosition(movePacket.destination);
             piece.setDirection(movePacket.direction);
             if (movePacket.targetID == -1){
                 piece.turnState = TurnState.DONE;
+                lastMovedAttackResult = null;
             } else{
                 Piece target = getPieceByID(movePacket.targetID);
                 assert target != null;
                 assert !piece.owner.equals(target.owner);
-                
-                piece.attack(target);
+                AttackResult attackResult = piece.isBackAttack(target) ? AttackResult.CRIT : movePacket.randomAttackResult;
+                lastMovedAttackResult = attackResult;
+                piece.attack(target, attackResult);
                 if (!target.isAlive()){
                     pieces.remove(target);
                 }

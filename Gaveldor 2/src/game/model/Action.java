@@ -57,6 +57,7 @@ public abstract class Action implements Serializable {
     	public final Point destination;
         public final int direction;
         public final int targetID;
+        public final GameModel.AttackResult randomAttackResult;
     	
     	public BoardMoveAction(Piece piece, Point destination, int direction, Piece target) {
             super(ActionType.BOARD_MOVE);
@@ -64,6 +65,18 @@ public abstract class Action implements Serializable {
     		this.destination = destination;
     		this.direction = direction;
     		targetID = target == null ? -1 : target.id;
+    		int rand = (int)(Math.random() * 6);
+    		switch (rand){
+    		case 0:
+    		    randomAttackResult = GameModel.AttackResult.MISS;
+    		    break;
+    		case 5:
+    		    randomAttackResult = GameModel.AttackResult.CRIT;
+    		    break;
+    		default:
+    		    randomAttackResult = GameModel.AttackResult.HIT;
+    		    break;
+    		}
     	}
     }
     
