@@ -31,25 +31,6 @@ public class RemotePlayerController extends PlayerController {
     }
 
     @Override
-    public Action retrieveAction(){
-        return networkingController.getAction();
-    }
-
-    @Override
-    public void propagateAction(Action action) {
-        networkingController.sendAction(action);
-    }
-
-    @Override
-    public void initStatesList(GameContainer container) throws SlickException {
-        addState(new SetupState(false));
-        addState(new PlayBoardState(false));
-        addState(new PlayMinigameState(false));
-        addState(new DisconnectedState(false));
-        addState(new WonState(false));
-    }
-
-    @Override
     public boolean isAnimatingMove(){
         if (model.lastMoved == null){
             return false;
@@ -65,5 +46,23 @@ public class RemotePlayerController extends PlayerController {
         } else{
             super.renderPiece(container, g, p);
         }
+    }
+
+    @Override
+    public Action retrieveAction(){
+        return networkingController.getAction();
+    }
+
+    @Override
+    public void propagateAction(Action action) {
+        networkingController.sendAction(action);
+    }
+
+    @Override
+    public void initStatesList(GameContainer container) throws SlickException {
+        addState(new SetupState(false));
+        addState(new PlayBoardState(false));
+        addState(new DisconnectedState(false));
+        addState(new WonState(false));
     }
 }

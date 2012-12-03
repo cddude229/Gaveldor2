@@ -110,7 +110,6 @@ public class LocalPlayerController extends PlayerController {
     public void initStatesList(GameContainer container) throws SlickException {
         addState(new SetupState(true));
         addState(new PlayBoardState(true));
-        addState(new PlayMinigameState(true));
         addState(new DisconnectedState(true));
         addState(new WonState(true));
     }

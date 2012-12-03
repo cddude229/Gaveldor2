@@ -7,7 +7,7 @@ public abstract class Action implements Serializable {
 
     public static final long serialVersionUID = 1L;
     public enum ActionType {
-    	FORFEIT,BOARD_MOVE,TURN_END,GAME_START,DISCONNECT, MINIGAME_START, MINIGAME_MOVE, MINIGAME_END;/*,HEART_BEAT,RESPONSE*/
+    	FORFEIT,BOARD_MOVE,TURN_END,GAME_START,DISCONNECT, MINIGAME_START, @Deprecated MINIGAME_MOVE, @Deprecated MINIGAME_END;
     	}
     	
     	public final ActionType type;
@@ -61,6 +61,7 @@ public abstract class Action implements Serializable {
         
     }
     
+    @Deprecated
     public static class MinigameMoveAction extends Action{
 
         private static final long serialVersionUID = 9022778930576890264L;
@@ -75,6 +76,7 @@ public abstract class Action implements Serializable {
         }
     }
     
+    @Deprecated
     public static class MinigameEndAction extends Action{
 
         private static final long serialVersionUID = -6447315522947765038L;

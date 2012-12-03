@@ -17,6 +17,7 @@ import org.newdawn.slick.SlickException;
 import util.Constants;
 import util.ControlScheme;
 
+@Deprecated
 public class PlayMinigameState extends PlayerControllerState {
     
     private boolean hasPlayedAttackSound;
