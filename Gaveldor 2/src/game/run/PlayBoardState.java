@@ -238,9 +238,6 @@ public class PlayBoardState extends PlayerControllerState {
         if (pc.isAnimatingMove()){
             
         } else if (wasAnimatingMove){
-            if (pc.model.getMinigame() != null){
-                pc.actionQueue.add(new Action.MinigameStartAction());
-            }
             wasAnimatingMove = false;
         } else{
             Point position = PlayBoardState.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()

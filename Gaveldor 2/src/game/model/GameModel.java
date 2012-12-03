@@ -426,15 +426,12 @@ public class GameModel {
                 assert target != null;
                 assert !piece.owner.equals(target.owner);
                 minigame = new MinigameModel(piece, target, piece.isBackAttack(target), movePacket.minigameBonusMove);
+                minigame.attackingPiece.attack(minigame.defendingPiece);
+                if (!minigame.defendingPiece.isAlive()) {
+                    pieces.remove(minigame.defendingPiece);
+                }
+                minigame = null;
             }
-            break;
-        case MINIGAME_START:
-            assert minigame != null;
-            minigame.attackingPiece.attack(minigame.defendingPiece);
-            if (!minigame.defendingPiece.isAlive()) {
-                pieces.remove(minigame.defendingPiece);
-            }
-            minigame = null;
             break;
         case TURN_END:
             TurnEndAction turnEndPacket = (TurnEndAction) action;
