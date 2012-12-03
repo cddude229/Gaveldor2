@@ -174,7 +174,11 @@ public class GameModel {
                 List<Point> path = new ArrayList<Point>();
                 path.add(p);
                 returnMap.put(p, path);
+            } else {
+                return returnMap;
             }
+        } else {
+            return returnMap;
         }
         
         // Check case where we don't need to recurse

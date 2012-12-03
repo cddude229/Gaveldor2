@@ -256,7 +256,7 @@ public class PlayBoardState extends PlayerControllerState {
                     case MOVING:
                         tutorialString = Constants.MOVING;
                         if (pc.selectedPieceMove == null){
-                            Set<Point> moves = pc.model.findValidMoves(pc.selectedPiece).keySet();
+                            Set<Point> moves = pc.model.findValidMoves(pc.selectedPiece, true).keySet();
                             Set<Point> attacks = new HashSet<Point>();
                             for (Point p : moves) {
                                 pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
