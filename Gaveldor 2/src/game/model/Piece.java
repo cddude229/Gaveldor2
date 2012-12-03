@@ -2,8 +2,6 @@ package game.model;
 
 import org.newdawn.slick.Image;
 
-import util.Helpful;
-
 public abstract class Piece {
     private int currentHealth, currentDirection;
     private Point point;
@@ -147,77 +145,13 @@ public abstract class Piece {
     }
 
     /**
-     * Can the piece attack this spot, if a unit is there?
-     * 
-     * @param p
-     * @return
-     */
-    @Deprecated
-    final public boolean isValidAttack(Point p) {
-        return isValidAttack(p, this.getPosition(), this.getDirection());
-    }
-    final public boolean isValidAttack(Point p, Point currentPosition, int currentDirection){
-        for (Point p2 : getValidAttacks(currentPosition, currentDirection)) {
-            if (p.equals(p2)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Return list of valid locations that piece can face
      */
-    @Deprecated
     final public Point[] getValidFacings() {
         return getValidFacings(this.getPosition());
     }
-    @Deprecated
     final public Point[] getValidFacings(Point p){
         return Piece.getPointsFromPoint(p, 1);
-    }
-
-    /**
-     * Return the list of where they can attack, if opponents are there
-     * 
-     * @return
-     */
-    @Deprecated
-    final public Point[] getValidAttacks(Point p, int dir) {
-        Point[] ret;
-        switch (defaultAttackRange()) {
-        case 1:
-            ret = Piece.getPointsFromPoint(p, 1);
-            return new Point[] {
-                    ret[dir],
-                    ret[(dir + 1 + 6) % 6],
-                    ret[(dir - 1 + 6) % 6]
-            };
-        case 2:
-            ret = Helpful.arrayConcatAll(
-                    Piece.getPointsFromPoint(p, 2),
-                    Piece.getPointsFromPoint(p, 1)
-            );
-            return new Point[] {
-                    ret[(dir * 2) % 12], //
-                    // We need to shift by + 12 first because (-2 % 12) == -2
-                    ret[(dir * 2 - 2 + 12) % 12], //
-                    ret[(dir * 2 - 1 + 12) % 12],//
-                    ret[(dir * 2 + 2) % 12],//
-                    ret[(dir * 2 + 1) % 12],//
-                    // Dist = 1 attacks
-                    ret[dir + 12],//
-                    ret[(dir + 1) % 6 + 12],//
-                    ret[(dir - 1 + 6) % 6 + 12] //
-            };
-        default:
-            throw new RuntimeException("Not yet implemented for d >= 3");
-        }
-    }
-
-    @Deprecated
-    public final Point[] getValidAttacks(){
-        return getValidAttacks(this.getPosition(), this.getDirection());
     }
 
     /**
