@@ -30,7 +30,6 @@ public class GameModel {
 
     public GameState gameState = GameState.SETTING_UP;
     
-    private MinigameModel minigame;
     public GameModel(){
         players = new Player[]{new Player(1), new Player(2)};
     }
@@ -339,10 +338,6 @@ public class GameModel {
     public Set<Piece> getPieces() {
         return pieces;
     }
-    
-    public MinigameModel getMinigame(){
-        return minigame;
-    }
 
     public Piece getPieceByPosition(Point p) {
         if (!isValidPosition(p)) {
@@ -395,7 +390,6 @@ public class GameModel {
             currentPlayerIndex = 0;
             lastMoved = null;
             sinceTurnStart = 0L;
-            minigame = null;
             gameState = GameState.PLAYING_BOARD;
             break;
         case DISCONNECT:
@@ -425,12 +419,11 @@ public class GameModel {
                 Piece target = getPieceByID(movePacket.targetID);
                 assert target != null;
                 assert !piece.owner.equals(target.owner);
-                minigame = new MinigameModel(piece, target, piece.isBackAttack(target), movePacket.minigameBonusMove);
-                minigame.attackingPiece.attack(minigame.defendingPiece);
-                if (!minigame.defendingPiece.isAlive()) {
-                    pieces.remove(minigame.defendingPiece);
+                
+                piece.attack(target);
+                if (!target.isAlive()){
+                    pieces.remove(target);
                 }
-                minigame = null;
             }
             break;
         case TURN_END:
@@ -451,16 +444,6 @@ public class GameModel {
                sinceTurnStart = 1;
             } else{
                 sinceTurnStart += delta;
-            }
-            break;
-        case PLAYING_MINIGAME:
-            if (minigame.sinceMoveTimeStart == 0){ //TODO: a temp fix for the minigame loading issue
-                minigame.sinceMoveTimeStart = 1;
-            } else{
-                minigame.sinceMoveTimeStart += delta;
-            }
-            if (minigame.hasBothMoves()){
-                minigame.sinceHasBothMoves += delta;
             }
             break;
         default:
