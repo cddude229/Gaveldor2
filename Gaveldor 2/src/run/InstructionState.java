@@ -20,13 +20,18 @@ import com.aem.sticky.button.events.ClickListener;
 public class InstructionState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
-    private SimpleButton backBtn;
+    private SimpleButton backBtn,fbtn,bbtn;
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
+    private ArrayList<Image> images;
+    private int page;
     
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
+        page=0;
+        int w=container.getWidth();
+        int h = container.getHeight();
         listener = new StickyListener();
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
@@ -36,17 +41,23 @@ public class InstructionState extends BasicGameState {
         }
         // create rectangles for buttons
         Rectangle backRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
+        Rectangle frect = new Rectangle(15*w/20, 9*h/10, 19*w/20, h-10);
+        Rectangle brect = new Rectangle(w/20, 9*h/10, 5*w/20, h-10);
 
         // create play Image
         Sound s = null;
-        ArrayList<Image> images = this.makeImages();
+        images = this.makeImages();
 
         // add buttons
         backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
+        fbtn = new SimpleButton(frect, images.get(2).getScaledCopy(w/5,h/10-10),images.get(2).getScaledCopy(w/5,h/10-10),s);
+        bbtn = new SimpleButton(brect, images.get(3).getScaledCopy(w/5,h/10-10),images.get(3).getScaledCopy(w/5,h/10-10),s);
 
         // create listeners
         createListeners(container,game);
         listener.add(backBtn);
+        listener.add(fbtn);
+        listener.add(bbtn);
     }
     
     @Override
@@ -61,8 +72,9 @@ public class InstructionState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        backBtn.render(container, g);
-        g.drawString("Gaveldor is a turn-based strategy game. Last one standing wins.There are three types of pieces:", 50, 50);
+        int w=container.getWidth();
+        int h = container.getHeight();
+        /*g.drawString("Gaveldor is a turn-based strategy game. Last one standing wins.There are three types of pieces:", 50, 50);
         g.drawString("• Infantry (3 health, 1 move range, 1 attack range)", 100, 100);
         g.drawString("• Archers (2 health, 1 move range, 2 attack range)", 100, 150);
         g.drawString("• Cavalry (4 health, 2 move range, 1 attack range)", 100, 200);
@@ -70,13 +82,21 @@ public class InstructionState extends BasicGameState {
         g.drawString("You can move three pieces per turn. After moving, you can pick a direction.", 50, 300);
         g.drawString("You can only attack pieces in the spots in front of you.", 50, 350);
         g.drawString("Because of this and back attacks, direction is important.", 50, 400);
-        g.drawString("Shift + click moves characters", 50, 450);
+        g.drawString("Shift + click moves characters", 50, 450);*/
+        g.drawImage(images.get(page+4), 0, 0,container.getWidth(),container.getHeight()-container.getHeight()/10,0,0,1280,800);
+        //g.drawImage(images.get(2), w/20, 9*h/10, 5*w/20, h-10, 0, 0, 915, 465);
+        backBtn.render(container, g);
+        fbtn.render(container, g);
+        bbtn.render(container, g);
+        
     }
 
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         backBtn.update(container, delta);
+        fbtn.update(container, delta);
+        bbtn.update(container, delta);
     }
 
     @Override
@@ -110,6 +130,24 @@ public class InstructionState extends BasicGameState {
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });
+        fbtn.addListener(new ClickListener() {
+
+            public void onClick(Button clicked, float mx, float my) {
+                page=((page+1)%(images.size()-4));
+            }
+
+            public void onDoubleClick(Button clicked, float mx, float my) {}
+            public void onRightClick(Button clicked, float mx, float my) {}
+        });
+        bbtn.addListener(new ClickListener() {
+
+            public void onClick(Button clicked, float mx, float my) {
+                page=((page-1)%(images.size()-4));
+            }
+
+            public void onDoubleClick(Button clicked, float mx, float my) {}
+            public void onRightClick(Button clicked, float mx, float my) {}
+        });
     }
     
     public ArrayList<Image> makeImages() throws SlickException {
@@ -130,6 +168,27 @@ public class InstructionState extends BasicGameState {
         clickPlay.getGraphics().flush();
         images.add(im);
         images.add(clickPlay);
+        Image wel = new Image("assets/instructions/welcome.png");
+        wel.getGraphics().flush();
+        Image move = new Image("assets/instructions/movement.png");
+        move.getGraphics().flush();
+        Image attack = new Image("assets/instructions/attack.png");
+        attack.getGraphics().flush();
+        Image unit = new Image("assets/instructions/unit.png");
+        unit.getGraphics().flush();
+        Image terrain = new Image("assets/instructions/terrain.png");
+        terrain.getGraphics().flush();
+        Image forward = new Image("assets/instructions/forward.png");
+        forward.getGraphics().flush();
+        Image backward = new Image("assets/instructions/backward.png");
+        backward.getGraphics().flush();
+        images.add(forward);
+        images.add(backward);
+        images.add(wel);
+        images.add(move);
+        images.add(attack);
+        images.add(unit);
+        images.add(terrain);
         return images;
     }
 
