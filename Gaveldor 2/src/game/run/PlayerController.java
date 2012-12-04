@@ -86,8 +86,10 @@ public abstract class PlayerController extends StateBasedGame{
                 getPixelX(x, image.getWidth(), centerX) - displayX,
                 getPixelY(y, image.getHeight(), centerY)- displayY);
     }
-
-    public void renderBoard(GameContainer container, Graphics g) {
+    
+    public abstract boolean isAnimatingMove();
+    
+    public void renderBoard(GameContainer container, Graphics g){
         int w = (int) Math.ceil(1.0 * container.getWidth() / Constants.TILE_WIDTH_SPACING / 2) + 1;
         int h = (int) Math.ceil(1.0 * (container.getHeight() + (Constants.TILE_HEIGHT - Constants.TILE_HEIGHT_SPACING)) / Constants.TILE_HEIGHT_SPACING);
         for (int j = - h; j < model.map.height + h; j++) {
@@ -99,11 +101,17 @@ public abstract class PlayerController extends StateBasedGame{
                     terrain = model.map.getTerrain(i, j);
                 }
                 renderAtPosition(terrain.tile, g, i, j, 0f, 0f);
+                Piece p = model.getPieceByPosition(new Point(i, j));
+                if (p != null){
+                    renderPiece(container, g, p);
+                }
             }
         }
+
+//        for (Piece p : model.getPieces()) {
+//            renderPiece(container, g, p);
+//        }
     }
-    
-    public abstract boolean isAnimatingMove();
     
     public void renderPieceMoving(GameContainer container, Graphics g, Piece p, Point oldPos, Point newPos, long sinceStart){
         List<Point> path = model.findValidMoves(p, oldPos, true).get(newPos);
@@ -135,12 +143,6 @@ public abstract class PlayerController extends StateBasedGame{
                     getPixelX(model.lastMoved.getPosition().x, g.getFont().getWidth(str), .5f) - displayX,
                     getPixelY(model.lastMoved.getPosition().y, g.getFont().getLineHeight(), .5f) - displayY
                     - (Constants.ATTACK_DISPLAY_FLOAT_MIN_DIST + frac * (Constants.ATTACK_DISPLAY_FLOAT_MAX_DIST - Constants.ATTACK_DISPLAY_FLOAT_MIN_DIST)));
-        }
-    }
-
-    public void renderPieces(GameContainer container, Graphics g) {
-        for (Piece p : model.getPieces()) {
-            renderPiece(container, g, p);
         }
     }
     
