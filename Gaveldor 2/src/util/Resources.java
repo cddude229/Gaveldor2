@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.net.URL;
 
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.util.ResourceLoader;
@@ -57,6 +58,17 @@ public class Resources {
     	}
         try {
             return new Sound(getResource(ref));
+        } catch (SlickException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public static Music getMusic(String ref){
+        if (ref.endsWith(".wav")){
+            throw new IllegalArgumentException("We can't use WAVs, because it breaks the JAR when deployed");
+        }
+        try {
+            return new Music(getResource(ref));
         } catch (SlickException e) {
             throw new RuntimeException(e);
         }

@@ -27,10 +27,12 @@ public class GameModel {
             return ordinal();
         }
     }
+    
+
+    public static enum AttackResult{HIT, MISS, CRIT};
 
     public GameState gameState = GameState.SETTING_UP;
     
-    private MinigameModel minigame;
     public GameModel(){
         players = new Player[]{new Player(1), new Player(2)};
     }
@@ -40,6 +42,7 @@ public class GameModel {
     public Piece lastMoved;
     public Point lastMovedPosition;
     public int lastMovedDirection;
+    public AttackResult lastMovedAttackResult;
     public long sinceLastMoved;
 
     public Player getPlayer1(){
@@ -339,10 +342,6 @@ public class GameModel {
     public Set<Piece> getPieces() {
         return pieces;
     }
-    
-    public MinigameModel getMinigame(){
-        return minigame;
-    }
 
     public Piece getPieceByPosition(Point p) {
         if (!isValidPosition(p)) {
@@ -395,7 +394,6 @@ public class GameModel {
             currentPlayerIndex = 0;
             lastMoved = null;
             sinceTurnStart = 0L;
-            minigame = null;
             gameState = GameState.PLAYING_BOARD;
             break;
         case DISCONNECT:
@@ -414,27 +412,24 @@ public class GameModel {
             assert piece.turnState == TurnState.MOVING;
             lastMoved = piece;
             lastMovedPosition = piece.getPosition();
-            System.out.println(lastMovedPosition);
             lastMovedDirection = piece.getDirection();
             sinceLastMoved = 0;
             piece.setPosition(movePacket.destination);
             piece.setDirection(movePacket.direction);
             if (movePacket.targetID == -1){
                 piece.turnState = TurnState.DONE;
+                lastMovedAttackResult = null;
             } else{
                 Piece target = getPieceByID(movePacket.targetID);
                 assert target != null;
                 assert !piece.owner.equals(target.owner);
-                minigame = new MinigameModel(piece, target, piece.isBackAttack(target), movePacket.minigameBonusMove);
+                AttackResult attackResult = piece.isBackAttack(target) ? AttackResult.CRIT : movePacket.randomAttackResult;
+                lastMovedAttackResult = attackResult;
+                piece.attack(target, attackResult);
+                if (!target.isAlive()){
+                    pieces.remove(target);
+                }
             }
-            break;
-        case MINIGAME_START:
-            assert minigame != null;
-            minigame.attackingPiece.attack(minigame.defendingPiece);
-            if (!minigame.defendingPiece.isAlive()) {
-                pieces.remove(minigame.defendingPiece);
-            }
-            minigame = null;
             break;
         case TURN_END:
             TurnEndAction turnEndPacket = (TurnEndAction) action;
@@ -454,16 +449,6 @@ public class GameModel {
                sinceTurnStart = 1;
             } else{
                 sinceTurnStart += delta;
-            }
-            break;
-        case PLAYING_MINIGAME:
-            if (minigame.sinceMoveTimeStart == 0){ //TODO: a temp fix for the minigame loading issue
-                minigame.sinceMoveTimeStart = 1;
-            } else{
-                minigame.sinceMoveTimeStart += delta;
-            }
-            if (minigame.hasBothMoves()){
-                minigame.sinceHasBothMoves += delta;
             }
             break;
         default:

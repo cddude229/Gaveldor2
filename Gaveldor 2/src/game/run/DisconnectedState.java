@@ -26,7 +26,6 @@ public class DisconnectedState extends PlayerControllerState {
     @Override
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
         pc.renderBoard(container, g);
-        pc.renderPieces(container, g);
         g.setFont(Constants.TEST_FONT);
         g.drawString("DISCONNECTED: the connection was lost", 0, 100);
         //TODO: render disconnected state

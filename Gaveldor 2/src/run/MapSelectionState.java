@@ -8,14 +8,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -40,57 +38,51 @@ public class MapSelectionState extends BasicGameState {
         MATCH
     }
     
-    private SimpleButton mapBtn;
     private SimpleButton backBtn;
-    private TextField mapBox;
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
     private String instructionTxt;
     ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
+    ArrayList<String> maps = new ArrayList<String>();
 
     @Override
     /**
      * Builds buttons and adds listeners to game. This isn't fully functional.
      */
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        instructionTxt = "Please enter map name.";
+        instructionTxt = "Please select a map or hit back to return to the main menu.";
         listener = new StickyListener();
-        buttons = this.buildButtons(container, game);
-        mapBox.setAcceptingInput(false);
+        maps = this.getMapNames();
+        this.buildButtons(container, game);
         for (SimpleButton button : buttons) {
             listener.add(button);
         }
-        
-        
+        listener.add(backBtn);
     }
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) {
         container.getInput().addListener(listener);
-        mapBox.setAcceptingInput(true);
     }
     
     @Override
     public void leave(GameContainer container, StateBasedGame game){
         container.getInput().removeListener(listener);
-        mapBox.setAcceptingInput(false);
     }
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g){
         backBtn.render(container, g);
-        mapBtn.render(container, g);
-        mapBox.render(container, g);
-        g.drawString(instructionTxt, mapBox.getX(), mapBox.getY() -50);
-        ArrayList<String> mapNames = getMapNames();
-        for( int i=0; i<mapNames.size(); i++ ){
-            g.drawString(mapNames.get(i), mapBox.getX(), mapBox.getY() - 125 - 25*i);
+        for (SimpleButton btn: buttons){
+            btn.render(container, g);
         }
+        g.drawString(instructionTxt, 200, 50);
     }
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta){
+        backBtn.update(container, delta);
         for (SimpleButton button : buttons) {
             button.update(container, delta);
         }
@@ -120,42 +112,42 @@ public class MapSelectionState extends BasicGameState {
      * @return an arrayList of the five buttons
      * @throws SlickException
      */
-    public ArrayList<SimpleButton> buildButtons(GameContainer container, StateBasedGame game) throws SlickException {
+    public void buildButtons(GameContainer container, StateBasedGame game) throws SlickException {
         ArrayList<int[]> locations = new ArrayList<int[]>();
-        int yLoc = 75;
+        int yLoc = 150;
+        int xLoc = 75;
         for (int i = 0; i < 6; i++) {
-            locations.add(new int[] { this.getxLoc(container, bWidth), yLoc });
-            yLoc += 100;
+            if (i == 5){
+                locations.add(new int[] {this.getxLoc(container, bWidth), 600});
+            }
+            else{
+                locations.add(new int[] {xLoc, yLoc});
+                xLoc += 300;
+                if (i == 2){
+                    yLoc += 100;
+                    xLoc = 75;
+                }
+            }
+        }
+        ArrayList<Rectangle> rects = new ArrayList<Rectangle>();
+        for (int i = 0; i< locations.size(); i++){
+            rects.add(new Rectangle(locations.get(i)[0],locations.get(i)[1],bWidth,bHeight));
         }
         // create rectangles for buttons
-        Rectangle backRect = new Rectangle(locations.get(5)[0] - 150, locations.get(5)[1], bWidth, bHeight);
-        Rectangle mapRect = new Rectangle(locations.get(5)[0] + 150, locations.get(5)[1], bWidth, bHeight);
+        Rectangle backRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
 
         // create play Image
         Sound s = null;
         ArrayList<Image> images = this.makeImages();
-        Font defaultFont = images.get(0).getGraphics().getFont();
-        mapBox = new TextField(container,defaultFont,locations.get(2)[0],locations.get(2)[1],bWidth,bHeight);
-        mapBox.setBackgroundColor(Color.white);
-        mapBox.setTextColor(Color.black);
-        // mapBox.setText("basic");
-        /*
-        mapBox.setAcceptingInput(true);
-        mapBox.setCursorVisible(true);
-        mapBox.setMaxLength(25);
-        */
         // add buttons
         backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
-        mapBtn = new SimpleButton(mapRect, images.get(2), images.get(3), s);
+        
+        for (int i = 0; i<rects.size()-2;i++){
+            buttons.add(new SimpleButton(rects.get(i),images.get(2*i+2),images.get(2*i+3),s));
+        }
 
         // create listeners
         createListeners(container,game);
-
-        // add to array of buttons
-        ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
-        buttons.add(mapBtn);
-        buttons.add(backBtn);
-        return buttons;
     }
 
     /**
@@ -172,44 +164,35 @@ public class MapSelectionState extends BasicGameState {
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });
-        mapBtn.addListener(new ClickListener(){
-            public void onClick(Button clicked, float mx, float my) {
-                String entry = mapBox.getText();
-                //System.out.println("clicked MAP");
-                //System.out.println(entry);
-                mapBox.setText("Choose a Map");
-               // map += entry;
-                
-                try {
-                    if(isValidMap(entry)){
-                        map += entry;
-                        switch(match){
-                        case LOCAL :
-                            try {
-                                ((Game) game).startLocalMatch(map);
-                                game.enterState(PlayGameState.STATE_ID);
-                            } catch (GameException e) {
-                                e.printStackTrace(); 
-                            }
-                            break;
-                        case HOST :
-                            game.enterState(HostGameState.STATE_ID);
-                            break;
-                        }
-                        
-                    }
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                
-                
-                
-            }
-            public void onDoubleClick(Button clicked, float mx, float my) {}
-            public void onRightClick(Button clicked, float mx, float my) {}
-        });
+        for (int i = 0; i <buttons.size(); i ++){
+            final int index = i;
+            System.out.println(index);
+            buttons.get(i).addListener(new ClickListener(){
 
+                @Override
+                public void onClick(Button clicked, float mx, float my) {
+                    map += maps.get(index);
+                    switch(match){
+                    case LOCAL :
+                        try {
+                            ((Game) game).startLocalMatch(map);
+                            game.enterState(PlayGameState.STATE_ID);
+                        } catch (GameException e) {
+                            e.printStackTrace(); 
+                        }
+                        break;
+                    case HOST :
+                        game.enterState(HostGameState.STATE_ID);
+                        break;
+                    }
+                }
+
+                @Override
+                public void onRightClick(Button clicked, float mx, float my) {}
+                @Override
+                public void onDoubleClick(Button clicked, float mx, float my) {}
+                });
+        }
     }
     
     public ArrayList<Image> makeImages() throws SlickException {
@@ -228,9 +211,9 @@ public class MapSelectionState extends BasicGameState {
                 im.getGraphics().drawString("Back", 0, 0);
                 
                 clickPlay = new Image(bWidth, bHeight);
-                clickPlay.getGraphics().setColor(Color.green);
+                clickPlay.getGraphics().setColor(Color.yellow);
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-                clickPlay.getGraphics().setColor(Color.white);
+                clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Back", 0, 0);
                 
                 im.getGraphics().flush();
@@ -240,24 +223,87 @@ public class MapSelectionState extends BasicGameState {
                 break;
                 
             case 1:
-//              im = new Image("assets/graphics/buttons/localmatch/select.png");
-//              clickPlay = new Image("assets/graphics/buttons/localmatch/select_hover.png");
                 im = new Image(bWidth, bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
-                im.getGraphics().drawString("Select", 0, 0);
+                im.getGraphics().drawString(maps.get(i-1), 0, 0);
                 
                 clickPlay = new Image(bWidth, bHeight);
                 clickPlay.getGraphics().setColor(Color.yellow);
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
-                clickPlay.getGraphics().drawString("Select", 0, 0);
+                clickPlay.getGraphics().drawString(maps.get(i-1), 0, 0);
                 
                 im.getGraphics().flush();
                 clickPlay.getGraphics().flush();
                 images.add(im);
                 images.add(clickPlay);
+                break;
+                
+            case 2:
+                im = new Image(bWidth, bHeight);
+                im.getGraphics().setColor(Color.blue);
+                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                im.getGraphics().setColor(Color.white);
+                im.getGraphics().drawString(maps.get(i-1), 0, 0);
+                
+                clickPlay = new Image(bWidth, bHeight);
+                clickPlay.getGraphics().setColor(Color.yellow);
+                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                clickPlay.getGraphics().setColor(Color.black);
+                clickPlay.getGraphics().drawString(maps.get(i-1), 0, 0);
+                
+                im.getGraphics().flush();
+                clickPlay.getGraphics().flush();
+                images.add(im);
+                images.add(clickPlay);
+                break;
+                
+            case 3:
+                im = new Image(bWidth, bHeight);
+                im.getGraphics().setColor(Color.blue);
+                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                im.getGraphics().setColor(Color.white);
+                im.getGraphics().drawString(maps.get(i-1), 0, 0);
+                
+                clickPlay = new Image(bWidth, bHeight);
+                clickPlay.getGraphics().setColor(Color.yellow);
+                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                clickPlay.getGraphics().setColor(Color.black);
+                clickPlay.getGraphics().drawString(maps.get(i-1), 0, 0);
+                
+                im.getGraphics().flush();
+                clickPlay.getGraphics().flush();
+                images.add(im);
+                images.add(clickPlay);
+                break;
+                
+            case 4:
+                im = new Image(bWidth, bHeight);
+                im.getGraphics().setColor(Color.blue);
+                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                im.getGraphics().setColor(Color.white);
+                im.getGraphics().drawString(maps.get(i-1), 0, 0);
+                
+                clickPlay = new Image(bWidth, bHeight);
+                clickPlay.getGraphics().setColor(Color.yellow);
+                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                clickPlay.getGraphics().setColor(Color.black);
+                clickPlay.getGraphics().drawString(maps.get(i-1), 0, 0);
+                
+                im.getGraphics().flush();
+                clickPlay.getGraphics().flush();
+                images.add(im);
+                images.add(clickPlay);
+                
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
                 break;
             }
         }
@@ -277,13 +323,11 @@ public class MapSelectionState extends BasicGameState {
                 validMaps.add(rowLine);
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             try {
                 reader.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }

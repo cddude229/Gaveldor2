@@ -32,7 +32,7 @@ public class PlayBoardState extends PlayerControllerState {
         super(GameState.PLAYING_BOARD, isLocal);
     }
     
-    private Image hoverOverlay, movableOverlay, faceableArrows, attackableOverlay;
+    private static Image hoverOverlay, movableOverlay, faceableArrows, attackableOverlay;
     private GameContainer gameContainer;
     //private PlayerController stateGame;
     
@@ -41,6 +41,13 @@ public class PlayBoardState extends PlayerControllerState {
     private SidebarButton[] sidebarButtons1, sidebarButtons2;
     
     private boolean wasAnimatingMove = false;
+    
+    public static void initAssets() throws SlickException{
+        hoverOverlay = Resources.getImage("/assets/graphics/ui/hover.png").getScaledCopy(.5f);
+        movableOverlay = Resources.getImage("/assets/graphics/ui/movable.png").getScaledCopy(.5f);
+        faceableArrows = Resources.getImage("/assets/graphics/ui/arrows.png").getScaledCopy(.5f);
+        attackableOverlay = Resources.getImage("/assets/graphics/ui/attackable.png").getScaledCopy(.5f);
+    }
 
     @Override
     public void init(GameContainer container, PlayerController pc) throws SlickException {
@@ -77,11 +84,7 @@ public class PlayBoardState extends PlayerControllerState {
     }
     
     public void initLocal(GameContainer container, final LocalPlayerController pc) throws SlickException{
-        hoverOverlay = Resources.getImage("/assets/graphics/ui/hover.png").getScaledCopy(.5f);
-        movableOverlay = Resources.getImage("/assets/graphics/ui/movable.png").getScaledCopy(.5f);
-        faceableArrows = Resources.getImage("/assets/graphics/ui/arrows.png").getScaledCopy(.5f);
-        attackableOverlay = Resources.getImage("/assets/graphics/ui/attackable.png").getScaledCopy(.5f);
-        
+
         ClickListener endTurnListener = new ClickListener(){
             @Override
             public void onClick(Button clicked, float mx, float my) {
@@ -161,10 +164,10 @@ public class PlayBoardState extends PlayerControllerState {
     @Override
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
         pc.renderBoard(container, g);
-        pc.renderPieces(container, g);
         if (isLocal){
             renderLocal(container, (LocalPlayerController)pc, g);
         }
+        pc.renderAttack(container, g);
     }
     
     public void renderMinimap(GameContainer container, Graphics g, LocalPlayerController pc, int x, int y) throws SlickException{
@@ -203,6 +206,7 @@ public class PlayBoardState extends PlayerControllerState {
         g.setColor(new Color(0x77000000));
         g.fillRect(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0, Constants.BOARD_SIDEBAR_WIDTH, container.getHeight());
         g.setColor(Color.white);
+        g.setFont(Constants.TEST_FONT);
         g.drawString(pc.player.toString(), container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 200);
         renderMinimap(container, g, pc, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0);
         
@@ -238,69 +242,57 @@ public class PlayBoardState extends PlayerControllerState {
         if (pc.isAnimatingMove()){
             
         } else if (wasAnimatingMove){
-            if (pc.model.getMinigame() != null){
-                pc.actionQueue.add(new Action.MinigameStartAction());
-            }
             wasAnimatingMove = false;
         } else{
-            Point position = PlayBoardState.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
-                    + pc.displayY);
+            Point position = PlayBoardState.getTileCoords(
+                    container.getInput().getMouseX() + pc.displayX,
+                    container.getInput().getMouseY() + pc.displayY);
             if (pc.model.isValidPosition(position)) {
                 pc.renderAtPosition(hoverOverlay, g, position.x, position.y, 0f, 0f);
             }
+            
+            Piece piece = pc.selectedPiece;
+            if (container.getInput().isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON)){
+                Piece hoveredPiece = pc.model.getPieceByPosition(position);
+                if (hoveredPiece != null){
+                    piece = hoveredPiece;
+                }
+            }
     
-            if (pc.selectedPiece != null) {
-                if (pc.player.equals(pc.selectedPiece.owner)){
-                    switch (pc.selectedPiece.turnState) {
-                    case MOVING:
-                        tutorialString = Constants.MOVING;
-                        if (pc.selectedPieceMove == null){
-                            Set<Point> moves = pc.model.findValidMoves(pc.selectedPiece, true).keySet();
-                            Set<Point> attacks = new HashSet<Point>();
-                            for (Point p : moves) {
-                                pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
-                                if(Constants.SHOW_ATTACK_WHILE_MOVING){
-                                    for (Point loc : pc.model.findValidAttacks(pc.selectedPiece, p)) {
-                                        if (!moves.contains(loc) && !attacks.contains(loc)) {
-                                            attacks.add(loc);
-                                        }
-                                    }
-                                }
-                            }
-                            for (Point p : attacks){
-                                pc.renderAtPosition(attackableOverlay, g, p.x, p.y, 0f, 0f);
-                            }
-                        } else if (pc.selectedPieceFace == -1){
-                            pc.renderAtPosition(faceableArrows, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0.5f, 0.5f);
-                            // TODO: add full tile overlays
-                        } else{
-                            for (Point loc : pc.model.findValidAttacks(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace)) {
-                                Piece atPoint = pc.model.getPieceByPosition(loc);
-                                if (pc.model.isValidPosition(loc) && atPoint != null && !atPoint.owner.equals(pc.player)) {
-                                    pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
-                                }
-                            }
-                            //TODO: use different overlay
-                            pc.renderAtPosition(movableOverlay, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0f, 0f);
-                        }
-                        break;
-                    case DONE:
-                        // do nothing
-                        tutorialString = Constants.NONE_SELECTED;
-                        break;
-                    default:
-                        throw new RuntimeException();
-                    }
+            if (piece != null) {
+                if (piece.equals(pc.selectedPiece) && piece.turnState == Piece.TurnState.MOVING){
+                    tutorialString = Constants.MOVING;
                 } else{
-                    Set<Point> moves = pc.model.findValidMoves(pc.selectedPiece).keySet();
+                    tutorialString = Constants.NONE_SELECTED;
+                }
+                if (!piece.equals(pc.selectedPiece) || pc.selectedPieceMove == null){
+                    Set<Point> moves = pc.model.findValidMoves(piece, true).keySet();
+                    Set<Point> attacks = new HashSet<Point>();
                     for (Point p : moves) {
                         pc.renderAtPosition(movableOverlay, g, p.x, p.y, 0f, 0f);
-                        for (Point loc : pc.model.findValidAttacks(pc.selectedPiece, p)) {
-                            if (pc.model.isValidPosition(loc) && moves.contains(loc) == false) {
-                                pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
+                        if(Constants.SHOW_ATTACK_WHILE_MOVING){
+                            for (Point loc : pc.model.findValidAttacks(piece, p)) {
+                                if (!moves.contains(loc) && !attacks.contains(loc)) {
+                                    attacks.add(loc);
+                                }
                             }
                         }
                     }
+                    for (Point p : attacks){
+                        pc.renderAtPosition(attackableOverlay, g, p.x, p.y, 0f, 0f);
+                    }
+                } else if (pc.selectedPieceFace == -1){
+                    pc.renderAtPosition(faceableArrows, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0.5f, 0.5f);
+                    // TODO: add full tile overlays
+                } else{
+                    for (Point loc : pc.model.findValidAttacks(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace)) {
+                        Piece atPoint = pc.model.getPieceByPosition(loc);
+                        if (pc.model.isValidPosition(loc) && atPoint != null && !atPoint.owner.equals(pc.player)) {
+                            pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
+                        }
+                    }
+                    //TODO: use different overlay
+                    pc.renderAtPosition(movableOverlay, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0f, 0f);
                 }
             }
             renderLocalSidebar(container, pc, g);
@@ -334,14 +326,14 @@ public class PlayBoardState extends PlayerControllerState {
                 updateLocalSidebar(container, pc, delta);
                 
                 if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON) &&
-                        container.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
+                        container.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) && !container.getInput().isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON)) {
                     if (container.getInput().getMouseX() < container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH){
                         
                         Point position = PlayBoardState.getTileCoords(container.getInput().getMouseX() + pc.displayX, container.getInput().getMouseY()
                                 + pc.displayY);
                         Piece piece = pc.model.getPieceByPosition(position);
                         
-                        if (piece != null && (!pc.player.equals(piece.owner) || piece.turnState != Piece.TurnState.DONE) && (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner) ||
+                        if (piece != null && pc.player.equals(piece.owner) && (piece.turnState != Piece.TurnState.DONE) && (pc.selectedPiece == null || !pc.player.equals(pc.selectedPiece.owner) ||
                                 !pc.selectedPiece.equals(piece) && pc.selectedPiece.turnState == Piece.TurnState.MOVING && pc.selectedPieceMove == null)){
                             clearSelection(pc);
                             pc.selectedPiece = piece;
@@ -354,7 +346,6 @@ public class PlayBoardState extends PlayerControllerState {
                                         // findValidMoves checks terrain, piece, and position validity
                                         pc.selectedPieceMove = position;
                                         pc.sinceSelectedPieceMove = 0L;
-                                        wasAnimatingMove = true;
                                         //tutorialString = Constants.FACING;
 //                                        pc.setDisplayCenter(container, position.x, position.y);
                                     }
@@ -435,7 +426,7 @@ public class PlayBoardState extends PlayerControllerState {
     }
     
     public void mute() {
-        if (gameContainer.isMusicOn() | gameContainer.isSoundOn()) {
+        if (gameContainer.isMusicOn() || gameContainer.isSoundOn()) {
             gameContainer.setMusicOn(false);
             gameContainer.setSoundOn(false);
         }

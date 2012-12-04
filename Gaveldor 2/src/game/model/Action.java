@@ -7,7 +7,7 @@ public abstract class Action implements Serializable {
 
     public static final long serialVersionUID = 1L;
     public enum ActionType {
-    	FORFEIT,BOARD_MOVE,TURN_END,GAME_START,DISCONNECT, MINIGAME_START, @Deprecated MINIGAME_MOVE, @Deprecated MINIGAME_END;
+    	FORFEIT,BOARD_MOVE,TURN_END,GAME_START,DISCONNECT, @Deprecated MINIGAME_START, @Deprecated MINIGAME_MOVE, @Deprecated MINIGAME_END;
     	}
     	
     	public final ActionType type;
@@ -50,43 +50,6 @@ public abstract class Action implements Serializable {
     	}
     }
     
-    
-    public static class MinigameStartAction extends Action{
-
-        private static final long serialVersionUID = 4273914302579028775L;
-
-        public MinigameStartAction() {
-            super(ActionType.MINIGAME_START);
-        }
-        
-    }
-    
-    @Deprecated
-    public static class MinigameMoveAction extends Action{
-
-        private static final long serialVersionUID = 9022778930576890264L;
-        
-        public final int playerID;
-        public final MinigameModel.Move move;
-        
-        public MinigameMoveAction(MinigameModel.Move move, Player player) {
-            super(ActionType.MINIGAME_MOVE);
-            this.move = move;
-            this.playerID = player.id;
-        }
-    }
-    
-    @Deprecated
-    public static class MinigameEndAction extends Action{
-
-        private static final long serialVersionUID = -6447315522947765038L;
-
-        public MinigameEndAction() {
-            super(ActionType.MINIGAME_END);
-        }
-        
-    }
-    
     public static class BoardMoveAction extends Action {
     	
         private static final long serialVersionUID = 8582750212791110715L;
@@ -94,7 +57,7 @@ public abstract class Action implements Serializable {
     	public final Point destination;
         public final int direction;
         public final int targetID;
-        public final MinigameModel.Move minigameBonusMove;
+        public final GameModel.AttackResult randomAttackResult;
     	
     	public BoardMoveAction(Piece piece, Point destination, int direction, Piece target) {
             super(ActionType.BOARD_MOVE);
@@ -102,7 +65,18 @@ public abstract class Action implements Serializable {
     		this.destination = destination;
     		this.direction = direction;
     		targetID = target == null ? -1 : target.id;
-    		minigameBonusMove = MinigameModel.Move.values()[(int)Math.floor(Math.random() * 3)];
+    		int rand = (int)(Math.random() * 6);
+    		switch (rand){
+    		case 0:
+    		    randomAttackResult = GameModel.AttackResult.MISS;
+    		    break;
+    		case 5:
+    		    randomAttackResult = GameModel.AttackResult.CRIT;
+    		    break;
+    		default:
+    		    randomAttackResult = GameModel.AttackResult.HIT;
+    		    break;
+    		}
     	}
     }
     

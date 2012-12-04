@@ -4,8 +4,6 @@ import game.model.Action;
 import game.model.GameModel;
 import game.model.Player;
 
-import org.newdawn.slick.Music;
-
 public class GameMatch {
     
     public final GameModel model;
@@ -17,14 +15,6 @@ public class GameMatch {
         this.model = model;
         this.pc1 = pc1;
         this.pc2 = pc2;
-        try {
-        Music music = new Music("assets/audio/music/DarkKnight.ogg");
-        music.loop();
-        music.setVolume(util.Constants.BATTLE_START_VOLUME);
-        music.fade(util.Constants.BATTLE_FADE_DURATION, util.Constants.BATTLE_END_VOLUME, false);
-        } catch (Exception e) {
-            
-        }
     }
     
     public void startGameLocally(String mapName){

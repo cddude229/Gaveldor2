@@ -14,6 +14,8 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import util.Resources;
+
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
 import com.aem.sticky.button.SimpleButton;
@@ -28,14 +30,15 @@ public class MainMenuState extends BasicGameState {
     private static final int bWidth = 150;
     private static final int bHeight = 50;
     ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
+    
+    private Music music;
 
     @Override
     /**
      * Builds buttons and adds listeners to game. This isn't fully functional.
      */
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        Music music = new Music("assets/audio/music/TheHaunting.ogg");
-        music.loop();
+        music = Resources.getMusic("/assets/audio/music/TheHaunting.ogg");
         music.setVolume(util.Constants.MENU_VOLUME);
         this.container = container;
         this.game = game;
@@ -51,6 +54,9 @@ public class MainMenuState extends BasicGameState {
     @Override
     public void enter(GameContainer container, StateBasedGame game) {
         container.getInput().addListener(listener);
+        if (!music.playing()){
+            music.loop();
+        }
     }
     
     @Override

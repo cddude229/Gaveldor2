@@ -51,8 +51,14 @@ public class LocalPlayerController extends PlayerController {
                 if (p.equals(selectedPiece)){
                     if (selectedPieceMove != null){
                         pos = selectedPieceMove;
+                        if (selectedPieceFace == -1){
+                            List<Point> path = model.findValidMoves(selectedPiece, selectedPiece.getPosition(), true).get(selectedPieceMove);
+                            if (path.size() > 1){
+                                dir = Piece.pointsToDirection(path.get(path.size() - 1), path.get(path.size() - 2));
+                            }
+                        }
                     }
-                    if (selectedPieceFace != -1){
+                    if (selectedPieceFace != -1) {
                         dir = selectedPieceFace;
                     }
                 }

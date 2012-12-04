@@ -1,6 +1,6 @@
 package game.model;
 
-
+@Deprecated
 public class MinigameModel{
     public final Piece attackingPiece, defendingPiece;
     
