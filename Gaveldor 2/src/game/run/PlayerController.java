@@ -123,13 +123,18 @@ public abstract class PlayerController extends StateBasedGame{
     
     public void renderPiece(GameContainer container, Graphics g, Piece p){
         renderAtPosition(p.getSprite(), g, p.getPosition().x, p.getPosition().y, .5f, 1f);
-        if (p.equals(model.lastMoved) && model.lastMovedAttackResult != null && model.sinceLastMoved < Constants.ATTACK_DISPLAY_TIME){
+    }
+    
+    public void renderAttack(GameContainer container, Graphics g){
+        if (model.lastMoved != null && model.lastMovedAttackResult != null && model.sinceLastMoved < Constants.ATTACK_DISPLAY_TIME){
             g.setColor(Color.white);
             g.setFont(Constants.TEST_FONT);
             String str = model.lastMovedAttackResult.name();
+            float frac = 1f * model.sinceLastMoved / Constants.ATTACK_DISPLAY_TIME;
             g.drawString(str,
-                    getPixelX(p.getPosition().x, g.getFont().getWidth(str), .5f) - displayX,
-                    getPixelY(p.getPosition().y, g.getFont().getLineHeight(), .5f) - displayY);
+                    getPixelX(model.lastMoved.getPosition().x, g.getFont().getWidth(str), .5f) - displayX,
+                    getPixelY(model.lastMoved.getPosition().y, g.getFont().getLineHeight(), .5f) - displayY
+                    - (Constants.ATTACK_DISPLAY_FLOAT_MIN_DIST + frac * (Constants.ATTACK_DISPLAY_FLOAT_MAX_DIST - Constants.ATTACK_DISPLAY_FLOAT_MIN_DIST)));
         }
     }
 

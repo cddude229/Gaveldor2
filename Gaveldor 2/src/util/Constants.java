@@ -123,4 +123,6 @@ public class Constants {
     public static final long TURN_TIME_LIMIT_PER_PIECE = 10000L;
     
     public static final long ATTACK_DISPLAY_TIME = 2000L;
+    public static final int ATTACK_DISPLAY_FLOAT_MIN_DIST = 50;
+    public static final int ATTACK_DISPLAY_FLOAT_MAX_DIST = 100;
 }

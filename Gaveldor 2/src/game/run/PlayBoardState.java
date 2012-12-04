@@ -165,6 +165,7 @@ public class PlayBoardState extends PlayerControllerState {
         if (isLocal){
             renderLocal(container, (LocalPlayerController)pc, g);
         }
+        pc.renderAttack(container, g);
     }
     
     public void renderMinimap(GameContainer container, Graphics g, LocalPlayerController pc, int x, int y) throws SlickException{
@@ -203,6 +204,7 @@ public class PlayBoardState extends PlayerControllerState {
         g.setColor(new Color(0x77000000));
         g.fillRect(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0, Constants.BOARD_SIDEBAR_WIDTH, container.getHeight());
         g.setColor(Color.white);
+        g.setFont(Constants.TEST_FONT);
         g.drawString(pc.player.toString(), container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 200);
         renderMinimap(container, g, pc, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0);
         
