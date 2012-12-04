@@ -35,6 +35,10 @@ public abstract class PlayerController extends StateBasedGame{
         this.player = player;
         this.model = model;
     }
+    
+    public static void initAssets() throws SlickException{
+        PlayBoardState.initAssets();
+    }
 
     public abstract Action retrieveAction();
 

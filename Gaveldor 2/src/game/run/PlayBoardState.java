@@ -32,7 +32,7 @@ public class PlayBoardState extends PlayerControllerState {
         super(GameState.PLAYING_BOARD, isLocal);
     }
     
-    private Image hoverOverlay, movableOverlay, faceableArrows, attackableOverlay;
+    private static Image hoverOverlay, movableOverlay, faceableArrows, attackableOverlay;
     private GameContainer gameContainer;
     //private PlayerController stateGame;
     
@@ -41,6 +41,13 @@ public class PlayBoardState extends PlayerControllerState {
     private SidebarButton[] sidebarButtons1, sidebarButtons2;
     
     private boolean wasAnimatingMove = false;
+    
+    public static void initAssets() throws SlickException{
+        hoverOverlay = Resources.getImage("/assets/graphics/ui/hover.png").getScaledCopy(.5f);
+        movableOverlay = Resources.getImage("/assets/graphics/ui/movable.png").getScaledCopy(.5f);
+        faceableArrows = Resources.getImage("/assets/graphics/ui/arrows.png").getScaledCopy(.5f);
+        attackableOverlay = Resources.getImage("/assets/graphics/ui/attackable.png").getScaledCopy(.5f);
+    }
 
     @Override
     public void init(GameContainer container, PlayerController pc) throws SlickException {
@@ -77,11 +84,7 @@ public class PlayBoardState extends PlayerControllerState {
     }
     
     public void initLocal(GameContainer container, final LocalPlayerController pc) throws SlickException{
-        hoverOverlay = Resources.getImage("/assets/graphics/ui/hover.png").getScaledCopy(.5f);
-        movableOverlay = Resources.getImage("/assets/graphics/ui/movable.png").getScaledCopy(.5f);
-        faceableArrows = Resources.getImage("/assets/graphics/ui/arrows.png").getScaledCopy(.5f);
-        attackableOverlay = Resources.getImage("/assets/graphics/ui/attackable.png").getScaledCopy(.5f);
-        
+
         ClickListener endTurnListener = new ClickListener(){
             @Override
             public void onClick(Button clicked, float mx, float my) {
@@ -423,7 +426,7 @@ public class PlayBoardState extends PlayerControllerState {
     }
     
     public void mute() {
-        if (gameContainer.isMusicOn() | gameContainer.isSoundOn()) {
+        if (gameContainer.isMusicOn() || gameContainer.isSoundOn()) {
             gameContainer.setMusicOn(false);
             gameContainer.setSoundOn(false);
         }

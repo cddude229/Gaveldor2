@@ -14,6 +14,7 @@ public class SetupState extends PlayerControllerState {
 
     @Override
     public void init(GameContainer container, PlayerController pc) throws SlickException {
+
     }
 
     @Override

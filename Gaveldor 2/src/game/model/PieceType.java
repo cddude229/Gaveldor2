@@ -27,7 +27,7 @@ public enum PieceType {
         this.attackSoundPath = attackSoundPath;
     }
     
-    public static void init(){
+    public static void initAssets(){
         int[] m = new int[]{1, 2, 5, 4, 3, 0};
         for (PieceType type : PieceType.values()){
             for (int player : new int[]{1, 2}){

@@ -5,25 +5,35 @@ import game.model.GameModel.GameState;
 import game.model.PieceType;
 import game.model.TerrainType;
 import game.run.GameMatch;
+import game.run.PlayerController;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import util.Resources;
 
 public class PlayGameState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
 
     private GameMatch match = null;
+    
+    private Music music;
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        TerrainType.initTiles();
-        PieceType.init();
+        TerrainType.initAssets();
+        PieceType.initAssets();
+        PlayerController.initAssets();
+        music = Resources.getMusic("/assets/audio/music/DarkKnight.ogg");
+        music.setVolume(util.Constants.BATTLE_START_VOLUME);
+        music.fade(util.Constants.BATTLE_FADE_DURATION, util.Constants.BATTLE_END_VOLUME, false);
     }
 
     @Override
@@ -31,6 +41,9 @@ public class PlayGameState extends BasicGameState {
         match = ((Game) game).match;
         match.getCurrentPC().init(container);
         match.getOtherPC().init(container);
+        if (!music.playing()){
+            music.loop();
+        }
     }
     
     @Override
