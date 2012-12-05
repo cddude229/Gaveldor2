@@ -92,6 +92,7 @@ public abstract class PlayerController extends StateBasedGame{
     }
     
     public abstract boolean isAnimatingMove();
+
     
     public void renderBoard(GameContainer container, Graphics g){
         int w = (int) Math.ceil(1.0 * container.getWidth() / Constants.TILE_WIDTH_SPACING / 2) + 1;
@@ -105,16 +106,16 @@ public abstract class PlayerController extends StateBasedGame{
                     terrain = model.map.getTerrain(i, j);
                 }
                 renderAtPosition(terrain.tile, g, i, j, 0f, 0f);
-                Piece p = model.getPieceByPosition(new Point(i, j));
-                if (p != null){
-                    renderPiece(container, g, p);
-                }
+//                Piece p = getPieceByRenderPosition(new Point(i, j));
+//                if (p != null){
+//                    renderPiece(container, g, p);
+//                }
             }
         }
 
-//        for (Piece p : model.getPieces()) {
-//            renderPiece(container, g, p);
-//        }
+        for (Piece p : model.getPieces()) {
+            renderPiece(container, g, p);
+        }
     }
     
     public void renderPieceMoving(GameContainer container, Graphics g, Piece p, Point oldPos, Point newPos, long sinceStart){
