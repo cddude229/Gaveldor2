@@ -171,7 +171,7 @@ public class MapSelectionState extends BasicGameState {
 
                 @Override
                 public void onClick(Button clicked, float mx, float my) {
-                    map += maps.get(index);
+                    map = "/assets/maps/"+maps.get(index);
                     switch(match){
                     case LOCAL :
                         ((Game) game).startLocalMatch(map);
