@@ -29,7 +29,7 @@ public class GameModel {
     }
     
 
-    public static enum AttackResult{HIT, MISS, CRIT};
+    public static enum AttackResult{STRIKE, BLOCKED, CRITICAL};
 
     public GameState gameState = GameState.SETTING_UP;
     
@@ -432,7 +432,7 @@ public class GameModel {
                 Piece target = getPieceByID(movePacket.targetID);
                 assert target != null;
                 assert !piece.owner.equals(target.owner);
-                AttackResult attackResult = piece.isBackAttack(target) ? AttackResult.CRIT : movePacket.randomAttackResult;
+                AttackResult attackResult = piece.isBackAttack(target) ? AttackResult.CRITICAL : movePacket.randomAttackResult;
                 lastMovedAttackResult = attackResult;
                 piece.attack(target, attackResult);
                 if (!target.isAlive()){

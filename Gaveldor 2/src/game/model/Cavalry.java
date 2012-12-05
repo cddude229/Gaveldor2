@@ -19,12 +19,12 @@ public class Cavalry extends Piece {
 //        if (this.isBackAttack(opponent))
 //            power *= 2;
         switch (result){
-        case HIT:
+        case STRIKE:
             break;
-        case CRIT:
+        case CRITICAL:
             power *= 2;
             break;
-        case MISS:
+        case BLOCKED:
             power = 0;
             break;
         }
