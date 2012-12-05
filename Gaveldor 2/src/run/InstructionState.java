@@ -65,6 +65,7 @@ public class InstructionState extends BasicGameState {
     @Override
     public void enter(GameContainer container, StateBasedGame game) {
         container.getInput().addListener(listener);
+        page = 0;
     }
     
     @Override
@@ -174,19 +175,19 @@ public class InstructionState extends BasicGameState {
         clickPlay.getGraphics().flush();
         images.add(im);
         images.add(clickPlay);
-        Image wel = new Image("assets/instructions/welcome.png");
+        Image wel = new Image("/assets/graphics/instructions/welcome.png");
         wel.getGraphics().flush();
-        Image move = new Image("assets/instructions/movement.png");
+        Image move = new Image("/assets/graphics/instructions/movement.png");
         move.getGraphics().flush();
-        Image attack = new Image("assets/instructions/attack.png");
+        Image attack = new Image("/assets/graphics/instructions/attack.png");
         attack.getGraphics().flush();
-        Image unit = new Image("assets/instructions/unit.png");
+        Image unit = new Image("/assets/graphics/instructions/unit.png");
         unit.getGraphics().flush();
-        Image terrain = new Image("assets/instructions/terrain.png");
+        Image terrain = new Image("/assets/graphics/instructions/terrain.png");
         terrain.getGraphics().flush();
-        Image forward = new Image("assets/instructions/forward.png");
+        Image forward = new Image("/assets/graphics/instructions/forward.png");
         forward.getGraphics().flush();
-        Image backward = new Image("assets/instructions/backward.png");
+        Image backward = new Image("/assets/graphics/instructions/backward.png");
         backward.getGraphics().flush();
         images.add(forward);
         images.add(backward);
