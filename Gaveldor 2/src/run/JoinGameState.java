@@ -20,6 +20,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import util.Constants;
 import util.MenuButton;
+import util.Resources;
 
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
@@ -131,7 +132,7 @@ public class JoinGameState extends BasicGameState {
         Rectangle connectRect = new Rectangle(locations.get(5)[0] + 150, locations.get(5)[1], bWidth, bHeight);
 
         // create play Image
-        Sound s = null;
+        Sound s = Resources.getSound("/assets/audio/effects/click.ogg");
         ArrayList<Image> images = this.makeImages();
         Font defaultFont = images.get(0).getGraphics().getFont();
         ipBox = new TextField(container,defaultFont,locations.get(2)[0],locations.get(2)[1],bWidth,bHeight);

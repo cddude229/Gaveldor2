@@ -50,7 +50,7 @@ public class InstructionState extends BasicGameState {
         brect = new Rectangle(w/20, 9*h/10, 5*w/20, h-30);
 
         // create play Image
-        Sound s = null;
+        Sound s = Resources.getSound("/assets/audio/effects/click.ogg");
         images = this.makeImages();
 
         // add buttons

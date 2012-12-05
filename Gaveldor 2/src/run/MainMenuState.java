@@ -122,7 +122,7 @@ public class MainMenuState extends BasicGameState {
         }
 
         // create play Image
-        Sound s = null;
+        Sound s = Resources.getSound("/assets/audio/effects/click.ogg");
         ArrayList<Image> images = this.makeImages();
         
         //create the buttons

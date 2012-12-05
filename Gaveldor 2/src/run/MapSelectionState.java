@@ -138,7 +138,7 @@ public class MapSelectionState extends BasicGameState {
         Rectangle backRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
 
         // create play Image
-        Sound s = null;
+        Sound s = Resources.getSound("/assets/audio/effects/click.ogg");
         ArrayList<Image> images = this.makeImages();
         // add buttons
         backBtn = new MenuButton(backRect, images.get(0), images.get(1), s);

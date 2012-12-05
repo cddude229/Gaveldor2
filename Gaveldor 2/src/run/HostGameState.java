@@ -20,6 +20,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import util.Constants;
 import util.MenuButton;
+import util.Resources;
 
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
@@ -50,7 +51,7 @@ public class HostGameState extends BasicGameState {
         Rectangle backRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
 
         // create play Image
-        Sound s = null;
+        Sound s = Resources.getSound("/assets/audio/effects/click.ogg");
         ArrayList<Image> images = this.makeImages();
 
         // add button
