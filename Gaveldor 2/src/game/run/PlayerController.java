@@ -73,7 +73,7 @@ public abstract class PlayerController extends StateBasedGame{
     }
     
     public void renderControllerWon(Graphics g) throws SlickException {
-        g.setFont(Constants.TEST_FONT);
+        g.setFont(Constants.PRIMARY_FONT);
         g.drawString("Player " + model.getCurrentPlayer().id + " Wins!", 0, 0);
     }
     
@@ -141,7 +141,7 @@ public abstract class PlayerController extends StateBasedGame{
     public void renderAttack(GameContainer container, Graphics g){
         if (model.lastMoved != null && model.lastMovedAttackResult != null && model.sinceLastMoved < Constants.ATTACK_DISPLAY_TIME){
             g.setColor(Color.white);
-            g.setFont(Constants.TEST_FONT);
+            g.setFont(Constants.PRIMARY_FONT);
             String str = model.lastMovedAttackResult.name();
             float frac = 1f * model.sinceLastMoved / Constants.ATTACK_DISPLAY_TIME;
             g.drawString(str,
