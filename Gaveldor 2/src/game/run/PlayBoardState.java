@@ -256,12 +256,12 @@ public class PlayBoardState extends PlayerControllerState {
             Point position = PlayBoardState.getTileCoords(
                     container.getInput().getMouseX() + pc.displayX,
                     container.getInput().getMouseY() + pc.displayY);
-            if (pc.model.isValidPosition(position)) {
+            if (pc.model.isValidPosition(position) && container.getInput().getMouseX() < container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH) {
                 pc.renderAtPosition(hoverOverlay, g, position.x, position.y, 0f, 0f);
             }
             
             Piece piece = pc.selectedPiece;
-            if (container.getInput().isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON)){
+            if (container.getInput().isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON) && container.getInput().getMouseX() < container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH){
                 Piece hoveredPiece = pc.model.getPieceByPosition(position);
                 if (hoveredPiece != null){
                     piece = hoveredPiece;
