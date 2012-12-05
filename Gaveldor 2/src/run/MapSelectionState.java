@@ -135,7 +135,7 @@ public class MapSelectionState extends BasicGameState {
         for (int i = 0; i< locations.size(); i++){
             rects.add(new Rectangle(locations.get(i)[0],locations.get(i)[1],bWidth,bHeight));
         }
-        // create rectangles for buttons
+        // create rectangles for map buttons
         Rectangle backRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
 
         // create play Image
@@ -144,7 +144,7 @@ public class MapSelectionState extends BasicGameState {
         // add buttons
         backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
         
-        for (int i = 0; i<rects.size()-2;i++){
+        for (int i = 0; i<rects.size()-1;i++){
             buttons.add(new SimpleButton(rects.get(i),images.get(2*i+2),images.get(2*i+3),s));
         }
 
@@ -168,7 +168,6 @@ public class MapSelectionState extends BasicGameState {
         });
         for (int i = 0; i <buttons.size(); i ++){
             final int index = i;
-            System.out.println(index);
             buttons.get(i).addListener(new ClickListener(){
 
                 @Override
@@ -224,7 +223,7 @@ public class MapSelectionState extends BasicGameState {
                 images.add(clickPlay);
                 break;
                 
-            case 1:
+            default:
                 im = new Image(bWidth, bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
@@ -241,71 +240,6 @@ public class MapSelectionState extends BasicGameState {
                 clickPlay.getGraphics().flush();
                 images.add(im);
                 images.add(clickPlay);
-                break;
-                
-            case 2:
-                im = new Image(bWidth, bHeight);
-                im.getGraphics().setColor(Color.blue);
-                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-                im.getGraphics().setColor(Color.white);
-                im.getGraphics().drawString(maps.get(i-1), 0, 0);
-                
-                clickPlay = new Image(bWidth, bHeight);
-                clickPlay.getGraphics().setColor(Color.yellow);
-                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-                clickPlay.getGraphics().setColor(Color.black);
-                clickPlay.getGraphics().drawString(maps.get(i-1), 0, 0);
-                
-                im.getGraphics().flush();
-                clickPlay.getGraphics().flush();
-                images.add(im);
-                images.add(clickPlay);
-                break;
-                
-            case 3:
-                im = new Image(bWidth, bHeight);
-                im.getGraphics().setColor(Color.blue);
-                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-                im.getGraphics().setColor(Color.white);
-                im.getGraphics().drawString(maps.get(i-1), 0, 0);
-                
-                clickPlay = new Image(bWidth, bHeight);
-                clickPlay.getGraphics().setColor(Color.yellow);
-                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-                clickPlay.getGraphics().setColor(Color.black);
-                clickPlay.getGraphics().drawString(maps.get(i-1), 0, 0);
-                
-                im.getGraphics().flush();
-                clickPlay.getGraphics().flush();
-                images.add(im);
-                images.add(clickPlay);
-                break;
-                
-            case 4:
-                im = new Image(bWidth, bHeight);
-                im.getGraphics().setColor(Color.blue);
-                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-                im.getGraphics().setColor(Color.white);
-                im.getGraphics().drawString(maps.get(i-1), 0, 0);
-                
-                clickPlay = new Image(bWidth, bHeight);
-                clickPlay.getGraphics().setColor(Color.yellow);
-                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-                clickPlay.getGraphics().setColor(Color.black);
-                clickPlay.getGraphics().drawString(maps.get(i-1), 0, 0);
-                
-                im.getGraphics().flush();
-                clickPlay.getGraphics().flush();
-                images.add(im);
-                images.add(clickPlay);
-                
-            case 5:
-                break;
-            case 6:
-                break;
-            case 7:
-                break;
-            case 8:
                 break;
             }
         }
