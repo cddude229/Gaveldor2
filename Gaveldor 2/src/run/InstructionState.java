@@ -78,17 +78,7 @@ public class InstructionState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        /*g.drawString("Gaveldor is a turn-based strategy game. Last one standing wins.There are three types of pieces:", 50, 50);
-        g.drawString("• Infantry (3 health, 1 move range, 1 attack range)", 100, 100);
-        g.drawString("• Archers (2 health, 1 move range, 2 attack range)", 100, 150);
-        g.drawString("• Cavalry (4 health, 2 move range, 1 attack range)", 100, 200);
-        g.drawString("Archers do 2x damage to Cavalry. Likewise, any piece attacking your opponent's back deals double damage.", 50, 250);
-        g.drawString("You can move three pieces per turn. After moving, you can pick a direction.", 50, 300);
-        g.drawString("You can only attack pieces in the spots in front of you.", 50, 350);
-        g.drawString("Because of this and back attacks, direction is important.", 50, 400);
-        g.drawString("Shift + click moves characters", 50, 450);*/
         g.drawImage(images.get(page+4), 0, 0,container.getWidth(),container.getHeight()-container.getHeight()/10,0,0,1280,800);
-        //g.drawImage(images.get(2), w/20, 9*h/10, 5*w/20, h-10, 0, 0, 915, 465);
         backBtn.render(container, g);
         fbtn.render(container, g);
         bbtn.render(container, g);
@@ -101,10 +91,7 @@ public class InstructionState extends BasicGameState {
         ((Game)game).toggleFullscreenCheck((AppGameContainer)container);
         backBtn.update(container, delta);
         fbtn.update(container, delta);
-        bbtn.update(container, delta);
-        this.frect.setBounds(15*container.getWidth()/20, 9*container.getHeight()/10, 19*container.getWidth()/20, container.getHeight()-30);
-        this.brect.setBounds(container.getWidth()/20, 9*container.getHeight()/10, 5*container.getWidth()/20, container.getHeight()-30);
-        this.backRect.setBounds(container.getWidth()/2-bWidth/2,container.getHeight()-bHeight-30, bWidth, bHeight);      
+        bbtn.update(container, delta);    
     }
 
     @Override
