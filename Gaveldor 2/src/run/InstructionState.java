@@ -13,17 +13,17 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import util.MenuButton;
 import util.Resources;
 
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
-import com.aem.sticky.button.SimpleButton;
 import com.aem.sticky.button.events.ClickListener;
 
 public class InstructionState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
-    private SimpleButton backBtn,fbtn,bbtn;
+    private MenuButton backBtn,fbtn,bbtn;
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
@@ -54,9 +54,9 @@ public class InstructionState extends BasicGameState {
         images = this.makeImages();
 
         // add buttons
-        backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
-        fbtn = new SimpleButton(frect, images.get(2).getScaledCopy(w/5,h/10-10),images.get(2).getScaledCopy(w/5,h/10-10),s);
-        bbtn = new SimpleButton(brect, images.get(3).getScaledCopy(w/5,h/10-10),images.get(3).getScaledCopy(w/5,h/10-10),s);
+        backBtn = new MenuButton(backRect, images.get(0), images.get(1), s);
+        fbtn = new MenuButton(frect, images.get(2).getScaledCopy(w/5,h/10-10),images.get(2).getScaledCopy(w/5,h/10-10),s);
+        bbtn = new MenuButton(brect, images.get(3).getScaledCopy(w/5,h/10-10),images.get(3).getScaledCopy(w/5,h/10-10),s);
 
         // create listeners
         createListeners(container,game);

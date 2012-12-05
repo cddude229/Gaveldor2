@@ -15,6 +15,8 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import util.MenuButton;
+
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
 import com.aem.sticky.button.SimpleButton;
@@ -23,7 +25,7 @@ import com.aem.sticky.button.events.ClickListener;
 public class CreditsState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
-    private SimpleButton backBtn;
+    private MenuButton backBtn;
     private StickyListener listener;
     private GameContainer container;
     private static final int bWidth = 200;
@@ -50,13 +52,23 @@ public class CreditsState extends BasicGameState {
         ArrayList<Image> images = this.makeImages();
 
         // add button
-        backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
+        backBtn = new MenuButton(backRect, images.get(0), images.get(1), s);
 
         // create listeners
         createListeners(container,game);
         listener.add(backBtn);
         
-        credits = new String[] {"Credits","Chris Dessonville: Co-Producer","Ben Greenberg: Co-Producer","Lane Pertusi: Artists","Calvin Lewis: Sound","Todd Layton: Slick Master","Andres Romero: Networking", "Jeremy Sharpe: Game Logic","Kevin White: Menu"};
+        credits = new String[] {
+            "Credits",
+            "Chris Dessonville: Co-Producer",
+            "Ben Greenberg: Co-Producer",
+            "Todd Layton: Slick Master",
+            "Calvin Lewis: Sounds",
+            "Lane Pertusi: Artist",
+            "Andres Romero: Networking",
+            "Jeremy Sharpe: Game Logic",
+            "Kevin White: Menus, Buttons, and the Other Fun Things"
+        };
         generateLocations(container, credits);
         
     }
