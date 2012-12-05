@@ -164,19 +164,23 @@ public class PlayBoardState extends PlayerControllerState {
     @Override
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
         pc.renderBoard(container, g);
+        if (isLocal){
+            renderLocal(container, (LocalPlayerController)pc, g);
+        }
+        pc.renderAttack(container, g);
+        renderHeader(container, g, pc);
+    }
+    
+    public void renderHeader(GameContainer container, Graphics g, PlayerController pc){
         int piecesMoved = 0;
         for (Piece p : pc.model.getPieces()){
             if (p.owner.equals(pc.player) && p.turnState == Piece.TurnState.DONE){
                 piecesMoved++;
             }
-        }
+        } 
         String str = pc.player.toString() + ": " + piecesMoved + "/" + pc.model.numberOfPieces(pc.player) + " Pieces Moved";
         g.setFont(Constants.PRIMARY_FONT);
         g.drawString(str, (container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH - g.getFont().getWidth(str)) / 2, g.getFont().getHeight(str) / 2);
-        if (isLocal){
-            renderLocal(container, (LocalPlayerController)pc, g);
-        }
-        pc.renderAttack(container, g);
     }
     
     public void renderMinimap(GameContainer container, Graphics g, LocalPlayerController pc, int x, int y) throws SlickException{
@@ -392,7 +396,7 @@ public class PlayBoardState extends PlayerControllerState {
                 }
             }
         
-            if (container.getInput().isKeyPressed(Input.KEY_E)) {
+            if (pc.selectedPiece == null && container.getInput().isKeyDown(Input.KEY_E) && container.getInput().isKeyPressed(Input.KEY_E)) {
                 endTurn(pc);
             }
         }
