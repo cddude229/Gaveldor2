@@ -244,8 +244,8 @@ public class MainMenuState extends BasicGameState {
             switch (i){
             
             case 0:
-                im = new Image("assets/graphics/buttons/mainmenu/local_match.png");
-                clickPlay = new Image("assets/graphics/buttons/mainmenu/local_match_hover.png");
+                im = Resources.getImage("/assets/graphics/buttons/mainmenu/local_match.png");
+                clickPlay = Resources.getImage("/assets/graphics/buttons/mainmenu/local_match_hover.png");
                 
                 im.getGraphics().flush();
                 clickPlay.getGraphics().flush();

@@ -13,6 +13,8 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import util.Resources;
+
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
 import com.aem.sticky.button.SimpleButton;
@@ -177,19 +179,19 @@ public class InstructionState extends BasicGameState {
         clickPlay.getGraphics().flush();
         images.add(im);
         images.add(clickPlay);
-        Image wel = new Image("/assets/graphics/instructions/welcome.png");
+        Image wel = Resources.getImage("/assets/graphics/instructions/welcome.png");
         wel.getGraphics().flush();
-        Image move = new Image("/assets/graphics/instructions/movement.png");
+        Image move = Resources.getImage("/assets/graphics/instructions/movement.png");
         move.getGraphics().flush();
-        Image attack = new Image("/assets/graphics/instructions/attack.png");
+        Image attack = Resources.getImage("/assets/graphics/instructions/attack.png");
         attack.getGraphics().flush();
-        Image unit = new Image("/assets/graphics/instructions/unit.png");
+        Image unit = Resources.getImage("/assets/graphics/instructions/unit.png");
         unit.getGraphics().flush();
-        Image terrain = new Image("/assets/graphics/instructions/terrain.png");
+        Image terrain = Resources.getImage("/assets/graphics/instructions/terrain.png");
         terrain.getGraphics().flush();
-        Image forward = new Image("/assets/graphics/instructions/forward.png");
+        Image forward = Resources.getImage("/assets/graphics/instructions/forward.png");
         forward.getGraphics().flush();
-        Image backward = new Image("/assets/graphics/instructions/backward.png");
+        Image backward = Resources.getImage("/assets/graphics/instructions/backward.png");
         backward.getGraphics().flush();
         images.add(forward);
         images.add(backward);
