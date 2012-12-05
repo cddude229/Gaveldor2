@@ -21,7 +21,7 @@ public class GameModel {
     private Set<Piece> pieces;
 
     public static enum GameState {
-        SETTING_UP, PLAYING_BOARD, @Deprecated PLAYING_MINIGAME, WON, DISCONNECTED;
+        SETTING_UP, PLAYING_BOARD, WON, DISCONNECTED;
         
         public int getPCStateID(){
             return ordinal();
@@ -382,6 +382,18 @@ public class GameModel {
         }
         return c;
     }
+    
+    public void giveLoss(Player loser){
+        setCurrentPlayer(loser);
+        setCurrentPlayer(getOtherPlayer());
+        gameState = GameState.WON;
+    }
+    
+    public void giveLoss(int loserID){
+        setCurrentPlayer(loserID);
+        setCurrentPlayer(getOtherPlayer());
+        gameState = GameState.WON;
+    }
 
     public void applyAction(Action action) {
         System.out.println(action.type);
@@ -401,9 +413,7 @@ public class GameModel {
             break;
         case FORFEIT:
             ForfeitAction forfeitPacket = (ForfeitAction) action;
-            setCurrentPlayer(forfeitPacket.playerID);
-            setCurrentPlayer(getOtherPlayer());
-            gameState = GameState.WON;
+            giveLoss(forfeitPacket.playerID);
             break;
         case BOARD_MOVE:
             BoardMoveAction movePacket = (BoardMoveAction) action;
@@ -417,7 +427,6 @@ public class GameModel {
             piece.setPosition(movePacket.destination);
             piece.setDirection(movePacket.direction);
             if (movePacket.targetID == -1){
-                piece.turnState = TurnState.DONE;
                 lastMovedAttackResult = null;
             } else{
                 Piece target = getPieceByID(movePacket.targetID);
@@ -429,7 +438,11 @@ public class GameModel {
                 if (!target.isAlive()){
                     pieces.remove(target);
                 }
+                if (!hasAnyPieces(target.owner)){
+                    giveLoss(target.owner);
+                }
             }
+            piece.turnState = TurnState.DONE;
             break;
         case TURN_END:
             TurnEndAction turnEndPacket = (TurnEndAction) action;
