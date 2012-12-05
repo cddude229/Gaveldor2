@@ -78,6 +78,7 @@ public class Constants {
     public static final long BOARD_MOVE_ANIMATE_TIME = 500L;
     
     public static final UnicodeFont TEST_FONT = loadFont("Arial Monospaced", Font.PLAIN, 40, Color.WHITE);
+    public static final UnicodeFont TUTORIAL_FONT = loadFont("Arial Monospaced", Font.PLAIN, 16, Color.WHITE);
     
     public static final ControlScheme
             PLAYER_1_CONTROLS = new ControlScheme("A", "S", "D"),
