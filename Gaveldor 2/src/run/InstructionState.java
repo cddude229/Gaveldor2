@@ -42,7 +42,7 @@ public class InstructionState extends BasicGameState {
             yLoc += 100;
         }
         // create rectangles for buttons
-        backRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
+        backRect = new Rectangle(w/2-bWidth/2,h-bHeight-30, bWidth, bHeight);
         frect = new Rectangle(15*w/20, 9*h/10, 19*w/20, h-30);
         brect = new Rectangle(w/20, 9*h/10, 5*w/20, h-30);
 
@@ -99,7 +99,7 @@ public class InstructionState extends BasicGameState {
         bbtn.update(container, delta);
         this.frect.setBounds(15*container.getWidth()/20, 9*container.getHeight()/10, 19*container.getWidth()/20, container.getHeight()-30);
         this.brect.setBounds(container.getWidth()/20, 9*container.getHeight()/10, 5*container.getWidth()/20, container.getHeight()-30);
-                
+        this.backRect.setBounds(container.getWidth()/2-bWidth/2,container.getHeight()-bHeight-30, bWidth, bHeight);      
     }
 
     @Override
@@ -168,8 +168,8 @@ public class InstructionState extends BasicGameState {
         clickPlay.getGraphics().setColor(Color.yellow);
         clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
         clickPlay.getGraphics().setColor(Color.black);
-        im.getGraphics().drawString("Back", 0, 0);
-        clickPlay.getGraphics().drawString("Back", 0, 0);
+        im.getGraphics().drawString("Main Menu", 0, 0);
+        clickPlay.getGraphics().drawString("Main Menu", 0, 0);
         im.getGraphics().flush();
         clickPlay.getGraphics().flush();
         images.add(im);
