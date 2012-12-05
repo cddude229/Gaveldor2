@@ -21,16 +21,16 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import util.Constants;
+import util.MenuButton;
 
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
-import com.aem.sticky.button.SimpleButton;
 import com.aem.sticky.button.events.ClickListener;
 
 public class HostGameState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
-    private SimpleButton backBtn;
+    private MenuButton backBtn;
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
@@ -56,7 +56,7 @@ public class HostGameState extends BasicGameState {
         ArrayList<Image> images = this.makeImages();
 
         // add button
-        backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
+        backBtn = new MenuButton(backRect, images.get(0), images.get(1), s);
 
         // create listeners
         createListeners(container,game);

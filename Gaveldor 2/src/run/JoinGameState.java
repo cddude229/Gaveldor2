@@ -21,23 +21,23 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import util.Constants;
+import util.MenuButton;
 
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
-import com.aem.sticky.button.SimpleButton;
 import com.aem.sticky.button.events.ClickListener;
 
 public class JoinGameState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
-    private SimpleButton connectBtn;
-    private SimpleButton backBtn;
+    private MenuButton connectBtn;
+    private MenuButton backBtn;
     private TextField ipBox;
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
     private String instructionTxt;
-    ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
+    ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
     
     private Socket socket = null;
 
@@ -50,7 +50,7 @@ public class JoinGameState extends BasicGameState {
         listener = new StickyListener();
         buttons = this.buildButtons(container, game);
         ipBox.setAcceptingInput(false);
-        for (SimpleButton button : buttons) {
+        for (MenuButton button : buttons) {
             listener.add(button);
         }
 
@@ -87,7 +87,7 @@ public class JoinGameState extends BasicGameState {
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException{
         ((Game)game).toggleFullscreenCheck((AppGameContainer)container);
-        for (SimpleButton button : buttons) {
+        for (MenuButton button : buttons) {
             button.update(container, delta);
         }
         if (socket != null && socket.isConnected()){
@@ -126,7 +126,7 @@ public class JoinGameState extends BasicGameState {
      * @return an arrayList of the five buttons
      * @throws SlickException
      */
-    public ArrayList<SimpleButton> buildButtons(GameContainer container, StateBasedGame game) throws SlickException {
+    public ArrayList<MenuButton> buildButtons(GameContainer container, StateBasedGame game) throws SlickException {
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
         for (int i = 0; i < 6; i++) {
@@ -146,14 +146,14 @@ public class JoinGameState extends BasicGameState {
         ipBox.setTextColor(Color.black);
         
         // add buttons
-        backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
-        connectBtn = new SimpleButton(connectRect, images.get(2), images.get(3), s);
+        backBtn = new MenuButton(backRect, images.get(0), images.get(1), s);
+        connectBtn = new MenuButton(connectRect, images.get(2), images.get(3), s);
 
         // create listeners
         createListeners(container,game);
 
         // add to array of buttons
-        ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
+        ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
         buttons.add(connectBtn);
         buttons.add(backBtn);
         return buttons;

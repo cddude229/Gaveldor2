@@ -18,6 +18,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import util.MenuButton;
 import util.Resources;
 
 import com.aem.sticky.StickyListener;
@@ -39,12 +40,12 @@ public class MapSelectionState extends BasicGameState {
         MATCH
     }
     
-    private SimpleButton backBtn;
+    private MenuButton backBtn;
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
     private String instructionTxt;
-    ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
+    ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
     ArrayList<String> maps = new ArrayList<String>();
 
     @Override
@@ -56,7 +57,7 @@ public class MapSelectionState extends BasicGameState {
         listener = new StickyListener();
         maps = this.getMapNames();
         this.buildButtons(container, game);
-        for (SimpleButton button : buttons) {
+        for (MenuButton button : buttons) {
             listener.add(button);
         }
         listener.add(backBtn);
@@ -75,7 +76,7 @@ public class MapSelectionState extends BasicGameState {
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g){
         backBtn.render(container, g);
-        for (SimpleButton btn: buttons){
+        for (MenuButton btn: buttons){
             btn.render(container, g);
         }
         g.drawString(instructionTxt, 200, 50);
@@ -142,10 +143,10 @@ public class MapSelectionState extends BasicGameState {
         Sound s = null;
         ArrayList<Image> images = this.makeImages();
         // add buttons
-        backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
+        backBtn = new MenuButton(backRect, images.get(0), images.get(1), s);
         
         for (int i = 0; i<rects.size()-1;i++){
-            buttons.add(new SimpleButton(rects.get(i),images.get(2*i+2),images.get(2*i+3),s));
+            buttons.add(new MenuButton(rects.get(i),images.get(2*i+2),images.get(2*i+3),s));
         }
 
         // create listeners
