@@ -58,7 +58,17 @@ public class CreditsState extends BasicGameState {
         createListeners(container,game);
         listener.add(backBtn);
         
-        credits = new String[] {"Credits","Chris Dessonville: Co-Producer","Ben Greenberg: Co-Producer","Lane Pertusi: Artists","Calvin Lewis: Sound","Todd Layton: Slick Master","Andres Romero: Networking", "Jeremy Sharpe: Game Logic","Kevin White: Menu"};
+        credits = new String[] {
+            "Credits",
+            "Chris Dessonville: Co-Producer",
+            "Ben Greenberg: Co-Producer",
+            "Todd Layton: Slick Master",
+            "Calvin Lewis: Sounds",
+            "Lane Pertusi: Artist",
+            "Andres Romero: Networking",
+            "Jeremy Sharpe: Game Logic",
+            "Kevin White: Menus, Buttons, and the Other Fun Things"
+        };
         generateLocations(container, credits);
         
     }
