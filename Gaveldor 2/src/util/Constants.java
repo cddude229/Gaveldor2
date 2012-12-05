@@ -114,7 +114,7 @@ public class Constants {
     
     
     // FEATURE FLAGS
-    public static final boolean ARCHER_2X_VS_CAVALRY = true;
+    public static final boolean ARCHER_2X_VS_CAVALRY = false;
     
     public static final boolean PLAYER2_ORANGE_SIDEBAR = true;
     
