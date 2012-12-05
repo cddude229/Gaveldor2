@@ -210,6 +210,7 @@ public class PlayBoardState extends PlayerControllerState {
         g.drawString(pc.player.toString(), container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 200);
         renderMinimap(container, g, pc, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0);
         
+        g.setFont(Constants.TUTORIAL_FONT);
         g.drawString(tutorialString, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 300);
         
         Button[] sidebarButtons = (Constants.PLAYER2_ORANGE_SIDEBAR && pc.player.id == 2?sidebarButtons2:sidebarButtons1);
