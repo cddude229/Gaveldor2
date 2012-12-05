@@ -1,7 +1,5 @@
 package run;
 
-import game.run.GameException;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -129,12 +127,7 @@ public class HostGameState extends BasicGameState {
             game.enterState(MapSelectionState.STATE_ID);
         }
         if (socket != null && socket.isConnected()){
-            try {
-                ((Game)game).startHostRemoteMatch(MapSelectionState.map, socket);
-            } catch (GameException e) {
-                //TODO: display error message
-                throw new RuntimeException(e);
-            }
+            ((Game)game).startHostRemoteMatch(MapSelectionState.map, socket);
             socket = null;
             game.enterState(PlayGameState.STATE_ID);
         }

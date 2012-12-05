@@ -1,6 +1,5 @@
 package run;
 
-import game.run.GameException;
 import game.run.MatchmakingNetworkingController;
 
 import java.io.IOException;
@@ -121,22 +120,12 @@ public class MatchMakingState extends BasicGameState {
         backBtn.update(container, delta);
         if (socket != null && setupDone){
             if (host) {
-                try {
-                    ((Game)game).startHostRemoteMatch(mapName, socket);
-                } catch (GameException e) {
-                    // TODO: display error
-                    throw new RuntimeException(e);
-                }
+                ((Game)game).startHostRemoteMatch(mapName, socket);
                 socket = null;
                 game.enterState(PlayGameState.STATE_ID);
             }
             else {
-                try {
-                    ((Game)game).startClientRemoteMatch(socket);
-                } catch (GameException e) {
-                    //TODO: display error message
-                    throw new RuntimeException(e);
-                }
+                ((Game)game).startClientRemoteMatch(socket);
                 socket = null;
                 game.enterState(PlayGameState.STATE_ID);
             }

@@ -458,7 +458,7 @@ public class GameModel {
         switch (gameState){
         case PLAYING_BOARD:
             sinceLastMoved += delta;
-            if (sinceTurnStart == 0){ //TODO: a temp fix for the loading issue
+            if (sinceTurnStart == 0){
                sinceTurnStart = 1;
             } else{
                 sinceTurnStart += delta;

@@ -171,7 +171,6 @@ public class PlayBoardState extends PlayerControllerState {
     }
     
     public void renderMinimap(GameContainer container, Graphics g, LocalPlayerController pc, int x, int y) throws SlickException{
-        //TODO clean up constants
         final int minimapWidth = 200, minimapHeight = 200;
         float scale = Math.min(1f * minimapWidth / pc.model.map.getPixelWidth() , 1f * minimapHeight / pc.model.map.getPixelHeight());
         int width = Math.round(pc.model.map.getPixelWidth() * scale);
@@ -285,7 +284,6 @@ public class PlayBoardState extends PlayerControllerState {
                 } else if (pc.selectedPieceFace == -1){
                     tutorialString = Constants.FACING;
                     pc.renderAtPosition(faceableArrows, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0.5f, 0.5f);
-                    // TODO: add full tile overlays
                 } else{
                     tutorialString = Constants.ATTACK;
                     for (Point loc : pc.model.findValidAttacks(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace)) {
@@ -294,7 +292,6 @@ public class PlayBoardState extends PlayerControllerState {
                             pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
                         }
                     }
-                    //TODO: use different overlay
                     pc.renderAtPosition(movableOverlay, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0f, 0f);
                 }
             }
@@ -359,7 +356,6 @@ public class PlayBoardState extends PlayerControllerState {
                                     if (direction != -1) {
                                         pc.selectedPieceFace = direction;
                                         
-                                        //TODO: replace with findValidAttack()
                                         if (pc.model.findValidAttacks(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace).isEmpty()){
                                             System.out.println("No valid attacks");
                                             pc.actionQueue.add(new Action.BoardMoveAction(

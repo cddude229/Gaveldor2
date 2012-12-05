@@ -1,7 +1,6 @@
 package run;
 
 import game.model.GameModel;
-import game.run.GameException;
 import game.run.GameMatch;
 import game.run.LocalPlayerController;
 import game.run.RemotePlayerController;
@@ -33,7 +32,7 @@ public class Game extends StateBasedGame {
         return nextStateID++;
     }
 
-    public void startLocalMatch(String mapName) throws GameException {
+    public void startLocalMatch(String mapName){
         GameModel model = new GameModel();
         match = new GameMatch(model,
                 new LocalPlayerController(model.getCurrentPlayer(), model),
@@ -41,7 +40,7 @@ public class Game extends StateBasedGame {
         match.startGameLocally(mapName);
     }
 
-    public void startHostRemoteMatch(String mapName, Socket socket) throws GameException {
+    public void startHostRemoteMatch(String mapName, Socket socket){
         GameModel model = new GameModel();
         match = new GameMatch(model,
                 new LocalPlayerController(model.getCurrentPlayer(), model),
@@ -49,7 +48,7 @@ public class Game extends StateBasedGame {
         match.startGameLocally(mapName);
     }
 
-    public void startClientRemoteMatch(Socket socket) throws GameException {
+    public void startClientRemoteMatch(Socket socket){
         GameModel model = new GameModel();
         match = new GameMatch(model,
                 new RemotePlayerController(model.getCurrentPlayer(), model, socket),

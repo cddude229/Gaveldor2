@@ -1,7 +1,5 @@
 package run;
 
-import game.run.GameException;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -91,12 +89,7 @@ public class JoinGameState extends BasicGameState {
             button.update(container, delta);
         }
         if (socket != null && socket.isConnected()){
-            try {
-                ((Game)game).startClientRemoteMatch(socket);
-            } catch (GameException e) {
-                //TODO: display error message
-                throw new RuntimeException(e);
-            }
+            ((Game)game).startClientRemoteMatch(socket);
             socket = null;
             game.enterState(PlayGameState.STATE_ID);
         }

@@ -19,8 +19,6 @@ public class Map {
 
     public final String name;
 
-    // TODO: handle piece deployment information
-
     public final int width, height;
 
     private final TerrainType[][] terrainMap;

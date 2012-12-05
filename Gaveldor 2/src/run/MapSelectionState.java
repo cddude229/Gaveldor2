@@ -1,7 +1,5 @@
 package run;
 
-import game.run.GameException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -175,12 +173,8 @@ public class MapSelectionState extends BasicGameState {
                     map += maps.get(index);
                     switch(match){
                     case LOCAL :
-                        try {
-                            ((Game) game).startLocalMatch(map);
-                            game.enterState(PlayGameState.STATE_ID);
-                        } catch (GameException e) {
-                            e.printStackTrace(); 
-                        }
+                        ((Game) game).startLocalMatch(map);
+                        game.enterState(PlayGameState.STATE_ID);
                         break;
                     case HOST :
                         game.enterState(HostGameState.STATE_ID);
