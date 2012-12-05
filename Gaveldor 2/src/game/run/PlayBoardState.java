@@ -283,9 +283,11 @@ public class PlayBoardState extends PlayerControllerState {
                         pc.renderAtPosition(attackableOverlay, g, p.x, p.y, 0f, 0f);
                     }
                 } else if (pc.selectedPieceFace == -1){
+                    tutorialString = Constants.FACING;
                     pc.renderAtPosition(faceableArrows, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0.5f, 0.5f);
                     // TODO: add full tile overlays
                 } else{
+                    tutorialString = Constants.ATTACK;
                     for (Point loc : pc.model.findValidAttacks(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace)) {
                         Piece atPoint = pc.model.getPieceByPosition(loc);
                         if (pc.model.isValidPosition(loc) && atPoint != null && !atPoint.owner.equals(pc.player)) {
@@ -342,6 +344,7 @@ public class PlayBoardState extends PlayerControllerState {
                         } else if (pc.selectedPiece != null && pc.player.equals(pc.selectedPiece.owner)){
                             switch (pc.selectedPiece.turnState) {
                             case MOVING:
+                                // tutorialString = "Click to Move";
                                 if (pc.selectedPieceMove == null){
                                     if (pc.model.findValidMoves(pc.selectedPiece).containsKey(position)) {
                                         // findValidMoves checks terrain, piece, and position validity
@@ -351,6 +354,7 @@ public class PlayBoardState extends PlayerControllerState {
 //                                        pc.setDisplayCenter(container, position.x, position.y);
                                     }
                                 } else if (pc.selectedPieceFace == -1){
+                                    // tutorialString = "Click to Face";
                                     int direction = Piece.pointsToDirection(position, pc.selectedPieceMove);
                                     if (direction != -1) {
                                         pc.selectedPieceFace = direction;
