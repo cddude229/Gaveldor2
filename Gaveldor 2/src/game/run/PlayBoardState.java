@@ -164,6 +164,15 @@ public class PlayBoardState extends PlayerControllerState {
     @Override
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
         pc.renderBoard(container, g);
+        int piecesMoved = 0;
+        for (Piece p : pc.model.getPieces()){
+            if (p.owner.equals(pc.player) && p.turnState == Piece.TurnState.DONE){
+                piecesMoved++;
+            }
+        }
+        String str = pc.player.toString() + ": " + piecesMoved + "/" + pc.model.numberOfPieces(pc.player) + " Pieces Moved";
+        g.setFont(Constants.PRIMARY_FONT);
+        g.drawString(str, (container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH - g.getFont().getWidth(str)) / 2, g.getFont().getHeight(str) / 2);
         if (isLocal){
             renderLocal(container, (LocalPlayerController)pc, g);
         }
@@ -206,7 +215,7 @@ public class PlayBoardState extends PlayerControllerState {
         g.fillRect(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0, Constants.BOARD_SIDEBAR_WIDTH, container.getHeight());
         g.setColor(Color.white);
         g.setFont(Constants.PRIMARY_FONT);
-        g.drawString(pc.player.toString(), container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 200);
+        //g.drawString(pc.player.toString(), container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 200);
         renderMinimap(container, g, pc, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0);
         
         g.setFont(Constants.TUTORIAL_FONT);
