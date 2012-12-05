@@ -26,12 +26,14 @@ public class InstructionState extends BasicGameState {
     private static final int bHeight = 50;
     private ArrayList<Image> images;
     private int page;
+    private Rectangle backRect,frect,brect;
+    private int w,h;
     
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         page=0;
-        int w=container.getWidth();
-        int h = container.getHeight();
+        w=container.getWidth();
+        h = container.getHeight();
         listener = new StickyListener();
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
@@ -40,9 +42,9 @@ public class InstructionState extends BasicGameState {
             yLoc += 100;
         }
         // create rectangles for buttons
-        Rectangle backRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
-        Rectangle frect = new Rectangle(15*w/20, 9*h/10, 19*w/20, h-10);
-        Rectangle brect = new Rectangle(w/20, 9*h/10, 5*w/20, h-10);
+        backRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
+        frect = new Rectangle(15*w/20, 9*h/10, 19*w/20, h-30);
+        brect = new Rectangle(w/20, 9*h/10, 5*w/20, h-30);
 
         // create play Image
         Sound s = null;
@@ -72,8 +74,6 @@ public class InstructionState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        int w=container.getWidth();
-        int h = container.getHeight();
         /*g.drawString("Gaveldor is a turn-based strategy game. Last one standing wins.There are three types of pieces:", 50, 50);
         g.drawString("• Infantry (3 health, 1 move range, 1 attack range)", 100, 100);
         g.drawString("• Archers (2 health, 1 move range, 2 attack range)", 100, 150);
@@ -97,6 +97,9 @@ public class InstructionState extends BasicGameState {
         backBtn.update(container, delta);
         fbtn.update(container, delta);
         bbtn.update(container, delta);
+        this.frect.setBounds(15*container.getWidth()/20, 9*container.getHeight()/10, 19*container.getWidth()/20, container.getHeight()-30);
+        this.brect.setBounds(container.getWidth()/20, 9*container.getHeight()/10, 5*container.getWidth()/20, container.getHeight()-30);
+                
     }
 
     @Override
@@ -143,6 +146,9 @@ public class InstructionState extends BasicGameState {
 
             public void onClick(Button clicked, float mx, float my) {
                 page=((page-1)%(images.size()-4));
+                if (page<0){
+                    page=images.size()-5;
+                }
             }
 
             public void onDoubleClick(Button clicked, float mx, float my) {}
