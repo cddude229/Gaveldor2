@@ -18,7 +18,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
-import run.MainMenuState;
 import util.Constants;
 import util.Helpful;
 import util.LayoutButton;
@@ -126,10 +125,11 @@ public class PlayBoardState extends PlayerControllerState {
             public void onDoubleClick(Button clicked, float mx, float my) {
             }
         },
-        exitGameListener = new ClickListener(){
+        forfeitListener = new ClickListener(){
             @Override
             public void onClick(Button clicked, float mx, float my) {
-                 pc.game.enterState(MainMenuState.STATE_ID);
+                pc.actionQueue.add(new Action.ForfeitAction(pc.player));
+//                 pc.game.enterState(MainMenuState.STATE_ID);
             }
             @Override
             public void onRightClick(Button clicked, float mx, float my) {
@@ -144,13 +144,13 @@ public class PlayBoardState extends PlayerControllerState {
                 new SidebarButton(250, "End Turn", endTurnListener, 1),
                 new SidebarButton(250, "Cancel", cancelListener, 1),
                 new SidebarButton(550, "Mute", muteListener, 1),
-                new SidebarButton(650, "Exit Game", exitGameListener, 1),
+                new SidebarButton(650, "Forfeit", forfeitListener, 1),
         };
         sidebarButtons2 = new SidebarButton[]{
                 new SidebarButton(250, "End Turn", endTurnListener, 2),
                 new SidebarButton(250, "Cancel", cancelListener, 2),
                 new SidebarButton(550, "Mute", muteListener, 2),
-                new SidebarButton(650, "Exit Game", exitGameListener, 2),
+                new SidebarButton(650, "Forfeit", forfeitListener, 2),
         };
         for (Button b : sidebarButtons1){
             stickyListener.add(b);
