@@ -18,6 +18,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
+import run.MainMenuState;
 import util.Constants;
 import util.Helpful;
 import util.LayoutButton;
@@ -128,7 +129,7 @@ public class PlayBoardState extends PlayerControllerState {
         exitGameListener = new ClickListener(){
             @Override
             public void onClick(Button clicked, float mx, float my) {
-                 gameContainer.exit();
+                 pc.game.enterState(MainMenuState.STATE_ID);
             }
             @Override
             public void onRightClick(Button clicked, float mx, float my) {
