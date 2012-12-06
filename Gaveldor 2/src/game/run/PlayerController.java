@@ -10,7 +10,6 @@ import game.model.TerrainType;
 import java.util.List;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Game;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -21,7 +20,7 @@ import util.Constants;
 
 public abstract class PlayerController extends StateBasedGame{
 
-    public Game game;
+    public StateBasedGame game;
     
     public final Player player;
 
@@ -155,7 +154,7 @@ public abstract class PlayerController extends StateBasedGame{
         return player.equals(model.getCurrentPlayer());
     }
     
-    public void update(GameContainer container, Game game, int delta) throws SlickException{
+    public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException{
         this.game = game;
         if (justStarted){
             setDisplayCenterPiecesAverage(container);
