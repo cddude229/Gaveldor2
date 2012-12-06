@@ -159,6 +159,7 @@ public class HostGameState extends BasicGameState {
         backBtn.addListener(new ClickListener() {
 
             public void onClick(Button clicked, float mx, float my) {
+                MapSelectionState.map = "/assets/maps/";
                 game.enterState(MainMenuState.STATE_ID);
             }
 
