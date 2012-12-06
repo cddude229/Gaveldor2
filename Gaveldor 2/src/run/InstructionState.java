@@ -176,6 +176,8 @@ public class InstructionState extends BasicGameState {
         unit.getGraphics().flush();
         Image terrain = Resources.getImage("/assets/graphics/instructions/terrain.png");
         terrain.getGraphics().flush();
+        Image misc = Resources.getImage("/assets/graphics/instructions/misc.png");
+        misc.getGraphics().flush();
         Image forward = Resources.getImage("/assets/graphics/instructions/forward.png");
         forward.getGraphics().flush();
         Image backward = Resources.getImage("/assets/graphics/instructions/backward.png");
@@ -187,6 +189,7 @@ public class InstructionState extends BasicGameState {
         images.add(attack);
         images.add(unit);
         images.add(terrain);
+        images.add(misc);
         return images;
     }
 
