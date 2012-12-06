@@ -81,10 +81,12 @@ public class LocalPlayerController extends PlayerController {
             frac = Math.max(frac, 0);
             frac = Math.min(frac,  1);
         }
-        if (frac < .1) {
-            return Math.round(-(.1f - frac) * .01f * size * delta);
-        } else if (frac >= .9) {
-            return Math.round((frac - .9f) * .01f * size * delta);
+        float threshold = .05f;
+        float scale = .02f;
+        if (frac < threshold) {
+            return Math.round(-(threshold - frac) * size * scale * delta);
+        } else if (frac >= 1f - threshold) {
+            return Math.round((frac - (1f - threshold)) * size * scale * delta);
         } else{
             return 0;
         }

@@ -1,12 +1,11 @@
 package run;
 
-import game.run.GameException;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
@@ -20,23 +19,24 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import util.Constants;
+import util.MenuButton;
+import util.Resources;
 
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
-import com.aem.sticky.button.SimpleButton;
 import com.aem.sticky.button.events.ClickListener;
 
 public class JoinGameState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
-    private SimpleButton connectBtn;
-    private SimpleButton backBtn;
+    private MenuButton connectBtn;
+    private MenuButton backBtn;
     private TextField ipBox;
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
     private String instructionTxt;
-    ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
+    ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
     
     private Socket socket = null;
 
@@ -49,7 +49,7 @@ public class JoinGameState extends BasicGameState {
         listener = new StickyListener();
         buttons = this.buildButtons(container, game);
         ipBox.setAcceptingInput(false);
-        for (SimpleButton button : buttons) {
+        for (MenuButton button : buttons) {
             listener.add(button);
         }
 
@@ -84,17 +84,13 @@ public class JoinGameState extends BasicGameState {
     }
 
     @Override
-    public void update(GameContainer container, StateBasedGame game, int delta){
-        for (SimpleButton button : buttons) {
+    public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException{
+        ((Game)game).toggleFullscreenCheck((AppGameContainer)container);
+        for (MenuButton button : buttons) {
             button.update(container, delta);
         }
         if (socket != null && socket.isConnected()){
-            try {
-                ((Game)game).startClientRemoteMatch(socket);
-            } catch (GameException e) {
-                //TODO: display error message
-                throw new RuntimeException(e);
-            }
+            ((Game)game).startClientRemoteMatch(socket);
             socket = null;
             game.enterState(PlayGameState.STATE_ID);
         }
@@ -124,7 +120,7 @@ public class JoinGameState extends BasicGameState {
      * @return an arrayList of the five buttons
      * @throws SlickException
      */
-    public ArrayList<SimpleButton> buildButtons(GameContainer container, StateBasedGame game) throws SlickException {
+    public ArrayList<MenuButton> buildButtons(GameContainer container, StateBasedGame game) throws SlickException {
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
         for (int i = 0; i < 6; i++) {
@@ -136,7 +132,7 @@ public class JoinGameState extends BasicGameState {
         Rectangle connectRect = new Rectangle(locations.get(5)[0] + 150, locations.get(5)[1], bWidth, bHeight);
 
         // create play Image
-        Sound s = null;
+        Sound s = Resources.getSound("/assets/audio/effects/click.ogg");
         ArrayList<Image> images = this.makeImages();
         Font defaultFont = images.get(0).getGraphics().getFont();
         ipBox = new TextField(container,defaultFont,locations.get(2)[0],locations.get(2)[1],bWidth,bHeight);
@@ -144,14 +140,14 @@ public class JoinGameState extends BasicGameState {
         ipBox.setTextColor(Color.black);
         
         // add buttons
-        backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
-        connectBtn = new SimpleButton(connectRect, images.get(2), images.get(3), s);
+        backBtn = new MenuButton(backRect, images.get(0), images.get(1), s);
+        connectBtn = new MenuButton(connectRect, images.get(2), images.get(3), s);
 
         // create listeners
         createListeners(container,game);
 
         // add to array of buttons
-        ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
+        ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
         buttons.add(connectBtn);
         buttons.add(backBtn);
         return buttons;

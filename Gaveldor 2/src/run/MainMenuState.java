@@ -14,11 +14,11 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import util.MenuButton;
 import util.Resources;
 
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
-import com.aem.sticky.button.SimpleButton;
 import com.aem.sticky.button.events.ClickListener;
 
 public class MainMenuState extends BasicGameState {
@@ -27,9 +27,9 @@ public class MainMenuState extends BasicGameState {
     private StickyListener listener;
     private GameContainer container;
     private StateBasedGame game;
-    private static final int bWidth = 150;
+    private static final int bWidth = 200;
     private static final int bHeight = 50;
-    ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
+    ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
     
     private Music music;
 
@@ -45,7 +45,7 @@ public class MainMenuState extends BasicGameState {
         listener = new StickyListener();
         buttons = this.buildButtons();
         game.enterState(MainMenuState.STATE_ID);
-        for (SimpleButton button : buttons) {
+        for (MenuButton button : buttons) {
             listener.add(button);
         }
 
@@ -66,8 +66,9 @@ public class MainMenuState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        g.drawString("Welcome to Gaveldor 2: The Engaveling of Ambidextria", 250, 10);
-        for (SimpleButton button: buttons){
+        int titleWidth = g.getFont().getWidth("Welcome to Gaveldor 2: The Engaveling of Ambidextria");
+        g.drawString("Welcome to Gaveldor 2: The Engaveling of Ambidextria", (container.getWidth() - titleWidth)/2, 0);
+        for (MenuButton button: buttons){
             button.render(container, g);
         }
     }
@@ -75,7 +76,7 @@ public class MainMenuState extends BasicGameState {
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         ((Game)game).toggleFullscreenCheck((AppGameContainer)container);
-        for (SimpleButton button : buttons) {
+        for (MenuButton button : buttons) {
             button.update(container, delta);
         }
     }
@@ -104,7 +105,7 @@ public class MainMenuState extends BasicGameState {
      * @return an arrayList of the five buttons
      * @throws SlickException
      */
-    public ArrayList<SimpleButton> buildButtons() throws SlickException {
+    public ArrayList<MenuButton> buildButtons() throws SlickException {
         
         //create possible locations for buttons
         ArrayList<int[]> locations = new ArrayList<int[]>();
@@ -121,13 +122,13 @@ public class MainMenuState extends BasicGameState {
         }
 
         // create play Image
-        Sound s = null;
+        Sound s = Resources.getSound("/assets/audio/effects/click.ogg");
         ArrayList<Image> images = this.makeImages();
         
         //create the buttons
-        ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
+        ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
         for (int i = 0; i < rects.size(); i++){
-            buttons.add(new SimpleButton(rects.get(i), images.get(2*i), images.get(2*i + 1),s));
+            buttons.add(new MenuButton(rects.get(i), images.get(2*i), images.get(2*i + 1),s));
         }
 
         // create listeners
@@ -139,7 +140,7 @@ public class MainMenuState extends BasicGameState {
      * Adds the listeners to the system. Editing the listeners must be in order of button appearance
      *
      */
-    private void createListeners(final StateBasedGame game, ArrayList<SimpleButton> buttons) {
+    private void createListeners(final StateBasedGame game, ArrayList<MenuButton> buttons) {
         for (int i = 0; i < buttons.size(); i++){
             switch (i){
 
@@ -244,8 +245,8 @@ public class MainMenuState extends BasicGameState {
             switch (i){
             
             case 0:
-                im = new Image("assets/graphics/buttons/mainmenu/local_match.png");
-                clickPlay = new Image("assets/graphics/buttons/mainmenu/local_match_hover.png");
+                im = Resources.getImage("/assets/graphics/buttons/mainmenu/local_match.png");
+                clickPlay = Resources.getImage("/assets/graphics/buttons/mainmenu/local_match_hover.png");
                 
                 im.getGraphics().flush();
                 clickPlay.getGraphics().flush();

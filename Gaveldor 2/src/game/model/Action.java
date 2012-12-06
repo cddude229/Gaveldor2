@@ -68,13 +68,13 @@ public abstract class Action implements Serializable {
     		int rand = (int)(Math.random() * 6);
     		switch (rand){
     		case 0:
-    		    randomAttackResult = GameModel.AttackResult.MISS;
+    		    randomAttackResult = GameModel.AttackResult.BLOCKED;
     		    break;
     		case 5:
-    		    randomAttackResult = GameModel.AttackResult.CRIT;
+    		    randomAttackResult = GameModel.AttackResult.CRITICAL;
     		    break;
     		default:
-    		    randomAttackResult = GameModel.AttackResult.HIT;
+    		    randomAttackResult = GameModel.AttackResult.STRIKE;
     		    break;
     		}
     	}

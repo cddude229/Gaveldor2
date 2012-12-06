@@ -1,7 +1,5 @@
 package run;
 
-import game.run.GameException;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -9,6 +7,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -20,16 +19,17 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import util.Constants;
+import util.MenuButton;
+import util.Resources;
 
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
-import com.aem.sticky.button.SimpleButton;
 import com.aem.sticky.button.events.ClickListener;
 
 public class HostGameState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
-    private SimpleButton backBtn;
+    private MenuButton backBtn;
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
@@ -51,11 +51,11 @@ public class HostGameState extends BasicGameState {
         Rectangle backRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
 
         // create play Image
-        Sound s = null;
+        Sound s = Resources.getSound("/assets/audio/effects/click.ogg");
         ArrayList<Image> images = this.makeImages();
 
         // add button
-        backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
+        backBtn = new MenuButton(backRect, images.get(0), images.get(1), s);
 
         // create listeners
         createListeners(container,game);
@@ -121,18 +121,14 @@ public class HostGameState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        ((Game)game).toggleFullscreenCheck((AppGameContainer)container);
         backBtn.update(container, delta);
         if(MapSelectionState.map.equals("/assets/maps/")){
             MapSelectionState.match = MapSelectionState.MatchType.HOST;
             game.enterState(MapSelectionState.STATE_ID);
         }
         if (socket != null && socket.isConnected()){
-            try {
-                ((Game)game).startHostRemoteMatch(MapSelectionState.map, socket);
-            } catch (GameException e) {
-                //TODO: display error message
-                throw new RuntimeException(e);
-            }
+            ((Game)game).startHostRemoteMatch(MapSelectionState.map, socket);
             socket = null;
             game.enterState(PlayGameState.STATE_ID);
         }

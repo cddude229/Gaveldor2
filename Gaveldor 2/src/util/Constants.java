@@ -77,7 +77,8 @@ public class Constants {
     public static final long MINIGAME_WAIT_TIME = 1500L;
     public static final long BOARD_MOVE_ANIMATE_TIME = 500L;
     
-    public static final UnicodeFont TEST_FONT = loadFont("Arial Monospaced", Font.PLAIN, 40, Color.WHITE);
+    public static final UnicodeFont PRIMARY_FONT = loadFont("Arial Monospaced", Font.PLAIN, 40, Color.WHITE);
+    public static final UnicodeFont TUTORIAL_FONT = loadFont("Arial Monospaced", Font.PLAIN, 24, Color.WHITE);
     
     public static final ControlScheme
             PLAYER_1_CONTROLS = new ControlScheme("A", "S", "D"),
@@ -85,35 +86,30 @@ public class Constants {
     
     // PlayBoardState
     // Tutorial strings
-    public static final String BASIC_TUTORIAL = 
-            "Click to select piece\n" +
-    		"Click to move\n" +
-    		"Click to face\n" +
-    		"Click where to attack\n" +
-    		"     or\n" +
-    		"Click the piece\n\n" +
-    		"Hit END TURN once\n" +
-    		"you've made all moves";
-    public static final String NONE_SELECTED =  "Click piece to select\n\n"+
-                                                "Hit END TURN once\n" +
-                                                "you've made all moves";
-    public static final String MOVING = "Click to move\n" +
+
+    public static final String NONE_SELECTED =  "Click a unit\n" +
+    		                                    "  to move\n\n"+
+                                                "Or \"End Turn\"";
+   /* public static final String MOVING = "Click to move\n" +
                                         "Click to face\n" +
                                         "Click where to attack\n" +
                                         "     or\n" +
                                         "Click the piece\n\n";
-    /*
-    public static final String MOVING = "Click spot to\n move to";
-    public static final String FACING = "Click space\n to face";
-    public static final String ATTACK = "Click where to attack\n" +
+    */
+    public static final String MOVING = "Click spot to\n" +
+    		                            "   move to";
+    public static final String FACING = "Click space\n" +
+    		                            "  to face";
+    public static final String ATTACK = "  Click unit\n" +
+                                        "  to attack\n" +
                                         "     or\n" +
                                         "Click the piece\n";
-    public static final String DONE = "Hit END TURN";
-    */
+    public static final String DONE = "Hit \"End Turn\"";
+    
     
     
     // FEATURE FLAGS
-    public static final boolean ARCHER_2X_VS_CAVALRY = true;
+    public static final boolean ARCHER_2X_VS_CAVALRY = false;
     
     public static final boolean PLAYER2_ORANGE_SIDEBAR = true;
     

@@ -10,7 +10,6 @@ import game.model.TerrainType;
 import java.util.List;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Game;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -21,7 +20,7 @@ import util.Constants;
 
 public abstract class PlayerController extends StateBasedGame{
 
-    public Game game;
+    public StateBasedGame game;
     
     public final Player player;
 
@@ -73,7 +72,7 @@ public abstract class PlayerController extends StateBasedGame{
     }
     
     public void renderControllerWon(Graphics g) throws SlickException {
-        g.setFont(Constants.TEST_FONT);
+        g.setFont(Constants.PRIMARY_FONT);
         g.drawString("Player " + model.getCurrentPlayer().id + " Wins!", 0, 0);
     }
     
@@ -92,6 +91,7 @@ public abstract class PlayerController extends StateBasedGame{
     }
     
     public abstract boolean isAnimatingMove();
+
     
     public void renderBoard(GameContainer container, Graphics g){
         int w = (int) Math.ceil(1.0 * container.getWidth() / Constants.TILE_WIDTH_SPACING / 2) + 1;
@@ -105,16 +105,16 @@ public abstract class PlayerController extends StateBasedGame{
                     terrain = model.map.getTerrain(i, j);
                 }
                 renderAtPosition(terrain.tile, g, i, j, 0f, 0f);
-                Piece p = model.getPieceByPosition(new Point(i, j));
-                if (p != null){
-                    renderPiece(container, g, p);
-                }
+//                Piece p = getPieceByRenderPosition(new Point(i, j));
+//                if (p != null){
+//                    renderPiece(container, g, p);
+//                }
             }
         }
 
-//        for (Piece p : model.getPieces()) {
-//            renderPiece(container, g, p);
-//        }
+        for (Piece p : model.getPieces()) {
+            renderPiece(container, g, p);
+        }
     }
     
     public void renderPieceMoving(GameContainer container, Graphics g, Piece p, Point oldPos, Point newPos, long sinceStart){
@@ -140,7 +140,7 @@ public abstract class PlayerController extends StateBasedGame{
     public void renderAttack(GameContainer container, Graphics g){
         if (model.lastMoved != null && model.lastMovedAttackResult != null && model.sinceLastMoved < Constants.ATTACK_DISPLAY_TIME){
             g.setColor(Color.white);
-            g.setFont(Constants.TEST_FONT);
+            g.setFont(Constants.PRIMARY_FONT);
             String str = model.lastMovedAttackResult.name();
             float frac = 1f * model.sinceLastMoved / Constants.ATTACK_DISPLAY_TIME;
             g.drawString(str,
@@ -154,7 +154,7 @@ public abstract class PlayerController extends StateBasedGame{
         return player.equals(model.getCurrentPlayer());
     }
     
-    public void update(GameContainer container, Game game, int delta) throws SlickException{
+    public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException{
         this.game = game;
         if (justStarted){
             setDisplayCenterPiecesAverage(container);

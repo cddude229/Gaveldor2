@@ -32,7 +32,7 @@ public class Helpful {
         im.getGraphics().setColor(color);
         im.getGraphics().fillRect(0, 0, width, height);
         im.getGraphics().setColor(Color.white);
-        im.getGraphics().setFont(Constants.TEST_FONT);
+        im.getGraphics().setFont(Constants.PRIMARY_FONT);
         im.getGraphics().drawString(text, 0, 0);
         im.getGraphics().flush();
         return im;

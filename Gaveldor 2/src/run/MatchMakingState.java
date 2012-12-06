@@ -1,6 +1,5 @@
 package run;
 
-import game.run.GameException;
 import game.run.MatchmakingNetworkingController;
 
 import java.io.IOException;
@@ -10,6 +9,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -21,16 +21,17 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import util.Constants;
+import util.MenuButton;
+import util.Resources;
 
 import com.aem.sticky.StickyListener;
 import com.aem.sticky.button.Button;
-import com.aem.sticky.button.SimpleButton;
 import com.aem.sticky.button.events.ClickListener;
 
 public class MatchMakingState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
-    private SimpleButton backBtn;
+    private MenuButton backBtn;
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
@@ -55,11 +56,11 @@ public class MatchMakingState extends BasicGameState {
         Rectangle backRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
 
         // create play Image
-        Sound s = null;
+        Sound s = Resources.getSound("/assets/audio/effects/click.ogg");
         ArrayList<Image> images = this.makeImages();
 
         // add button
-        backBtn = new SimpleButton(backRect, images.get(0), images.get(1), s);
+        backBtn = new MenuButton(backRect, images.get(0), images.get(1), s);
 
         // create listeners
         createListeners(container,game);
@@ -116,25 +117,16 @@ public class MatchMakingState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        ((Game)game).toggleFullscreenCheck((AppGameContainer)container);
         backBtn.update(container, delta);
         if (socket != null && setupDone){
             if (host) {
-                try {
-                    ((Game)game).startHostRemoteMatch(mapName, socket);
-                } catch (GameException e) {
-                    // TODO: display error
-                    throw new RuntimeException(e);
-                }
+                ((Game)game).startHostRemoteMatch(mapName, socket);
                 socket = null;
                 game.enterState(PlayGameState.STATE_ID);
             }
             else {
-                try {
-                    ((Game)game).startClientRemoteMatch(socket);
-                } catch (GameException e) {
-                    //TODO: display error message
-                    throw new RuntimeException(e);
-                }
+                ((Game)game).startClientRemoteMatch(socket);
                 socket = null;
                 game.enterState(PlayGameState.STATE_ID);
             }

@@ -21,7 +21,7 @@ public class GameModel {
     private Set<Piece> pieces;
 
     public static enum GameState {
-        SETTING_UP, PLAYING_BOARD, @Deprecated PLAYING_MINIGAME, WON, DISCONNECTED;
+        SETTING_UP, PLAYING_BOARD, WON, DISCONNECTED;
         
         public int getPCStateID(){
             return ordinal();
@@ -29,7 +29,7 @@ public class GameModel {
     }
     
 
-    public static enum AttackResult{HIT, MISS, CRIT};
+    public static enum AttackResult{STRIKE, BLOCKED, CRITICAL};
 
     public GameState gameState = GameState.SETTING_UP;
     
@@ -382,6 +382,18 @@ public class GameModel {
         }
         return c;
     }
+    
+    public void giveLoss(Player loser){
+        setCurrentPlayer(loser);
+        setCurrentPlayer(getOtherPlayer());
+        gameState = GameState.WON;
+    }
+    
+    public void giveLoss(int loserID){
+        setCurrentPlayer(loserID);
+        setCurrentPlayer(getOtherPlayer());
+        gameState = GameState.WON;
+    }
 
     public void applyAction(Action action) {
         System.out.println(action.type);
@@ -401,9 +413,7 @@ public class GameModel {
             break;
         case FORFEIT:
             ForfeitAction forfeitPacket = (ForfeitAction) action;
-            setCurrentPlayer(forfeitPacket.playerID);
-            setCurrentPlayer(getOtherPlayer());
-            gameState = GameState.WON;
+            giveLoss(forfeitPacket.playerID);
             break;
         case BOARD_MOVE:
             BoardMoveAction movePacket = (BoardMoveAction) action;
@@ -417,19 +427,22 @@ public class GameModel {
             piece.setPosition(movePacket.destination);
             piece.setDirection(movePacket.direction);
             if (movePacket.targetID == -1){
-                piece.turnState = TurnState.DONE;
                 lastMovedAttackResult = null;
             } else{
                 Piece target = getPieceByID(movePacket.targetID);
                 assert target != null;
                 assert !piece.owner.equals(target.owner);
-                AttackResult attackResult = piece.isBackAttack(target) ? AttackResult.CRIT : movePacket.randomAttackResult;
+                AttackResult attackResult = piece.isBackAttack(target) ? AttackResult.CRITICAL : movePacket.randomAttackResult;
                 lastMovedAttackResult = attackResult;
                 piece.attack(target, attackResult);
                 if (!target.isAlive()){
                     pieces.remove(target);
                 }
+                if (!hasAnyPieces(target.owner)){
+                    giveLoss(target.owner);
+                }
             }
+            piece.turnState = TurnState.DONE;
             break;
         case TURN_END:
             TurnEndAction turnEndPacket = (TurnEndAction) action;
@@ -445,7 +458,7 @@ public class GameModel {
         switch (gameState){
         case PLAYING_BOARD:
             sinceLastMoved += delta;
-            if (sinceTurnStart == 0){ //TODO: a temp fix for the loading issue
+            if (sinceTurnStart == 0){
                sinceTurnStart = 1;
             } else{
                 sinceTurnStart += delta;

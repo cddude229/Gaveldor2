@@ -18,6 +18,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
+import run.MainMenuState;
 import util.Constants;
 import util.Helpful;
 import util.LayoutButton;
@@ -128,7 +129,7 @@ public class PlayBoardState extends PlayerControllerState {
         exitGameListener = new ClickListener(){
             @Override
             public void onClick(Button clicked, float mx, float my) {
-                 gameContainer.exit();
+                 pc.game.enterState(MainMenuState.STATE_ID);
             }
             @Override
             public void onRightClick(Button clicked, float mx, float my) {
@@ -168,10 +169,23 @@ public class PlayBoardState extends PlayerControllerState {
             renderLocal(container, (LocalPlayerController)pc, g);
         }
         pc.renderAttack(container, g);
+        renderHeader(container, g, pc);
+    }
+    
+    public void renderHeader(GameContainer container, Graphics g, PlayerController pc){
+        int piecesMoved = 0;
+        for (Piece p : pc.model.getPieces()){
+            if (p.owner.equals(pc.player) && p.turnState == Piece.TurnState.DONE){
+                piecesMoved++;
+            }
+        }
+        if(piecesMoved == pc.model.numberOfPieces(pc.player)){tutorialString = Constants.DONE;}
+        String str = pc.player.toString() + ": " + piecesMoved + "/" + pc.model.numberOfPieces(pc.player) + " Pieces Moved";
+        g.setFont(Constants.PRIMARY_FONT);
+        g.drawString(str, (container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH - g.getFont().getWidth(str)) / 2, g.getFont().getHeight(str) / 2);
     }
     
     public void renderMinimap(GameContainer container, Graphics g, LocalPlayerController pc, int x, int y) throws SlickException{
-        //TODO clean up constants
         final int minimapWidth = 200, minimapHeight = 200;
         float scale = Math.min(1f * minimapWidth / pc.model.map.getPixelWidth() , 1f * minimapHeight / pc.model.map.getPixelHeight());
         int width = Math.round(pc.model.map.getPixelWidth() * scale);
@@ -206,11 +220,12 @@ public class PlayBoardState extends PlayerControllerState {
         g.setColor(new Color(0x77000000));
         g.fillRect(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0, Constants.BOARD_SIDEBAR_WIDTH, container.getHeight());
         g.setColor(Color.white);
-        g.setFont(Constants.TEST_FONT);
-        g.drawString(pc.player.toString(), container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 200);
+        g.setFont(Constants.PRIMARY_FONT);
+        //g.drawString(pc.player.toString(), container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 200);
         renderMinimap(container, g, pc, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0);
         
-        g.drawString(tutorialString, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 300);
+        g.setFont(Constants.TUTORIAL_FONT);
+        g.drawString(tutorialString, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 30, 350);
         
         Button[] sidebarButtons = (Constants.PLAYER2_ORANGE_SIDEBAR && pc.player.id == 2?sidebarButtons2:sidebarButtons1);
         for (Button b : sidebarButtons){
@@ -247,12 +262,12 @@ public class PlayBoardState extends PlayerControllerState {
             Point position = PlayBoardState.getTileCoords(
                     container.getInput().getMouseX() + pc.displayX,
                     container.getInput().getMouseY() + pc.displayY);
-            if (pc.model.isValidPosition(position)) {
+            if (pc.model.isValidPosition(position) && container.getInput().getMouseX() < container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH) {
                 pc.renderAtPosition(hoverOverlay, g, position.x, position.y, 0f, 0f);
             }
             
             Piece piece = pc.selectedPiece;
-            if (container.getInput().isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON)){
+            if (container.getInput().isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON) && container.getInput().getMouseX() < container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH){
                 Piece hoveredPiece = pc.model.getPieceByPosition(position);
                 if (hoveredPiece != null){
                     piece = hoveredPiece;
@@ -282,16 +297,16 @@ public class PlayBoardState extends PlayerControllerState {
                         pc.renderAtPosition(attackableOverlay, g, p.x, p.y, 0f, 0f);
                     }
                 } else if (pc.selectedPieceFace == -1){
+                    tutorialString = Constants.FACING;
                     pc.renderAtPosition(faceableArrows, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0.5f, 0.5f);
-                    // TODO: add full tile overlays
                 } else{
+                    tutorialString = Constants.ATTACK;
                     for (Point loc : pc.model.findValidAttacks(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace)) {
                         Piece atPoint = pc.model.getPieceByPosition(loc);
                         if (pc.model.isValidPosition(loc) && atPoint != null && !atPoint.owner.equals(pc.player)) {
                             pc.renderAtPosition(attackableOverlay, g, loc.x, loc.y, 0f, 0f);
                         }
                     }
-                    //TODO: use different overlay
                     pc.renderAtPosition(movableOverlay, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0f, 0f);
                 }
             }
@@ -341,6 +356,7 @@ public class PlayBoardState extends PlayerControllerState {
                         } else if (pc.selectedPiece != null && pc.player.equals(pc.selectedPiece.owner)){
                             switch (pc.selectedPiece.turnState) {
                             case MOVING:
+                                // tutorialString = "Click to Move";
                                 if (pc.selectedPieceMove == null){
                                     if (pc.model.findValidMoves(pc.selectedPiece).containsKey(position)) {
                                         // findValidMoves checks terrain, piece, and position validity
@@ -350,11 +366,11 @@ public class PlayBoardState extends PlayerControllerState {
 //                                        pc.setDisplayCenter(container, position.x, position.y);
                                     }
                                 } else if (pc.selectedPieceFace == -1){
+                                    // tutorialString = "Click to Face";
                                     int direction = Piece.pointsToDirection(position, pc.selectedPieceMove);
                                     if (direction != -1) {
                                         pc.selectedPieceFace = direction;
                                         
-                                        //TODO: replace with findValidAttack()
                                         if (pc.model.findValidAttacks(pc.selectedPiece, pc.selectedPieceMove, pc.selectedPieceFace).isEmpty()){
                                             System.out.println("No valid attacks");
                                             pc.actionQueue.add(new Action.BoardMoveAction(
@@ -382,7 +398,7 @@ public class PlayBoardState extends PlayerControllerState {
                 }
             }
         
-            if (container.getInput().isKeyPressed(Input.KEY_E)) {
+            if (pc.selectedPiece == null && container.getInput().isKeyDown(Input.KEY_E) && container.getInput().isKeyPressed(Input.KEY_E)) {
                 endTurn(pc);
             }
         }
