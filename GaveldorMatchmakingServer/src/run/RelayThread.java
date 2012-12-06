@@ -6,19 +6,19 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class RelayThread extends Thread {
-	private Socket in,out;
+	private Socket in;
+	private OutputStream os;
 	private Server server;
 	
-	  RelayThread(Socket in, Socket out, Server server){
+	  RelayThread(Socket in,Server server){
 		    this.in = in;
-		    this.out = out;
 		    this.server = server;
 	  }
 	  
 	  public void run(){
 		  try{
+			  System.out.println("Relay thread up!");
 		      InputStream is = in.getInputStream();
-		      OutputStream os = out.getOutputStream();
 		      byte[] buf = new byte[4096];
 
 		      int nRead;
@@ -26,12 +26,24 @@ public class RelayThread extends Thread {
 		    	  os.write(buf, 0, nRead); os.flush();
 		    	  System.out.write(buf, 0, nRead);
 		      }
-
-		      out.shutdownInput();
+		      if (this.server.firstSocket == this.in) {
+		    	  this.server.firstSocket = null; 
+		      }
+		      if (this.server.secondSocket == this.in) {
+		    	  this.server.secondSocket = null; 
+		      }
 		      in.shutdownOutput();
 		      this.server.connectionClosed();
 	    }catch(IOException ioe){
 		      // do nothing
 	    }
+	  }
+	  
+	  public void setOutputStream(Socket out) {
+		  try {
+			this.os = out.getOutputStream();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	  }
 }

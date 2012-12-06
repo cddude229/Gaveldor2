@@ -12,6 +12,10 @@ public class Server extends Thread{
 	private ServerSocket serverSocket;
 	private final static int max_connections = 500;
 	private Integer num_connections = 0;
+	public Socket firstSocket;
+	public Socket secondSocket;
+	private RelayThread firstSocketRelay;
+	private RelayThread secondSocketRelay;
 	
 	/**
 	 * Initialize a server instance on the specified port
@@ -52,33 +56,50 @@ public class Server extends Thread{
      */
 	private void serve() throws IOException {
         while (true) {
-            // Block until a client connects
-            System.out.println("Waiting for a connection");
-            Socket firstSocket = serverSocket.accept();
-            System.out.println("Got a connection!");
-            if (num_connections >= max_connections) {
-            	// Too many connections. Close connection
-            	firstSocket.close();
-            	continue;
-            }
-            Socket secondSocket = serverSocket.accept();
-            if (num_connections >= max_connections) {
-            	// Too many connections. Close connection
-            	firstSocket.close();
-            	secondSocket.close();
-            	continue;
-            }
-            String mapName = chooseMap();
-            sendStartMessage(firstSocket,mapName,true);
-            sendStartMessage(secondSocket,mapName,false);
-            
-            RelayThread connection1 = new RelayThread(firstSocket,secondSocket,this);
-            RelayThread connection2 = new RelayThread(secondSocket,firstSocket,this);
-            connection1.start();
-            connection2.start();
-            synchronized (num_connections) { 
-            	num_connections = num_connections + 2;
-            }
+        	if (this.firstSocket == null) {
+	            // Block until a client connects
+	            System.out.println("Waiting for a connection");
+	            this.firstSocket = serverSocket.accept();
+	            System.out.println("Got a connection!");
+	            
+	            firstSocketRelay = new RelayThread(this.firstSocket,this);
+	            firstSocketRelay.start();
+	            
+	            if (num_connections >= max_connections) {
+	            	// Too many connections. Close connection
+	            	this.firstSocket.close();
+	            	this.firstSocket = null;
+	            	continue;
+	            }
+        	}
+        	if (this.secondSocket == null) {
+	            this.secondSocket = serverSocket.accept();
+	            
+	            secondSocketRelay = new RelayThread(this.secondSocket,this);
+	            secondSocketRelay.start();
+	            
+	            if (num_connections >= max_connections) {
+	            	// Too many connections. Close connection
+	            	this.firstSocket.close();
+	            	this.secondSocket.close();
+	            	continue;
+	            }
+        	}
+        	if (this.firstSocket != null & this.secondSocket != null) {
+	            String mapName = chooseMap();
+
+	            sendStartMessage(firstSocket,mapName,true);
+	            sendStartMessage(secondSocket,mapName,false);
+	            
+	            firstSocketRelay.setOutputStream(secondSocket);
+	            secondSocketRelay.setOutputStream(firstSocket);
+	            
+	            this.firstSocket = null;
+	            this.secondSocket = null;
+	            synchronized (num_connections) { 
+	            	num_connections = num_connections + 2;
+	            }
+        	}
         }
     }
 	
