@@ -23,7 +23,7 @@ public class Constants {
     public static final int TILE_HEIGHT_SPACING = (int)(TILE_HEIGHT * 3 / 4);
     
     public static final int REMOTE_CONNECTION_PORT = 1400;
-    public static final String MATCHMAKING_SERVER_IP = "18.189.83.43";
+    public static final String MATCHMAKING_SERVER_IP = "18.189.43.23";
     public static final int SERVER_PORT = 1600;
 
     // This is just until map selection is online
