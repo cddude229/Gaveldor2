@@ -3,7 +3,6 @@ package run;
 import java.util.ArrayList;
 
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -150,9 +149,9 @@ public class InstructionState extends BasicGameState {
     
     public ArrayList<Image> makeImages() throws SlickException {
         ArrayList<Image> images = new ArrayList<Image>();
-//      Image im = new Image("assets/graphics/buttons/instructions/instruct_back.png");
-//      Image clickPlay = new Image("assets/graphics/buttons/instructions/instruct_back_hover.png");
-        Image im = new Image(bWidth, bHeight);
+        Image im = new Image("assets/graphics/buttons/general/back.png");
+        Image clickPlay = new Image("assets/graphics/buttons/general/back_hover.png");
+        /*Image im = new Image(bWidth, bHeight);
         im.getGraphics().setColor(Color.blue);
         im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
         im.getGraphics().setColor(Color.white);
@@ -162,7 +161,7 @@ public class InstructionState extends BasicGameState {
         clickPlay.getGraphics().setColor(Color.black);
         im.getGraphics().drawString("Main Menu", 0, 0);
         clickPlay.getGraphics().drawString("Main Menu", 0, 0);
-        im.getGraphics().flush();
+        */im.getGraphics().flush();
         clickPlay.getGraphics().flush();
         images.add(im);
         images.add(clickPlay);

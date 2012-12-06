@@ -198,9 +198,9 @@ public class JoinGameState extends BasicGameState {
         for (int i = 0; i <6; i++){
             switch (i){
             case 0:
-//              im = new Image("assets/graphics/buttons/joinmatch/connect.png");
-//              clickPlay = new Image("assets/graphics/buttons/joinmatch/connect_hover.png");
-                im = new Image(bWidth, bHeight);
+              im = new Image("assets/graphics/buttons/general/back.png");
+              clickPlay = new Image("assets/graphics/buttons/general/back_hover.png");
+/*                im = new Image(bWidth, bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
@@ -211,16 +211,16 @@ public class JoinGameState extends BasicGameState {
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Back", 0, 0);
-                
+*/                
                 im.getGraphics().flush();
                 clickPlay.getGraphics().flush();
                 images.add(im);
                 images.add(clickPlay);
                 break;
             case 1:
-//              im = new Image("assets/graphics/buttons/joinmatch/join_match_back.png");
-//              clickPlay = new Image("assets/graphics/buttons/joinmatch/join_match_back_hover.png");
-                im = new Image(bWidth, bHeight);
+              im = new Image("assets/graphics/buttons/general/connect.png");
+              clickPlay = new Image("assets/graphics/buttons/general/connect_hover.png");
+/*                im = new Image(bWidth, bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
@@ -231,7 +231,7 @@ public class JoinGameState extends BasicGameState {
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Connect", 0, 0);
-                
+*/                
                 im.getGraphics().flush();
                 clickPlay.getGraphics().flush();
                 images.add(im);

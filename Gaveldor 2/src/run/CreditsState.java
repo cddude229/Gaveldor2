@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -139,9 +138,9 @@ public class CreditsState extends BasicGameState {
         for (int i = 0; i <6; i++){
             switch (i){
             case 0:
-//              im = new Image("assets/graphics/buttons/credits/credits_back.png");
-//              clickPlay = new Image("assets/graphics/buttons/credits/credits_back_hover.png");
-                im = new Image(bWidth, bHeight);
+                im = new Image("assets/graphics/buttons/general/back.png");
+                clickPlay = new Image("assets/graphics/buttons/general/back_hover.png");
+/*                im = new Image(bWidth, bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
@@ -151,7 +150,7 @@ public class CreditsState extends BasicGameState {
                 clickPlay.getGraphics().setColor(Color.black);
                 im.getGraphics().drawString("Back", 0, 0);
                 clickPlay.getGraphics().drawString("Back", 0, 0);
-                im.getGraphics().flush();
+*/                im.getGraphics().flush();
                 clickPlay.getGraphics().flush();
                 images.add(im);
                 images.add(clickPlay);
