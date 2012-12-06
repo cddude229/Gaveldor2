@@ -179,8 +179,7 @@ public class PlayBoardState extends PlayerControllerState {
             }
         } 
         String str = pc.player.toString() + ": " + piecesMoved + "/" + pc.model.numberOfPieces(pc.player) + " Pieces Moved";
-        g.setFont(Constants.PRIMARY_FONT);
-        g.drawString(str, (container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH - g.getFont().getWidth(str)) / 2, g.getFont().getHeight(str) / 2);
+        pc.renderHeaderText(container, g, str);
     }
     
     public void renderMinimap(GameContainer container, Graphics g, LocalPlayerController pc, int x, int y) throws SlickException{

@@ -6,8 +6,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
-import util.Constants;
-
 import com.aem.sticky.button.Button;
 
 public class DisconnectedState extends PlayerControllerState {
@@ -26,8 +24,7 @@ public class DisconnectedState extends PlayerControllerState {
     @Override
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
         pc.renderBoard(container, g);
-        g.setFont(Constants.PRIMARY_FONT);
-        g.drawString("DISCONNECTED: the connection was lost", 0, 100);
+        pc.renderHeaderText(container, g, "The Connection was Lost");
         //TODO: render disconnected state
     }
 

@@ -71,9 +71,8 @@ public abstract class PlayerController extends StateBasedGame{
         setDisplayCenter(container, 1f * x / count, 1f * y / count);
     }
     
-    public void renderControllerWon(Graphics g) throws SlickException {
-        g.setFont(Constants.PRIMARY_FONT);
-        g.drawString("Player " + model.getCurrentPlayer().id + " Wins!", 0, 0);
+    public void renderControllerWon(GameContainer container, Graphics g) throws SlickException {
+        this.renderHeaderText(container, g, model.getCurrentPlayer().toString() + " Wins!");
     }
     
     public static int getPixelX(float x, int width, float centerX){
@@ -91,6 +90,12 @@ public abstract class PlayerController extends StateBasedGame{
     }
     
     public abstract boolean isAnimatingMove();
+    
+    public void renderHeaderText(GameContainer container, Graphics g, String str){
+        g.setColor(Color.white);
+        g.setFont(Constants.PRIMARY_FONT);
+        g.drawString(str, (container.getWidth() - g.getFont().getWidth(str)) / 2, g.getFont().getHeight(str) / 2);
+    }
 
     
     public void renderBoard(GameContainer container, Graphics g){
@@ -139,7 +144,7 @@ public abstract class PlayerController extends StateBasedGame{
     
     public void renderAttack(GameContainer container, Graphics g){
         if (model.lastMoved != null && model.lastMovedAttackResult != null && model.sinceLastMoved < Constants.ATTACK_DISPLAY_TIME){
-            g.setColor(Color.white);
+            g.setColor(model.lastMovedAttackResult == GameModel.AttackResult.CRITICAL ? Color.red : Color.white);
             g.setFont(Constants.PRIMARY_FONT);
             String str = model.lastMovedAttackResult.name();
             float frac = 1f * model.sinceLastMoved / Constants.ATTACK_DISPLAY_TIME;
