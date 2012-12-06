@@ -178,7 +178,8 @@ public class PlayBoardState extends PlayerControllerState {
             if (p.owner.equals(pc.player) && p.turnState == Piece.TurnState.DONE){
                 piecesMoved++;
             }
-        } 
+        }
+        if(piecesMoved == pc.model.numberOfPieces(pc.player)){tutorialString = Constants.DONE;}
         String str = pc.player.toString() + ": " + piecesMoved + "/" + pc.model.numberOfPieces(pc.player) + " Pieces Moved";
         g.setFont(Constants.PRIMARY_FONT);
         g.drawString(str, (container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH - g.getFont().getWidth(str)) / 2, g.getFont().getHeight(str) / 2);
@@ -224,7 +225,7 @@ public class PlayBoardState extends PlayerControllerState {
         renderMinimap(container, g, pc, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0);
         
         g.setFont(Constants.TUTORIAL_FONT);
-        g.drawString(tutorialString, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 300);
+        g.drawString(tutorialString, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 30, 350);
         
         Button[] sidebarButtons = (Constants.PLAYER2_ORANGE_SIDEBAR && pc.player.id == 2?sidebarButtons2:sidebarButtons1);
         for (Button b : sidebarButtons){
