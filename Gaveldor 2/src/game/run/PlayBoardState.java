@@ -18,6 +18,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
+import run.MainMenuState;
 import util.Constants;
 import util.Helpful;
 import util.LayoutButton;
@@ -128,7 +129,7 @@ public class PlayBoardState extends PlayerControllerState {
         exitGameListener = new ClickListener(){
             @Override
             public void onClick(Button clicked, float mx, float my) {
-                 gameContainer.exit();
+                 pc.game.enterState(MainMenuState.STATE_ID);
             }
             @Override
             public void onRightClick(Button clicked, float mx, float my) {
@@ -177,7 +178,8 @@ public class PlayBoardState extends PlayerControllerState {
             if (p.owner.equals(pc.player) && p.turnState == Piece.TurnState.DONE){
                 piecesMoved++;
             }
-        } 
+        }
+        if(piecesMoved == pc.model.numberOfPieces(pc.player)){tutorialString = Constants.DONE;}
         String str = pc.player.toString() + ": " + piecesMoved + "/" + pc.model.numberOfPieces(pc.player) + " Pieces Moved";
         pc.renderHeaderText(container, g, str);
     }
@@ -222,7 +224,7 @@ public class PlayBoardState extends PlayerControllerState {
         renderMinimap(container, g, pc, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0);
         
         g.setFont(Constants.TUTORIAL_FONT);
-        g.drawString(tutorialString, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 10, 300);
+        g.drawString(tutorialString, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 30, 350);
         
         Button[] sidebarButtons = (Constants.PLAYER2_ORANGE_SIDEBAR && pc.player.id == 2?sidebarButtons2:sidebarButtons1);
         for (Button b : sidebarButtons){

@@ -95,8 +95,9 @@ public class Server extends Thread{
 		}
 	}
 
-	private String chooseMap() {
-		return "/assets/maps/basic";
+	private String chooseMap() {    
+	    String[] maps = {"agincourt", "basic", "largefield", "mountain", "thermopylae"};
+		return "/assets/maps/" + maps[((int)(Math.random()*5))];
 	}
 
 	public void connectionClosed() {
