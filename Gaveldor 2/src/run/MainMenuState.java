@@ -3,7 +3,6 @@ package run;
 import java.util.ArrayList;
 
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -30,7 +29,7 @@ public class MainMenuState extends BasicGameState {
     private static final int bWidth = 200;
     private static final int bHeight = 50;
     ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
-    
+    private static Image bgImage;
     private Music music;
 
     @Override
@@ -40,6 +39,8 @@ public class MainMenuState extends BasicGameState {
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         music = Resources.getMusic("/assets/audio/music/TheHaunting.ogg");
         music.setVolume(util.Constants.MENU_VOLUME);
+        bgImage = Resources.getImage("/assets/graphics/ui/main_menu_bg.png");
+        bgImage.getGraphics().flush();
         this.container = container;
         this.game = game;
         listener = new StickyListener();
@@ -66,8 +67,11 @@ public class MainMenuState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        int titleWidth = g.getFont().getWidth("Welcome to Gaveldor 2: The Engaveling of Ambidextria");
-        g.drawString("Welcome to Gaveldor 2: The Engaveling of Ambidextria", (container.getWidth() - titleWidth)/2, 0);
+        //int titleWidth = g.getFont().getWidth("Welcome to Gaveldor 2: The Engaveling of Ambidextria");
+        //g.drawString("Welcome to Gaveldor 2: The Engaveling of Ambidextria", (container.getWidth() - titleWidth)/2, 0);
+        
+        g.drawImage(bgImage, container.getWidth()/2-512,container.getHeight()/2-384);
+        //this.getxLoc(container,1024),this.getyLoc(container,768));
         for (MenuButton button: buttons){
             button.render(container, g);
         }
@@ -90,7 +94,7 @@ public class MainMenuState extends BasicGameState {
      * 
      * @param width
      * @param height
-     * @return an int[] containing the screen location of the buttons
+     * @return an int containing the screen location of the buttons
      */
     public int getxLoc(GameContainer container, int width) {
         int scnWidth = container.getWidth();
@@ -98,6 +102,18 @@ public class MainMenuState extends BasicGameState {
         return xLoc;
     }
 
+    /**
+     * 
+     * @param width
+     * @param height
+     * @return an int containing the screen location of the buttons
+     */
+    public int getyLoc(GameContainer container, int height) {
+        int scnHeight = container.getHeight();
+        int yLoc = scnHeight / 2 - height / 2;
+        return yLoc;
+    }
+    
     /**
      * This function builds the buttons and adds the listeners. returning them
      * in an arrayList. The arrayList is useful for update iterations.
@@ -109,10 +125,16 @@ public class MainMenuState extends BasicGameState {
         
         //create possible locations for buttons
         ArrayList<int[]> locations = new ArrayList<int[]>();
-        int yLoc = 75;
+        //int yLoc = 75;
+        int x_offset = -50;
+        int y_offset = -160;
         for (int i = 0; i < 7; i++) {
-            locations.add(new int[] { this.getxLoc(container, bWidth), yLoc });
-            yLoc += 100;
+            locations.add(new int[] { container.getWidth()/2+x_offset,//this.getxLoc(container, bWidth)+x_offset, 
+                                        container.getHeight()/2+y_offset});
+                                      //this.getyLoc(container, bHeight)+y_offset});
+            //locations.add(new int[] { this.getxLoc(container, bWidth), yLoc });
+            //yLoc += 100;
+            y_offset += 70;
         }
         
         //create rectangles for buttons
@@ -255,9 +277,9 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 1:
-//                im = new Image("assets/graphics/buttons/mainmenu/host_match.png");
-//                clickPlay = new Image("assets/graphics/buttons/mainmenu/host_match_hover.png");
-                im = new Image(bWidth,bHeight);
+                im = new Image("assets/graphics/buttons/mainmenu/host_match.png");
+                clickPlay = new Image("assets/graphics/buttons/mainmenu/host_match_hover.png");
+/*                im = new Image(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
@@ -268,7 +290,7 @@ public class MainMenuState extends BasicGameState {
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Host a Match", 0, 0);
-                
+*/                
                 im.getGraphics().flush();
                 clickPlay.getGraphics().flush();
                 images.add(im);
@@ -276,9 +298,9 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 2:
-//                im = new Image("assets/graphics/buttons/mainmenu/join_match.png");
-//                clickPlay = new Image("assets/graphics/buttons/mainmenu/join_match_hover.png");
-                im = new Image(bWidth,bHeight);
+                im = new Image("assets/graphics/buttons/mainmenu/join_match.png");
+                clickPlay = new Image("assets/graphics/buttons/mainmenu/join_match_hover.png");
+/*                im = new Image(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
@@ -289,7 +311,7 @@ public class MainMenuState extends BasicGameState {
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Join a Match", 0, 0);
-                
+*/                
                 im.getGraphics().flush();
                 clickPlay.getGraphics().flush();
                 images.add(im);
@@ -297,9 +319,9 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 3:
-//                im = new Image("assets/graphics/buttons/mainmenu/matchmaking.png");
-//                clickPlay = new Image("assets/graphics/buttons/mainmenu/matchmaking_hover.png");
-                im = new Image(bWidth,bHeight);
+                im = new Image("assets/graphics/buttons/mainmenu/matchmaking.png");
+                clickPlay = new Image("assets/graphics/buttons/mainmenu/matchmaking_hover.png");
+/*                im = new Image(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
@@ -310,7 +332,7 @@ public class MainMenuState extends BasicGameState {
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Matchmaking", 0, 0);
-                
+*/                
                 im.getGraphics().flush();
                 clickPlay.getGraphics().flush();
                 images.add(im);
@@ -318,9 +340,9 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 4:
-//                im = new Image("assets/graphics/buttons/mainmenu/instructions.png");
-//                clickPlay = new Image("assets/graphics/buttons/mainmenu/instructions_hover.png");
-                im = new Image(bWidth,bHeight);
+                im = new Image("assets/graphics/buttons/mainmenu/instructions.png");
+                clickPlay = new Image("assets/graphics/buttons/mainmenu/instructions_hover.png");
+/*                im = new Image(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
@@ -331,7 +353,7 @@ public class MainMenuState extends BasicGameState {
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Instructions", 0, 0);
-                
+*/                
                 im.getGraphics().flush();
                 clickPlay.getGraphics().flush();
                 images.add(im);
@@ -339,9 +361,9 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 5:
-//                im = new Image("assets/graphics/buttons/mainmenu/credits.png");
-//                clickPlay = new Image("assets/graphics/buttons/mainmenu/credits_hover.png");
-                im = new Image(bWidth,bHeight);
+                im = new Image("assets/graphics/buttons/mainmenu/credits.png");
+                clickPlay = new Image("assets/graphics/buttons/mainmenu/credits_hover.png");
+/*                im = new Image(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
@@ -352,7 +374,7 @@ public class MainMenuState extends BasicGameState {
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Credits", 0, 0);
-                
+*/                
                 im.getGraphics().flush();
                 clickPlay.getGraphics().flush();
                 images.add(im);
@@ -360,9 +382,9 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 6:
-//                im = new Image("assets/graphics/buttons/mainmenu/exit.png");
-//                clickPlay = new Image("assets/graphics/buttons/mainmenu/exit_hover.png");
-                im = new Image(bWidth,bHeight);
+                im = new Image("assets/graphics/buttons/mainmenu/exit.png");
+                clickPlay = new Image("assets/graphics/buttons/mainmenu/exit_hover.png");
+/*                im = new Image(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
@@ -373,7 +395,7 @@ public class MainMenuState extends BasicGameState {
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
                 clickPlay.getGraphics().drawString("Exit", 0, 0);
-                
+*/                
                 im.getGraphics().flush();
                 clickPlay.getGraphics().flush();
                 images.add(im);
