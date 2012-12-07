@@ -206,15 +206,15 @@ public class JoinGameState extends BasicGameState {
         for (int i = 0; i <6; i++){
             switch (i){
             case 0:
-              im = new Image("assets/graphics/buttons/general/back.png");
-              clickPlay = new Image("assets/graphics/buttons/general/back_hover.png");
-/*                im = new Image(bWidth, bHeight);
+              im = Resources.getImage("assets/graphics/buttons/general/back.png");
+              clickPlay = Resources.getImage("assets/graphics/buttons/general/back_hover.png");
+/*                im = Resources.getImage(bWidth, bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
                 im.getGraphics().drawString("Back", 0, 0);
                 
-                clickPlay = new Image(bWidth, bHeight);
+                clickPlay = Resources.getImage(bWidth, bHeight);
                 clickPlay.getGraphics().setColor(Color.yellow);
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
@@ -226,15 +226,15 @@ public class JoinGameState extends BasicGameState {
                 images.add(clickPlay);
                 break;
             case 1:
-              im = new Image("assets/graphics/buttons/general/connect.png");
-              clickPlay = new Image("assets/graphics/buttons/general/connect_hover.png");
-/*                im = new Image(bWidth, bHeight);
+              im = Resources.getImage("assets/graphics/buttons/general/connect.png");
+              clickPlay = Resources.getImage("assets/graphics/buttons/general/connect_hover.png");
+/*                im = Resources.getImage(bWidth, bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
                 im.getGraphics().drawString("Connect", 0, 0);
                 
-                clickPlay = new Image(bWidth, bHeight);
+                clickPlay = Resources.getImage(bWidth, bHeight);
                 clickPlay.getGraphics().setColor(Color.yellow);
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);

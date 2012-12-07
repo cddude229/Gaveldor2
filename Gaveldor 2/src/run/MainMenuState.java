@@ -279,15 +279,15 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 1:
-                im = new Image("assets/graphics/buttons/mainmenu/host_match.png");
-                clickPlay = new Image("assets/graphics/buttons/mainmenu/host_match_hover.png");
-/*                im = new Image(bWidth,bHeight);
+                im = Resources.getImage("assets/graphics/buttons/mainmenu/host_match.png");
+                clickPlay = Resources.getImage("assets/graphics/buttons/mainmenu/host_match_hover.png");
+/*                im = Resources.getImage(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
                 im.getGraphics().drawString("Host a Match", 0, 0);
                 
-                clickPlay = new Image(bWidth,bHeight);
+                clickPlay = Resources.getImage(bWidth,bHeight);
                 clickPlay.getGraphics().setColor(Color.yellow);
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
@@ -300,15 +300,15 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 2:
-                im = new Image("assets/graphics/buttons/mainmenu/join_match.png");
-                clickPlay = new Image("assets/graphics/buttons/mainmenu/join_match_hover.png");
-/*                im = new Image(bWidth,bHeight);
+                im = Resources.getImage("assets/graphics/buttons/mainmenu/join_match.png");
+                clickPlay = Resources.getImage("assets/graphics/buttons/mainmenu/join_match_hover.png");
+/*                im = Resources.getImage(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
                 im.getGraphics().drawString("Join a Match", 0, 0);
                 
-                clickPlay = new Image(bWidth,bHeight);
+                clickPlay = Resources.getImage(bWidth,bHeight);
                 clickPlay.getGraphics().setColor(Color.yellow);
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
@@ -321,15 +321,15 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 3:
-                im = new Image("assets/graphics/buttons/mainmenu/matchmaking.png");
-                clickPlay = new Image("assets/graphics/buttons/mainmenu/matchmaking_hover.png");
-/*                im = new Image(bWidth,bHeight);
+                im = Resources.getImage("assets/graphics/buttons/mainmenu/matchmaking.png");
+                clickPlay = Resources.getImage("assets/graphics/buttons/mainmenu/matchmaking_hover.png");
+/*                im = Resources.getImage(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
                 im.getGraphics().drawString("Matchmaking", 0, 0);
                 
-                clickPlay = new Image(bWidth,bHeight);
+                clickPlay = Resources.getImage(bWidth,bHeight);
                 clickPlay.getGraphics().setColor(Color.yellow);
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
@@ -342,15 +342,15 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 4:
-                im = new Image("assets/graphics/buttons/mainmenu/instructions.png");
-                clickPlay = new Image("assets/graphics/buttons/mainmenu/instructions_hover.png");
-/*                im = new Image(bWidth,bHeight);
+                im = Resources.getImage("assets/graphics/buttons/mainmenu/instructions.png");
+                clickPlay = Resources.getImage("assets/graphics/buttons/mainmenu/instructions_hover.png");
+/*                im = Resources.getImage(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
                 im.getGraphics().drawString("Instructions", 0, 0);
                 
-                clickPlay = new Image(bWidth,bHeight);
+                clickPlay = Resources.getImage(bWidth,bHeight);
                 clickPlay.getGraphics().setColor(Color.yellow);
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
@@ -363,15 +363,15 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 5:
-                im = new Image("assets/graphics/buttons/mainmenu/credits.png");
-                clickPlay = new Image("assets/graphics/buttons/mainmenu/credits_hover.png");
-/*                im = new Image(bWidth,bHeight);
+                im = Resources.getImage("assets/graphics/buttons/mainmenu/credits.png");
+                clickPlay = Resources.getImage("assets/graphics/buttons/mainmenu/credits_hover.png");
+/*                im = Resources.getImage(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
                 im.getGraphics().drawString("Credits", 0, 0);
                 
-                clickPlay = new Image(bWidth,bHeight);
+                clickPlay = Resources.getImage(bWidth,bHeight);
                 clickPlay.getGraphics().setColor(Color.yellow);
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);
@@ -384,15 +384,15 @@ public class MainMenuState extends BasicGameState {
                 break;
                 
             case 6:
-                im = new Image("assets/graphics/buttons/mainmenu/exit.png");
-                clickPlay = new Image("assets/graphics/buttons/mainmenu/exit_hover.png");
-/*                im = new Image(bWidth,bHeight);
+                im = Resources.getImage("assets/graphics/buttons/mainmenu/exit.png");
+                clickPlay = Resources.getImage("assets/graphics/buttons/mainmenu/exit_hover.png");
+/*                im = Resources.getImage(bWidth,bHeight);
                 im.getGraphics().setColor(Color.blue);
                 im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 im.getGraphics().setColor(Color.white);
                 im.getGraphics().drawString("Exit", 0, 0);
                 
-                clickPlay = new Image(bWidth,bHeight);
+                clickPlay = Resources.getImage(bWidth,bHeight);
                 clickPlay.getGraphics().setColor(Color.yellow);
                 clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
                 clickPlay.getGraphics().setColor(Color.black);

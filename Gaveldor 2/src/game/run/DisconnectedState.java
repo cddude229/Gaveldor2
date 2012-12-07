@@ -27,8 +27,8 @@ public class DisconnectedState extends PlayerControllerState {
     @Override
     public void init(GameContainer container, final PlayerController pc) throws SlickException {
         Rectangle rect = new Rectangle((container.getWidth()-100)/2, container.getHeight()-100,200,50);
-        Image mainImg = new Image("/assets/graphics/buttons/general/main_menu.png");
-        Image mainImgHvr = new Image("/assets/graphics/buttons/general/main_menu_hover.png");
+        Image mainImg = Resources.getImage("/assets/graphics/buttons/general/main_menu.png");
+        Image mainImgHvr = Resources.getImage("/assets/graphics/buttons/general/main_menu_hover.png");
         Sound s = Resources.getSound("/assets/audio/effects/click.ogg");
         menuBtn = new MenuButton(rect,mainImg,mainImgHvr,s);
         menuBtn.addListener(new ClickListener(){
