@@ -19,7 +19,6 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import util.Constants;
-import util.Helpful;
 import util.LayoutButton;
 import util.Resources;
 
@@ -70,11 +69,13 @@ public class PlayBoardState extends PlayerControllerState {
         
         private final int y; //, playerId;
         
-        public SidebarButton(int y, String text, ClickListener listener, int playerId) throws SlickException{
-            super(
-                    Helpful.makeTestImage(WIDTH, HEIGHT, (playerId == 1?Color.blue:new Color(1.0f, 0.5f, 0.0f)), text),
-                    Helpful.makeTestImage(WIDTH, HEIGHT, Color.green, text),
+        public SidebarButton(int y, String text, ClickListener listener, int playerId) throws SlickException {
+            super(Resources.getImage("/assets/graphics/buttons/playgame/" + text + "_player" + Integer.toString(playerId) + ".png"), 
+                    Resources.getImage("/assets/graphics/buttons/playgame/" + text + "_player" + Integer.toString(playerId) + "_hover.png"), 
                     null);
+                    //Helpful.makeTestImage(WIDTH, HEIGHT, (playerId == 1?Color.blue:new Color(1.0f, 0.5f, 0.0f)), text),
+                    //Helpful.makeTestImage(WIDTH, HEIGHT, Color.green, text),
+                    //null);
             this.y = y;
             //this.playerId = playerId;
             this.
@@ -147,16 +148,16 @@ public class PlayBoardState extends PlayerControllerState {
         
 
         sidebarButtons1 = new SidebarButton[]{
-                new SidebarButton(250, "End Turn", endTurnListener, 1),
-                new SidebarButton(250, "Cancel", cancelListener, 1),
-                new SidebarButton(550, "Mute", muteListener, 1),
-                new SidebarButton(650, "Forfeit", forfeitListener, 1),
+                new SidebarButton(250, "end_turn", endTurnListener, 1),
+                new SidebarButton(250, "cancel", cancelListener, 1),
+                new SidebarButton(550, "mute", muteListener, 1),
+                new SidebarButton(650, "forfeit", forfeitListener, 1),
         };
         sidebarButtons2 = new SidebarButton[]{
-                new SidebarButton(250, "End Turn", endTurnListener, 2),
-                new SidebarButton(250, "Cancel", cancelListener, 2),
-                new SidebarButton(550, "Mute", muteListener, 2),
-                new SidebarButton(650, "Forfeit", forfeitListener, 2),
+                new SidebarButton(250, "end_turn", endTurnListener, 2),
+                new SidebarButton(250, "cancel", cancelListener, 2),
+                new SidebarButton(550, "mute", muteListener, 2),
+                new SidebarButton(650, "forfeit", forfeitListener, 2),
         };
         for (Button b : sidebarButtons1){
             stickyListener.add(b);
