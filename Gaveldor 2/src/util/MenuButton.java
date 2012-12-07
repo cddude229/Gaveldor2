@@ -33,8 +33,14 @@ public class MenuButton extends SimpleButton {
     public Shape calculateShape(GameContainer container) {
         if (container.isFullscreen()){
             return new Rectangle(
+                    (float) (container.getScreenWidth() - Constants.WINDOW_WIDTH)/2 + initRect.getX(),
+                    (float) (container.getScreenHeight() - Constants.WINDOW_HEIGHT)/2 + initRect.getY(), WIDTH, HEIGHT);
+            
+            //return initRect;
+            /*return new Rectangle(
                     (float) container.getScreenWidth()/Constants.WINDOW_WIDTH * initRect.getX(),
                     (float) container.getScreenHeight()/Constants.WINDOW_HEIGHT * initRect.getY(), WIDTH, HEIGHT);
+                    */
         }
         
         else {
