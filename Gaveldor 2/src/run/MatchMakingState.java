@@ -110,7 +110,9 @@ public class MatchMakingState extends BasicGameState {
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         backBtn.render(container, g);
-        g.drawString("Waiting For Another Player to Connect to MatchMaking", 300, 100);
+        int w1 = g.getFont().getWidth("Waiting For Another Player to Connect to MatchMaking");
+        g.drawString("Waiting For Another Player to Connect to MatchMaking", 
+                    (container.getWidth()-w1)/2, container.getHeight()/2-300);
     }
 
 

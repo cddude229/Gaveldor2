@@ -79,8 +79,10 @@ public class JoinGameState extends BasicGameState {
     public void render(GameContainer container, StateBasedGame game, Graphics g){
         backBtn.render(container, g);
         connectBtn.render(container, g);
+        ipBox.setLocation(container.getWidth()/2-100,container.getHeight()/2-150);
         ipBox.render(container, g);
-        g.drawString(instructionTxt, ipBox.getX(), ipBox.getY() -50);
+        g.drawString(instructionTxt, 
+                (container.getWidth()-g.getFont().getWidth(instructionTxt))/2, ipBox.getY() -50);
     }
 
     @Override
@@ -135,7 +137,9 @@ public class JoinGameState extends BasicGameState {
         Sound s = Resources.getSound("/assets/audio/effects/click.ogg");
         ArrayList<Image> images = this.makeImages();
         Font defaultFont = images.get(0).getGraphics().getFont();
-        ipBox = new TextField(container,defaultFont,locations.get(2)[0],locations.get(2)[1],bWidth,bHeight);
+        //ipBox = new TextField(container,defaultFont,locations.get(2)[0],locations.get(2)[1],bWidth,bHeight);
+        ipBox = new TextField(container,defaultFont,
+                                container.getWidth()/2,container.getHeight()/2,bWidth,bHeight);
         ipBox.setBackgroundColor(Color.white);
         ipBox.setTextColor(Color.black);
         

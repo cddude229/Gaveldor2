@@ -113,8 +113,11 @@ public class HostGameState extends BasicGameState {
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         backBtn.render(container, g);
-        g.drawString("Waiting For Player to Connect", 300, 100);
-        g.drawString("Your External IP:" + hostIP, 300, 200);
+        
+        int w1 = g.getFont().getWidth("Waiting For Player to Connect");
+        int w2 = g.getFont().getWidth("Your External IP: " + hostIP);
+        g.drawString("Waiting For Player to Connect", (container.getWidth()-w1)/2, container.getHeight()/2 - 100);
+        g.drawString("Your External IP: " + hostIP, (container.getWidth()-w2)/2, container.getHeight()/2 - 200);
     }
 
 

@@ -70,7 +70,6 @@ public class CreditsState extends BasicGameState {
             "Kevin White: Menus, Buttons, and the Other Fun Things"
         };
         generateLocations(container, credits);
-        
     }
     
     @Override
@@ -86,6 +85,7 @@ public class CreditsState extends BasicGameState {
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         backBtn.render(container, g);
+        generateLocations(container, credits);
         for (String line: this.nameLocations.keySet()){
             g.drawString(line, nameLocations.get(line)[0], nameLocations.get(line)[1]);
         }
@@ -162,7 +162,7 @@ public class CreditsState extends BasicGameState {
     
     private void generateLocations(GameContainer container, String[] credits){
         Font defFont = container.getDefaultFont();
-        int yLoc = 50;
+        int yLoc = container.getHeight()/2-300;
         for (String line : credits){
             int width = defFont.getWidth(line);
             this.nameLocations.put(line, new int[] {(container.getWidth()-width)/2,yLoc});

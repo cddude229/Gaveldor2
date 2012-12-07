@@ -76,7 +76,8 @@ public class MapSelectionState extends BasicGameState {
         for (MenuButton btn: buttons){
             btn.render(container, g);
         }
-        g.drawString(instructionTxt, 200, 50);
+        int w1 = g.getFont().getWidth(instructionTxt);
+        g.drawString(instructionTxt, (container.getWidth()-w1)/2, container.getHeight()/2 - 300);
     }
 
     @Override
