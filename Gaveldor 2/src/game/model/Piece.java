@@ -51,7 +51,9 @@ public abstract class Piece {
      * Back attack at current position?
      */
     final public boolean isBackAttack(Piece opponent) {
-        return isBackAttack(this.getPosition(), opponent);
+        boolean ret = isBackAttack(this.getPosition(), opponent);
+        System.out.println("isbackattack: "+ret);
+        return ret;
     }
     
     /**
@@ -63,19 +65,21 @@ public abstract class Piece {
     final public boolean isBackAttack(Point p, Piece opponent){
         int attackDir = -1;
         Point o = opponent.getPosition();
-        if (Math.abs(p.x - o.x) + Math.abs(p.y - o.y) == 2 || !(Math.abs(p.x - o.x) == 2 && p.y == o.y)) {
-            Point[] ret = Piece.getPointsFromPoint(p, 1);
-
-            for (int i = 0; i < ret.length; i++) {
-                if (ret[i].equals(opponent.getPosition())) {
-                    attackDir = i;
-                }
+        Point[] ret = Piece.getPointsFromPoint(p, 1);
+        
+        for (int i = 0; i < ret.length; i++) {
+            if (ret[i].equals(opponent.getPosition())) {
+                System.out.println("isBackAttack: Matched d=1");
+                attackDir = i;
             }
-        } else {
-            Point[] ret = Piece.getPointsFromPoint(p, 2);
-            for (int i = 0; i < ret.length; i++) {
-                if (ret[i].equals(opponent.getPosition()))
-                    attackDir = i / 2;
+        }
+        
+        // Ok, check d2 now as well
+        ret = Piece.getPointsFromPoint(p, 2);
+        for (int i = 0; i < ret.length; i++) {
+            if (ret[i].equals(opponent.getPosition())){
+                System.out.println("isBackAttack: Matched d=2");
+                attackDir = i / 2;
             }
         }
 
