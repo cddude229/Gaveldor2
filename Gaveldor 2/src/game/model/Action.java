@@ -65,12 +65,12 @@ public abstract class Action implements Serializable {
     		this.destination = destination;
     		this.direction = direction;
     		targetID = target == null ? -1 : target.id;
-    		int rand = (int)(Math.random() * 6);
+    		int rand = (int)(Math.random() * 8);
     		switch (rand){
     		case 0:
     		    randomAttackResult = GameModel.AttackResult.BLOCKED;
     		    break;
-    		case 5:
+    		case 7:
     		    randomAttackResult = GameModel.AttackResult.CRITICAL;
     		    break;
     		default:
