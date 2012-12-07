@@ -88,7 +88,7 @@ public class Constants {
     // Tutorial strings
 
     public static final String NONE_SELECTED =  "Click a unit\n" +
-    		                                    "  to move\n\n"+
+    		                                    "to move\n\n" +
                                                 "Or \"End Turn\"";
    /* public static final String MOVING = "Click to move\n" +
                                         "Click to face\n" +
@@ -97,12 +97,12 @@ public class Constants {
                                         "Click the piece\n\n";
     */
     public static final String MOVING = "Click spot to\n" +
-    		                            "   move to";
+    		                            "move to";
     public static final String FACING = "Click space\n" +
-    		                            "  to face";
-    public static final String ATTACK = "  Click unit\n" +
-                                        "  to attack\n" +
-                                        "     or\n" +
+    		                            "to face";
+    public static final String ATTACK = "Click unit\n" +
+                                        "to attack\n" +
+                                        "or\n" +
                                         "Click the piece\n";
     public static final String DONE = "Hit \"End Turn\"";
     
