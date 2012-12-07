@@ -34,6 +34,7 @@ public class MatchMakingState extends BasicGameState {
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
+    private static Image bgImage;
     private String hostIP = "";
     public String mapName = "";
     public boolean host = false;
@@ -64,6 +65,9 @@ public class MatchMakingState extends BasicGameState {
         // create listeners
         createListeners(container,game);
         listener.add(backBtn);
+        
+        bgImage = Resources.getImage("/assets/graphics/ui/menu_bg.png");
+        bgImage.getGraphics().flush();
     }
     
     public static String getIPAddress(){
@@ -109,6 +113,8 @@ public class MatchMakingState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+        g.drawImage(bgImage, container.getWidth()/2-Constants.WINDOW_WIDTH/2,
+                container.getHeight()/2-Constants.WINDOW_HEIGHT/2);
         backBtn.render(container, g);
         int w1 = g.getFont().getWidth("Waiting For Another Player to Connect to MatchMaking");
         g.drawString("Waiting For Another Player to Connect to MatchMaking", 

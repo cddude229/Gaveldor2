@@ -13,6 +13,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import util.Constants;
 import util.MenuButton;
 import util.Resources;
 
@@ -70,7 +71,8 @@ public class MainMenuState extends BasicGameState {
         //int titleWidth = g.getFont().getWidth("Welcome to Gaveldor 2: The Engaveling of Ambidextria");
         //g.drawString("Welcome to Gaveldor 2: The Engaveling of Ambidextria", (container.getWidth() - titleWidth)/2, 0);
         
-        g.drawImage(bgImage, container.getWidth()/2-512,container.getHeight()/2-384);
+        g.drawImage(bgImage, container.getWidth()/2-Constants.WINDOW_WIDTH/2,
+                                container.getHeight()/2-Constants.WINDOW_HEIGHT/2);
         //this.getxLoc(container,1024),this.getyLoc(container,768));
         for (MenuButton button: buttons){
             button.render(container, g);

@@ -35,6 +35,7 @@ public class JoinGameState extends BasicGameState {
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
+    private static Image bgImage;
     private String instructionTxt;
     ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
     
@@ -52,7 +53,8 @@ public class JoinGameState extends BasicGameState {
         for (MenuButton button : buttons) {
             listener.add(button);
         }
-
+        bgImage = Resources.getImage("/assets/graphics/ui/menu_bg.png");
+        bgImage.getGraphics().flush();
     }
 
     @Override
@@ -77,6 +79,8 @@ public class JoinGameState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g){
+        g.drawImage(bgImage, container.getWidth()/2-Constants.WINDOW_WIDTH/2,
+                container.getHeight()/2-Constants.WINDOW_HEIGHT/2);
         backBtn.render(container, g);
         connectBtn.render(container, g);
         ipBox.setLocation(container.getWidth()/2-100,container.getHeight()/2-150);

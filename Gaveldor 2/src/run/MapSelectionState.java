@@ -15,6 +15,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import util.Constants;
 import util.MenuButton;
 import util.Resources;
 
@@ -41,6 +42,7 @@ public class MapSelectionState extends BasicGameState {
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
+    private static Image bgImage;
     private String instructionTxt;
     ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
     ArrayList<String> maps = new ArrayList<String>();
@@ -58,6 +60,8 @@ public class MapSelectionState extends BasicGameState {
             listener.add(button);
         }
         listener.add(backBtn);
+        bgImage = Resources.getImage("/assets/graphics/ui/menu_bg.png");
+        bgImage.getGraphics().flush();
     }
 
     @Override
@@ -72,6 +76,8 @@ public class MapSelectionState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g){
+        g.drawImage(bgImage, container.getWidth()/2-Constants.WINDOW_WIDTH/2,
+                container.getHeight()/2-Constants.WINDOW_HEIGHT/2);
         backBtn.render(container, g);
         for (MenuButton btn: buttons){
             btn.render(container, g);

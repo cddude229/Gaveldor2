@@ -14,6 +14,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import util.Constants;
 import util.MenuButton;
 import util.Resources;
 
@@ -30,6 +31,7 @@ public class CreditsState extends BasicGameState {
     private GameContainer container;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
+    private static Image bgImage;
     ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
     String[] credits;
     HashMap<String,int[]> nameLocations = new HashMap<String,int[]>();
@@ -70,6 +72,9 @@ public class CreditsState extends BasicGameState {
             "Kevin White: Menus, Buttons, and the Other Fun Things"
         };
         generateLocations(container, credits);
+        
+        bgImage = Resources.getImage("/assets/graphics/ui/menu_bg.png");
+        bgImage.getGraphics().flush();
     }
     
     @Override
@@ -84,6 +89,8 @@ public class CreditsState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+        g.drawImage(bgImage, container.getWidth()/2-Constants.WINDOW_WIDTH/2,
+                container.getHeight()/2-Constants.WINDOW_HEIGHT/2);
         backBtn.render(container, g);
         generateLocations(container, credits);
         for (String line: this.nameLocations.keySet()){
