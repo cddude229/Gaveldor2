@@ -36,6 +36,7 @@ public abstract class PlayerController extends StateBasedGame{
     }
     
     public static void initAssets() throws SlickException{
+        GameModel.AttackResult.initAssets();
         PlayBoardState.initAssets();
     }
 
@@ -146,12 +147,12 @@ public abstract class PlayerController extends StateBasedGame{
         if (model.lastMoved != null && model.lastMovedAttackResult != null && model.sinceLastMoved < Constants.ATTACK_DISPLAY_TIME){
             g.setColor(model.lastMovedAttackResult == GameModel.AttackResult.CRITICAL ? Color.red : Color.white);
             g.setFont(Constants.PRIMARY_FONT);
-            String str = model.lastMovedAttackResult.name();
+            Image im = model.lastMovedAttackResult.image;
             float frac = 1f * model.sinceLastMoved / Constants.ATTACK_DISPLAY_TIME;
-            g.drawString(str,
-                    getPixelX(model.lastMoved.getPosition().x, g.getFont().getWidth(str), .5f) - displayX,
-                    getPixelY(model.lastMoved.getPosition().y, g.getFont().getLineHeight(), .5f) - displayY
-                    - (Constants.ATTACK_DISPLAY_FLOAT_MIN_DIST + frac * (Constants.ATTACK_DISPLAY_FLOAT_MAX_DIST - Constants.ATTACK_DISPLAY_FLOAT_MIN_DIST)));
+            g.drawImage(im,
+                    getPixelX(model.lastMoved.getPosition().x, im.getWidth(), .5f) - displayX,
+                    getPixelY(model.lastMoved.getPosition().y, im.getHeight(), .5f) - displayY
+                    - (Constants.ATTACK_DISPLAY_FLOAT_MIN_DIST + (1 - (float)Math.pow(1 - frac, 3)) * (Constants.ATTACK_DISPLAY_FLOAT_MAX_DIST - Constants.ATTACK_DISPLAY_FLOAT_MIN_DIST)));
         }
     }
     

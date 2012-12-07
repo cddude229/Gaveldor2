@@ -12,6 +12,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.newdawn.slick.Image;
+
+import util.Resources;
+
 public class GameModel {
 
     private final Player[] players;
@@ -29,7 +33,17 @@ public class GameModel {
     }
     
 
-    public static enum AttackResult{STRIKE, BLOCKED, CRITICAL};
+    public static enum AttackResult{
+        STRIKE, BLOCKED, CRITICAL;
+        
+        public Image image;
+        
+        public static void initAssets(){
+            STRIKE.image = Resources.getImage("/assets/graphics/ui/strike_markers/strike.png");
+            BLOCKED.image = Resources.getImage("/assets/graphics/ui/strike_markers/blocked.png");
+            CRITICAL.image = Resources.getImage("/assets/graphics/ui/strike_markers/critical.png");
+        }
+    }
 
     public GameState gameState = GameState.SETTING_UP;
     
