@@ -12,6 +12,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import util.Constants;
 import util.MenuButton;
 import util.Resources;
 
@@ -44,7 +45,7 @@ public class InstructionState extends BasicGameState {
             yLoc += 100;
         }
         // create rectangles for buttons
-        backRect = new Rectangle(w/2-bWidth/2,h-bHeight-30, bWidth, bHeight);
+        backRect = new Rectangle(w/2-bWidth/2,h-bHeight - 10, bWidth, bHeight);
         frect = new Rectangle(15*w/20, 9*h/10, 19*w/20, h-30);
         brect = new Rectangle(w/20, 9*h/10, 5*w/20, h-30);
 
@@ -77,7 +78,9 @@ public class InstructionState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        g.drawImage(images.get(page+4), 0, 0,container.getWidth(),container.getHeight()-container.getHeight()/10,0,0,1280,800);
+        float deltaW = (container.getWidth()/(float) Constants.WINDOW_WIDTH - 1) * Constants.WINDOW_WIDTH;
+        float deltaH = (float) 0.0001 * (container.getHeight()/(float) Constants.WINDOW_HEIGHT - 1) * Constants.WINDOW_HEIGHT;
+        g.drawImage(images.get(page+4), 0, 0,Constants.WINDOW_WIDTH + deltaW,Constants.WINDOW_HEIGHT- Constants.WINDOW_HEIGHT/10 - deltaH,0,0,1280,800);
         backBtn.render(container, g);
         fbtn.render(container, g);
         bbtn.render(container, g);
