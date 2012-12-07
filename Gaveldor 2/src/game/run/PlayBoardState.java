@@ -32,7 +32,8 @@ public class PlayBoardState extends PlayerControllerState {
         super(GameState.PLAYING_BOARD, isLocal);
     }
     
-    private static Image hoverOverlay, movableOverlay, faceableArrows, attackableOverlay;
+    private static Image hoverOverlay, movableOverlay, faceableArrows, attackableOverlay,
+            minimapBlue, minimapEmpty, minimapGrey, minimapOrange, minimapSelected;
     private GameContainer gameContainer;
     //private PlayerController stateGame;
     
@@ -47,6 +48,11 @@ public class PlayBoardState extends PlayerControllerState {
         movableOverlay = Resources.getImage("/assets/graphics/ui/movable.png").getScaledCopy(.5f);
         faceableArrows = Resources.getImage("/assets/graphics/ui/arrows.png").getScaledCopy(.5f);
         attackableOverlay = Resources.getImage("/assets/graphics/ui/attackable.png").getScaledCopy(.5f);
+        minimapBlue = Resources.getImage("/assets/graphics/ui/minimap/minimap_blue.png");
+        minimapEmpty = Resources.getImage("/assets/graphics/ui/minimap/minimap_empty.png");
+        minimapGrey = Resources.getImage("/assets/graphics/ui/minimap/minimap_grey.png");
+        minimapOrange = Resources.getImage("/assets/graphics/ui/minimap/minimap_orange.png");
+        minimapSelected = Resources.getImage("/assets/graphics/ui/minimap/minimap_selected.png");
     }
 
     @Override
@@ -192,21 +198,20 @@ public class PlayBoardState extends PlayerControllerState {
         int xi = x + (minimapWidth - width) / 2, yi = y + (minimapHeight - height) / 2;
         g.setColor(Color.black);
         g.fillRect(x, y, minimapWidth, minimapHeight);
-        g.setColor(Color.white);
         for (int j = 0; j < pc.model.map.height; j++) {
             for (int i = j % 2; i < pc.model.map.width; i += 2) {
-                g.drawOval(
+                minimapEmpty.draw(
                         PlayerController.getPixelX(i, Constants.TILE_WIDTH, .5f) * scale + xi,
                         PlayerController.getPixelY(j, Constants.TILE_HEIGHT, .5f) * scale + yi,
-                        Constants.TILE_WIDTH * scale, Constants.TILE_HEIGHT * scale);
+                        scale * Constants.TILE_WIDTH / minimapEmpty.getWidth());
             }
         }
         for (Piece p : pc.model.getPieces()) {
-            g.setColor(p.owner.equals(pc.player) && p.equals(pc.selectedPiece) ? Color.white : p.turnState == TurnState.DONE ? Color.gray : p.owner.id == 1 ? Color.blue : Color.orange); //TODO: add minimap assets
-            g.fillOval(
-                        PlayerController.getPixelX(p.getPosition().x, Constants.TILE_WIDTH, .5f) * scale + xi,
-                        PlayerController.getPixelY(p.getPosition().y, Constants.TILE_HEIGHT, .5f) * scale + yi,
-                        Constants.TILE_WIDTH * scale, Constants.TILE_HEIGHT * scale);
+            Image im = p.owner.equals(pc.player) && p.equals(pc.selectedPiece) ? minimapSelected : p.turnState == TurnState.DONE ? minimapGrey : p.owner.id == 1 ? minimapBlue : minimapOrange;
+            im.draw(
+                    PlayerController.getPixelX(p.getPosition().x, Constants.TILE_WIDTH, .5f) * scale + xi,
+                    PlayerController.getPixelY(p.getPosition().y, Constants.TILE_HEIGHT, .5f) * scale + yi,
+                    scale * Constants.TILE_WIDTH / im.getWidth());
         }
         g.setColor(Color.white);
         float rl = Math.max(pc.displayX * scale + xi, x), rt = Math.max(pc.displayY * scale + yi, y),
