@@ -159,7 +159,7 @@ public abstract class PlayerController extends StateBasedGame{
                     getPixelX(model.lastMoved.getPosition().x, im.getWidth(), .5f) - displayX,
                     getPixelY(model.lastMoved.getPosition().y, im.getHeight(), .5f) - displayY
                     - (Constants.ATTACK_DISPLAY_FLOAT_MIN_DIST + (1 - (float)Math.pow(1 - frac, 3)) * (Constants.ATTACK_DISPLAY_FLOAT_MAX_DIST - Constants.ATTACK_DISPLAY_FLOAT_MIN_DIST)));
-            if (model.lastMovedJustHappened){
+            if (model.lastMovedJustHappened && model.lastMovedAttackResult.sound != null){
                 model.lastMovedAttackResult.sound.play();
             }
         }
