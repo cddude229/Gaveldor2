@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Sound;
 
 import util.Resources;
 
@@ -37,11 +38,14 @@ public class GameModel {
         STRIKE, BLOCKED, CRITICAL;
         
         public Image image;
+        public Sound sound;
         
         public static void initAssets(){
             STRIKE.image = Resources.getImage("/assets/graphics/ui/strike_markers/strike.png");
             BLOCKED.image = Resources.getImage("/assets/graphics/ui/strike_markers/blocked.png");
             CRITICAL.image = Resources.getImage("/assets/graphics/ui/strike_markers/critical.png");
+        
+            //TODO: initialize attack result sounds
         }
     }
 
@@ -54,6 +58,7 @@ public class GameModel {
     public long sinceTurnStart;
     
     public Piece lastMoved;
+    public boolean lastMovedJustHappened;
     public Point lastMovedPosition;
     public int lastMovedDirection;
     public AttackResult lastMovedAttackResult;
@@ -110,6 +115,7 @@ public class GameModel {
             }
         }
         lastMoved = null;
+        lastMovedJustHappened = false;
         sinceTurnStart = 0;
         switchCurrentAndOtherPlayers();
     }
@@ -429,6 +435,7 @@ public class GameModel {
             pieces = map.createPieces(players);
             currentPlayerIndex = 0;
             lastMoved = null;
+            lastMovedJustHappened = false;
             sinceTurnStart = 0L;
             gameState = GameState.PLAYING_BOARD;
             break;
@@ -447,6 +454,7 @@ public class GameModel {
             assert piece != null;
             assert piece.turnState == TurnState.MOVING;
             lastMoved = piece;
+            lastMovedJustHappened = true;
             lastMovedPosition = piece.getPosition();
             lastMovedDirection = piece.getDirection();
             sinceLastMoved = 0;
@@ -483,12 +491,9 @@ public class GameModel {
     public void applyDelta(int delta){
         switch (gameState){
         case PLAYING_BOARD:
-            sinceLastMoved += delta;
-            if (sinceTurnStart == 0){
-               sinceTurnStart = 1;
-            } else{
-                sinceTurnStart += delta;
-            }
+            lastMovedJustHappened = false;
+            sinceLastMoved += sinceLastMoved == 0 ? 1 : delta;
+            sinceTurnStart += sinceTurnStart == 0 ? 1 : delta;
             break;
         default:
             break;
