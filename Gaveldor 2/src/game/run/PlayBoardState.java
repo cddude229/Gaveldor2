@@ -4,6 +4,7 @@ import game.model.Action;
 import game.model.GameModel.GameState;
 import game.model.Piece;
 import game.model.Piece.TurnState;
+import game.model.Player;
 import game.model.Point;
 
 import java.util.HashSet;
@@ -38,7 +39,7 @@ public class PlayBoardState extends PlayerControllerState {
     
     public static String tutorialString = Constants.NONE_SELECTED;
     
-    private SidebarButton[] sidebarButtons1, sidebarButtons2;
+    private SidebarButton[] sidebarButtons;
     
     private boolean wasAnimatingMove = false;
     
@@ -57,29 +58,21 @@ public class PlayBoardState extends PlayerControllerState {
     @Override
     public void init(GameContainer container, PlayerController pc) throws SlickException {
         gameContainer = container;
-        //stateGame = pc;
-        if (isLocal){
-            initLocal(container, (LocalPlayerController)pc);
-        }
+        initSidebar(container, pc);
     }
     
     private class SidebarButton extends LayoutButton{
         
         private static final int WIDTH = 200, HEIGHT = 50;
         
-        private final int y; //, playerId;
+        private final int y;
         
-        public SidebarButton(int y, String text, ClickListener listener, int playerId) throws SlickException {
-            super(Resources.getImage("/assets/graphics/buttons/playgame/" + text + "_player" + Integer.toString(playerId) + ".png"), 
-                    Resources.getImage("/assets/graphics/buttons/playgame/" + text + "_player" + Integer.toString(playerId) + "_hover.png"), 
+        public SidebarButton(int y, String text, ClickListener listener, Player player) throws SlickException {
+            super(Resources.getImage("/assets/graphics/buttons/playgame/" + text + "_player" + player.id + ".png"), 
+                    Resources.getImage("/assets/graphics/buttons/playgame/" + text + "_player" + player.id + "_hover.png"), 
                     null);
-                    //Helpful.makeTestImage(WIDTH, HEIGHT, (playerId == 1?Color.blue:new Color(1.0f, 0.5f, 0.0f)), text),
-                    //Helpful.makeTestImage(WIDTH, HEIGHT, Color.green, text),
-                    //null);
             this.y = y;
-            //this.playerId = playerId;
-            this.
-            addListener(listener);
+            this.addListener(listener);
         }
 
         @Override
@@ -90,13 +83,15 @@ public class PlayBoardState extends PlayerControllerState {
         }
     }
     
-    public void initLocal(GameContainer container, final LocalPlayerController pc) throws SlickException{
+    public void initSidebar(GameContainer container, final PlayerController pc) throws SlickException{
 
+        final Player player = isLocal ? pc.player : pc.model.getOtherPlayer(pc.player);
+        
         ClickListener endTurnListener = new ClickListener(){
             @Override
             public void onClick(Button clicked, float mx, float my) {
-                if (pc.selectedPiece == null) {
-                    endTurn(pc);
+                if (((LocalPlayerController)pc).selectedPiece == null) {
+                    endTurn(((LocalPlayerController)pc));
                 }
             }
             @Override
@@ -109,8 +104,8 @@ public class PlayBoardState extends PlayerControllerState {
         cancelListener = new ClickListener(){
             @Override
             public void onClick(Button clicked, float mx, float my) {
-                if (pc.selectedPiece != null){
-                    clearSelection(pc);
+                if (((LocalPlayerController)pc).selectedPiece != null){
+                    clearSelection(((LocalPlayerController)pc));
                 }
             }
             @Override
@@ -135,7 +130,7 @@ public class PlayBoardState extends PlayerControllerState {
         forfeitListener = new ClickListener(){
             @Override
             public void onClick(Button clicked, float mx, float my) {
-                pc.actionQueue.add(new Action.ForfeitAction(pc.player));
+                pc.actionQueue.add(new Action.ForfeitAction(player));
 //                 pc.game.enterState(MainMenuState.STATE_ID);
             }
             @Override
@@ -146,20 +141,35 @@ public class PlayBoardState extends PlayerControllerState {
             }
         };
         
-
-        sidebarButtons1 = new SidebarButton[]{
-                new SidebarButton(250, "end_turn", endTurnListener, 1),
-                new SidebarButton(250, "cancel", cancelListener, 1),
-                new SidebarButton(550, "mute", muteListener, 1),
-                new SidebarButton(650, "forfeit", forfeitListener, 1),
-        };
-        sidebarButtons2 = new SidebarButton[]{
-                new SidebarButton(250, "end_turn", endTurnListener, 2),
-                new SidebarButton(250, "cancel", cancelListener, 2),
-                new SidebarButton(550, "mute", muteListener, 2),
-                new SidebarButton(650, "forfeit", forfeitListener, 2),
-        };
-        for (Button b : sidebarButtons1){
+        if (isLocal){
+            sidebarButtons = new SidebarButton[]{
+                    new SidebarButton(250, "end_turn", endTurnListener, player),
+                    new SidebarButton(250, "cancel", cancelListener, player),
+                    new SidebarButton(550, "mute", muteListener, player),
+                    new SidebarButton(650, "forfeit", forfeitListener, player),
+            };
+        } else{
+            sidebarButtons = new SidebarButton[]{
+                    new SidebarButton(550, "mute", muteListener, player),
+                    new SidebarButton(650, "forfeit", forfeitListener, player),
+            };
+        }
+//        if (pc.player.equals(pc.model.getPlayer1()) || !Constants.PLAYER2_ORANGE_SIDEBAR){
+//            sidebarButtons = new SidebarButton[]{
+//                    new SidebarButton(250, "end_turn", endTurnListener, 1),
+//                    new SidebarButton(250, "cancel", cancelListener, 1),
+//                    new SidebarButton(550, "mute", muteListener, 1),
+//                    new SidebarButton(650, "forfeit", forfeitListener, 1),
+//            };
+//        } else{
+//            sidebarButtons = new SidebarButton[]{
+//                    new SidebarButton(250, "end_turn", endTurnListener, 2),
+//                    new SidebarButton(250, "cancel", cancelListener, 2),
+//                    new SidebarButton(550, "mute", muteListener, 2),
+//                    new SidebarButton(650, "forfeit", forfeitListener, 2),
+//            };
+//        }
+        for (Button b : sidebarButtons){
             stickyListener.add(b);
         }
     }
@@ -174,6 +184,9 @@ public class PlayBoardState extends PlayerControllerState {
         pc.renderBoard(container, g);
         if (isLocal){
             renderLocal(container, (LocalPlayerController)pc, g);
+        }
+        if (!pc.isAnimatingMove()){
+            renderSidebar(container, pc, g);
         }
         pc.renderAttack(container, g);
         renderHeader(container, g, pc);
@@ -191,7 +204,7 @@ public class PlayBoardState extends PlayerControllerState {
         pc.renderHeaderText(container, g, str);
     }
     
-    public void renderMinimap(GameContainer container, Graphics g, LocalPlayerController pc, int x, int y) throws SlickException{
+    public void renderMinimap(GameContainer container, Graphics g, PlayerController pc, int x, int y) throws SlickException{
         final int minimapWidth = 200, minimapHeight = 200;
         float scale = Math.min(1f * minimapWidth / pc.model.map.getPixelWidth() , 1f * minimapHeight / pc.model.map.getPixelHeight());
         int width = Math.round(pc.model.map.getPixelWidth() * scale);
@@ -208,7 +221,7 @@ public class PlayBoardState extends PlayerControllerState {
             }
         }
         for (Piece p : pc.model.getPieces()) {
-            Image im = p.owner.equals(pc.player) && p.equals(pc.selectedPiece) ? minimapSelected : p.turnState == TurnState.DONE ? minimapGrey : p.owner.id == 1 ? minimapBlue : minimapOrange;
+            Image im = p.owner.equals(pc.player) && isLocal && p.equals(((LocalPlayerController)pc).selectedPiece) ? minimapSelected : p.turnState == TurnState.DONE ? minimapGrey : p.owner.id == 1 ? minimapBlue : minimapOrange;
             im.draw(
                     PlayerController.getPixelX(p.getPosition().x, Constants.TILE_WIDTH, .5f) * scale + xi,
                     PlayerController.getPixelY(p.getPosition().y, Constants.TILE_HEIGHT, .5f) * scale + yi,
@@ -221,7 +234,7 @@ public class PlayBoardState extends PlayerControllerState {
         g.drawRect(rl, rt, rr - rl, rb - rt);
     }
     
-    public void renderLocalSidebar(GameContainer container, LocalPlayerController pc, Graphics g) throws SlickException{
+    public void renderSidebar(GameContainer container, PlayerController pc, Graphics g) throws SlickException{
         g.setColor(new Color(0x77000000));
         g.fillRect(container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0, Constants.BOARD_SIDEBAR_WIDTH, container.getHeight());
         g.setColor(Color.white);
@@ -230,31 +243,36 @@ public class PlayBoardState extends PlayerControllerState {
         renderMinimap(container, g, pc, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH, 0);
         
         g.setFont(Constants.TUTORIAL_FONT);
-        g.drawString(tutorialString, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 20, 350);
+        g.drawString(tutorialString, container.getWidth() - Constants.BOARD_SIDEBAR_WIDTH + 30, 350);
         
-        Button[] sidebarButtons = (Constants.PLAYER2_ORANGE_SIDEBAR && pc.player.id == 2?sidebarButtons2:sidebarButtons1);
         for (Button b : sidebarButtons){
             //End Turn button
-            if (b.equals(sidebarButtons[0])) {
-                if (pc.selectedPiece == null) {
+            if (isLocal){
+                if (b.equals(sidebarButtons[0])) {
+                    if (((LocalPlayerController)pc).selectedPiece == null) {
+                        b.render(container, g);
+                    }
+                }
+                //Cancel button
+                else if (b.equals(sidebarButtons[1])) {
+                    if (((LocalPlayerController)pc).selectedPiece != null) {
+                        b.render(container, g);
+                    }
+                }
+                else {
                     b.render(container, g);
                 }
-            }
-            //Cancel button
-            else if (b.equals(sidebarButtons[1])) {
-                if (pc.selectedPiece != null) {
-                    b.render(container, g);
-                }
-            }
-            else {
+            } else{
                 b.render(container, g);
             }
         }
     }
     
-    public void updateLocalSidebar(GameContainer container, LocalPlayerController pc, int delta){
-        for (Button b : sidebarButtons1){
-            b.update(container, delta);
+    public void updateSidebar(GameContainer container, PlayerController pc, int delta){
+        if (pc.player.equals(pc.model.getCurrentPlayer())){
+            for (Button b : sidebarButtons){
+                b.update(container, delta);
+            }
         }
     }
     
@@ -315,7 +333,6 @@ public class PlayBoardState extends PlayerControllerState {
                     pc.renderAtPosition(movableOverlay, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0f, 0f);
                 }
             }
-            renderLocalSidebar(container, pc, g);
         }
         if (Constants.TURN_TIME_LIMIT_ON){
             float timeFrac = 1f * (timeLimit(pc) - pc.model.sinceTurnStart) / timeLimit(pc);
@@ -327,23 +344,29 @@ public class PlayBoardState extends PlayerControllerState {
     private long timeLimit(LocalPlayerController pc){
         return Constants.TURN_TIME_LIMIT_PER_PIECE * pc.model.numberOfPieces(pc.player);
     }
-
+    
     @Override
-    public void updateLocal(GameContainer container, LocalPlayerController pc, int delta) throws SlickException {
+    public void updateEither(GameContainer container, PlayerController pc, int delta) throws SlickException{
+        if (pc.justStarted){
+            pc.setDisplayCenterPiecesAverage(container);
+        }
+        pc.justStarted = false;
+        
         if (pc.isCurrentPC() && !pc.isAnimatingMove()){
             container.getInput().addListener(stickyListener);
+            updateSidebar(container, pc, delta);
         } else{
             container.getInput().removeListener(stickyListener);
         }
-        
+    }
+
+    @Override
+    public void updateLocal(GameContainer container, LocalPlayerController pc, int delta) throws SlickException {
         if (pc.isCurrentPC()){
             if (pc.isAnimatingMove()){
                 pc.sinceSelectedPieceMove += delta;
-            } else if (Constants.TURN_TIME_LIMIT_ON && pc.model.sinceTurnStart >= timeLimit(pc)){
-                endTurn(pc);
             } else{
                 pc.updateMousePan(container, pc, delta);
-                updateLocalSidebar(container, pc, delta);
                 
                 if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON) &&
                         container.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) && !container.getInput().isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON)) {

@@ -50,7 +50,13 @@ public class RemotePlayerController extends PlayerController {
 
     @Override
     public Action retrieveAction(){
-        return networkingController.getAction();
+        Action action = super.retrieveAction();
+        if (action == null){
+            return networkingController.getAction();
+        } else{
+            propagateAction(action);
+            return action;
+        }
     }
 
     @Override

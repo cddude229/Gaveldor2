@@ -6,9 +6,7 @@ import game.model.Piece;
 import game.model.Player;
 import game.model.Point;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -19,8 +17,6 @@ import org.newdawn.slick.SlickException;
 import util.Constants;
 
 public class LocalPlayerController extends PlayerController {
-
-    public final Queue<Action> actionQueue = new LinkedList<Action>();
 
     public Piece selectedPiece = null;
     public Point selectedPieceMove = null;
@@ -101,11 +97,6 @@ public class LocalPlayerController extends PlayerController {
                         container.getHeight(), container.getInput().getMouseY(), Input.KEY_UP, Input.KEY_DOWN,
                 delta)
         );
-    }
-
-    @Override
-    public Action retrieveAction() {
-        return actionQueue.poll();
     }
 
     @Override

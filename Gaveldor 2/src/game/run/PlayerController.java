@@ -7,7 +7,9 @@ import game.model.Player;
 import game.model.Point;
 import game.model.TerrainType;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -23,6 +25,8 @@ public abstract class PlayerController extends StateBasedGame{
     public StateBasedGame game;
     
     public final Player player;
+    
+    public final Queue<Action> actionQueue = new LinkedList<Action>();
 
     public final GameModel model; // for getting game state info only (no updating)
 
@@ -40,7 +44,9 @@ public abstract class PlayerController extends StateBasedGame{
         PlayBoardState.initAssets();
     }
 
-    public abstract Action retrieveAction();
+    public Action retrieveAction(){
+        return actionQueue.poll();
+    }
 
     public abstract void propagateAction(Action action);
 
@@ -162,10 +168,6 @@ public abstract class PlayerController extends StateBasedGame{
     
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException{
         this.game = game;
-        if (justStarted){
-            setDisplayCenterPiecesAverage(container);
-        }
         update(container, delta);
-        justStarted = false;
     }
 }

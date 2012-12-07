@@ -88,6 +88,16 @@ public class GameModel {
     public Player getOtherPlayer() {
         return players[1 - currentPlayerIndex];
     }
+    
+    public Player getOtherPlayer(Player player){
+        if (player.equals(players[0])){
+            return players[1];
+        } else if (player.equals(players[1])){
+            return players[0];
+        } else{
+            throw new RuntimeException();
+        }
+    }
 
     private void switchCurrentAndOtherPlayers() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
@@ -423,7 +433,9 @@ public class GameModel {
             gameState = GameState.PLAYING_BOARD;
             break;
         case DISCONNECT:
-            gameState = GameState.DISCONNECTED;
+            if (gameState != GameState.WON){
+                gameState = GameState.DISCONNECTED;
+            }
             break;
         case FORFEIT:
             ForfeitAction forfeitPacket = (ForfeitAction) action;
