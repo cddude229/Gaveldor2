@@ -30,9 +30,9 @@ public class Constants {
     public static final String defaultMap = "";
     
     //Music Volume
-    public static final float MENU_VOLUME = 0.4f;
+    public static final float MENU_VOLUME = 0.6f;
     public static final float BATTLE_START_VOLUME = 0.01f;
-    public static final float BATTLE_END_VOLUME = 0.25f;
+    public static final float BATTLE_END_VOLUME = 0.15f;
     public static final int BATTLE_FADE_DURATION = 10;
     
     // Action.java
