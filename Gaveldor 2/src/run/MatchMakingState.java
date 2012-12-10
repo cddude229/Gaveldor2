@@ -175,13 +175,13 @@ public class MatchMakingState extends BasicGameState {
     
     public ArrayList<Image> makeImages() throws SlickException {
         ArrayList<Image> images = new ArrayList<Image>();
-      Image im = new Image("assets/graphics/buttons/general/back.png");
-      Image clickPlay = new Image("assets/graphics/buttons/general/back_hover.png");
-/*        Image im = new Image(bWidth, bHeight);
+      Image im = Resources.getImage("assets/graphics/buttons/general/back.png");
+      Image clickPlay = Resources.getImage("assets/graphics/buttons/general/back_hover.png");
+/*        Image im = Resources.getImage(bWidth, bHeight);
         im.getGraphics().setColor(Color.blue);
         im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
         im.getGraphics().setColor(Color.white);
-        Image clickPlay = new Image(bWidth, bHeight);
+        Image clickPlay = Resources.getImage(bWidth, bHeight);
         clickPlay.getGraphics().setColor(Color.yellow);
         clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
         clickPlay.getGraphics().setColor(Color.black);

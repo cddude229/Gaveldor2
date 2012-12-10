@@ -73,11 +73,14 @@ public abstract class PlayerControllerState extends BasicGameState {
             pc.enterState(pc.model.gameState.getPCStateID());
             return; //do we want?
         }
+        updateEither(container, pc, delta);
         if (isLocal){
             updateLocal(container, (LocalPlayerController)pc, delta);
         } else{
             //do nothing
         }
     }
+    public void updateEither(GameContainer container, PlayerController pc, int delta) throws SlickException{};
+    
     public abstract void updateLocal(GameContainer container, LocalPlayerController pc, int delta) throws SlickException;
 }
