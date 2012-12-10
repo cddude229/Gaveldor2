@@ -79,7 +79,7 @@ public class InstructionState extends BasicGameState {
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         float deltaW,deltaH;
-        if (container.getWidth()<=Constants.WINDOW_WIDTH && container.getHeight()<=Constants.WINDOW_HEIGHT)
+        if (container.getWidth()<=1280 && container.getHeight()<=800)
         {
             deltaW = (container.getWidth()/(float) Constants.WINDOW_WIDTH - 1) * Constants.WINDOW_WIDTH;
             deltaH = (float) 0.0001 * (container.getHeight()/(float) Constants.WINDOW_HEIGHT - 1) * Constants.WINDOW_HEIGHT;
