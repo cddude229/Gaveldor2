@@ -137,7 +137,7 @@ public class MapSelectionState extends BasicGameState {
             }
         }
         ArrayList<Rectangle> rects = new ArrayList<Rectangle>();
-        for (int i = 0; i< locations.size(); i++){
+        for (int i = 0; i< locations.size()-1; i++){
             rects.add(new Rectangle(locations.get(i)[0],locations.get(i)[1],bWidth,bHeight));
         }
         // create rectangles for map buttons
