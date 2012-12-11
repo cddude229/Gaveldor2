@@ -69,7 +69,9 @@ public class CreditsState extends BasicGameState {
             "Lane Pertusi: Artist",
             "Andres Romero: Networking",
             "Jeremy Sharpe: Game Logic",
-            "Kevin White: Menus, Buttons, and the Other Fun Things"
+            "Kevin White: Menus, Buttons, and the Other Fun Things",
+            "",
+            "Music by Tanner Helland (www.tannerhelland.com)"
         };
         generateLocations(container, credits);
         
