@@ -11,6 +11,7 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Rectangle;
@@ -99,6 +100,22 @@ public class JoinGameState extends BasicGameState {
             ((Game)game).startClientRemoteMatch(socket);
             socket = null;
             game.enterState(PlayGameState.STATE_ID);
+        }
+        if (container.getInput().isKeyPressed(Input.KEY_ENTER)) {
+            socket = new Socket();
+            new Thread(new Runnable(){
+                private final String ip = ipBox.getText();
+                @Override
+                public void run() {
+                    try {
+                        socket.connect(new InetSocketAddress(ip, Constants.REMOTE_CONNECTION_PORT));
+                    }catch (IOException e) {
+                      instructionTxt = "A connection could not be established. Please try again.";
+                      ipBox.setText("");
+                      ipBox.setCursorVisible(true);
+                    }
+                }
+            }).start();
         }
     }
 
