@@ -55,8 +55,8 @@ public class InstructionState extends BasicGameState {
 
         // add buttons
         backBtn = new MenuButton(backRect, images.get(0), images.get(1), s);
-        fbtn = new MenuButton(frect, images.get(2).getScaledCopy(w/5,h/10-10),images.get(2).getScaledCopy(w/5,h/10-10),s);
-        bbtn = new MenuButton(brect, images.get(3).getScaledCopy(w/5,h/10-10),images.get(3).getScaledCopy(w/5,h/10-10),s);
+        fbtn = new MenuButton(frect, images.get(2).getScaledCopy(w/5,h/10-10),images.get(4).getScaledCopy(w/5,h/10-10),s);
+        bbtn = new MenuButton(brect, images.get(3).getScaledCopy(w/5,h/10-10),images.get(5).getScaledCopy(w/5,h/10-10),s);
 
         // create listeners
         createListeners(container,game);
@@ -83,7 +83,7 @@ public class InstructionState extends BasicGameState {
         {
             deltaW = (container.getWidth()/(float) Constants.WINDOW_WIDTH - 1) * Constants.WINDOW_WIDTH;
             deltaH = (float) 0.0001 * (container.getHeight()/(float) Constants.WINDOW_HEIGHT - 1) * Constants.WINDOW_HEIGHT;
-            g.drawImage(images.get(page+4), 0, 0,Constants.WINDOW_WIDTH + deltaW,Constants.WINDOW_HEIGHT- Constants.WINDOW_HEIGHT/10 - deltaH,0,0,1280,800);
+            g.drawImage(images.get(page+6), 0, 0,Constants.WINDOW_WIDTH + deltaW,Constants.WINDOW_HEIGHT- Constants.WINDOW_HEIGHT/10 - deltaH,0,0,1280,800);
             backBtn.render(container, g);
             fbtn.render(container, g);
             bbtn.render(container, g);
@@ -92,7 +92,7 @@ public class InstructionState extends BasicGameState {
         {
             deltaW = (1280/(float) Constants.WINDOW_WIDTH - 1) * Constants.WINDOW_WIDTH;
             deltaH = (float) 0.0001 * (800/(float) Constants.WINDOW_HEIGHT - 1) * Constants.WINDOW_HEIGHT;
-            g.drawImage(images.get(page+4), (container.getWidth()-(Constants.WINDOW_WIDTH + deltaW)), 0,Constants.WINDOW_WIDTH + deltaW,Constants.WINDOW_HEIGHT- Constants.WINDOW_HEIGHT/10 - deltaH,0,0,1280,800);
+            g.drawImage(images.get(page+6), (container.getWidth()-(Constants.WINDOW_WIDTH + deltaW)), 0,Constants.WINDOW_WIDTH + deltaW,Constants.WINDOW_HEIGHT- Constants.WINDOW_HEIGHT/10 - deltaH,0,0,1280,800);
             backBtn.render(container, g);
             fbtn.render(container, g);
             bbtn.render(container, g);
@@ -143,7 +143,7 @@ public class InstructionState extends BasicGameState {
         fbtn.addListener(new ClickListener() {
 
             public void onClick(Button clicked, float mx, float my) {
-                page=((page+1)%(images.size()-4));
+                page=((page+1)%(images.size()-6));
             }
 
             public void onDoubleClick(Button clicked, float mx, float my) {}
@@ -152,9 +152,9 @@ public class InstructionState extends BasicGameState {
         bbtn.addListener(new ClickListener() {
 
             public void onClick(Button clicked, float mx, float my) {
-                page=((page-1)%(images.size()-4));
+                page=((page-1)%(images.size()-6));
                 if (page<0){
-                    page=images.size()-5;
+                    page=images.size()-7;
                 }
             }
 
@@ -193,12 +193,18 @@ public class InstructionState extends BasicGameState {
         terrain.getGraphics().flush();
         Image misc = Resources.getImage("/assets/graphics/instructions/misc.png");
         misc.getGraphics().flush();
-        Image forward = Resources.getImage("/assets/graphics/instructions/forward.png");
+        Image forward = Resources.getImage("/assets/graphics/buttons/general/next.png");
         forward.getGraphics().flush();
-        Image backward = Resources.getImage("/assets/graphics/instructions/backward.png");
+        Image backward = Resources.getImage("/assets/graphics/buttons/general/prev.png");
         backward.getGraphics().flush();
         images.add(forward);
         images.add(backward);
+        Image forwardh = Resources.getImage("/assets/graphics/buttons/general/next_hover.png");
+        forward.getGraphics().flush();
+        Image backwardh = Resources.getImage("/assets/graphics/buttons/general/prev_hover.png");
+        backward.getGraphics().flush();
+        images.add(forwardh);
+        images.add(backwardh);
         images.add(wel);
         images.add(move);
         images.add(attack);
