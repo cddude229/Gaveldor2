@@ -123,14 +123,14 @@ public class MapSelectionState extends BasicGameState {
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 150;
         int xLoc = 75;
-        for (int i = 0; i < 6; i++) {
-            if (i == 5){
+        for (int i = 0; i < 7; i++) {
+            if (i == 6){
                 locations.add(new int[] {this.getxLoc(container, bWidth), 600});
             }
             else{
                 locations.add(new int[] {xLoc, yLoc});
                 xLoc += 300;
-                if (i == 2){
+                if (i == 2 ){
                     yLoc += 100;
                     xLoc = 75;
                 }
@@ -141,7 +141,7 @@ public class MapSelectionState extends BasicGameState {
             rects.add(new Rectangle(locations.get(i)[0],locations.get(i)[1],bWidth,bHeight));
         }
         // create rectangles for map buttons
-        Rectangle backRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
+        Rectangle backRect = new Rectangle(locations.get(6)[0], locations.get(6)[1], bWidth, bHeight);
 
         // create play Image
         Sound s = Resources.getSound("/assets/audio/effects/click.ogg");
@@ -201,7 +201,7 @@ public class MapSelectionState extends BasicGameState {
         ArrayList<Image> images = new ArrayList<Image>();
         Image im;
         Image clickPlay;
-        for (int i = 0; i <6; i++){
+        for (int i = 0; i <7; i++){
             switch (i){
             case 0:
               im = Resources.getImage("assets/graphics/buttons/general/back.png");
