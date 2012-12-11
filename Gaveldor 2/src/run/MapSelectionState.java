@@ -149,7 +149,7 @@ public class MapSelectionState extends BasicGameState {
         // add buttons
         backBtn = new MenuButton(backRect, images.get(0), images.get(1), s);
         
-        for (int i = 0; i<rects.size()-1;i++){
+        for (int i = 0; i<rects.size();i++){
             buttons.add(new MenuButton(rects.get(i),images.get(2*i+2),images.get(2*i+3),s));
         }
 
