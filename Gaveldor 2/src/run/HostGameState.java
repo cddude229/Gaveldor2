@@ -34,6 +34,7 @@ public class HostGameState extends BasicGameState {
     private static final int bHeight = 50;
     private static Image bgImage;
     private String hostIP = "";
+    private String message = "";
     
     private ServerSocket serverSocket = null;
     private Socket socket = null;
@@ -77,20 +78,20 @@ public class HostGameState extends BasicGameState {
     public void enter(GameContainer container, StateBasedGame game) {
         container.getInput().addListener(listener);
         hostIP = getIPAddress();
+        message = "Waiting for a player to connect.";
         try {
             serverSocket = new ServerSocket(Constants.REMOTE_CONNECTION_PORT);
         } catch (IOException e) {
-            //TODO: display error message
-            throw new RuntimeException(e);
+            message = e.getMessage();
         }
+        
         new Thread(new Runnable(){
             @Override
             public void run() {
                 try {
                     socket = serverSocket.accept();
                 } catch (IOException e) {
-                    //TODO: display error message
-                    throw new RuntimeException(e);
+                    message = e.getMessage();
                 }
                 serverSocket = null;
             }
@@ -119,9 +120,9 @@ public class HostGameState extends BasicGameState {
         g.drawImage(bgImage, container.getWidth()/2-Constants.WINDOW_WIDTH/2,
                 container.getHeight()/2-Constants.WINDOW_HEIGHT/2);
         backBtn.render(container, g);
-        int w1 = g.getFont().getWidth("Waiting For Player to Connect");
+        int w1 = g.getFont().getWidth(message);
         int w2 = g.getFont().getWidth("Your External IP: " + hostIP);
-        g.drawString("Waiting For Player to Connect", (container.getWidth()-w1)/2, container.getHeight()/2 - 100);
+        g.drawString(message, (container.getWidth()-w1)/2, container.getHeight()/2 - 100);
         g.drawString("Your External IP: " + hostIP, (container.getWidth()-w2)/2, container.getHeight()/2 - 200);
     }
 
