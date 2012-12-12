@@ -10,12 +10,16 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -31,21 +35,25 @@ public class MatchMakingState extends BasicGameState {
 
     public static final int STATE_ID = Game.allocateStateID();
     private MenuButton backBtn;
+    private MenuButton connectBtn;
     private StickyListener listener;
     private static final int bWidth = 200;
     private static final int bHeight = 50;
     private static Image bgImage;
-    private String hostIP = "";
     public String mapName = "";
     public boolean host = false;
     public boolean setupDone = false;
-    
+    private TextField ipBox;
+    private String instructionTxt;
+    private MatchMakingState thistate = this;
     
     private Socket socket = null;
     
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         listener = new StickyListener();
+        instructionTxt = "Please enter the Matchmaking Host IP.";
+        
         ArrayList<int[]> locations = new ArrayList<int[]>();
         int yLoc = 75;
         for (int i = 0; i < 6; i++) {
@@ -53,18 +61,28 @@ public class MatchMakingState extends BasicGameState {
             yLoc += 100;
         }
         // create rectangles for buttons
-        Rectangle backRect = new Rectangle(locations.get(5)[0], locations.get(5)[1], bWidth, bHeight);
-
+        Rectangle backRect = new Rectangle(locations.get(5)[0] - 150, locations.get(5)[1], bWidth, bHeight);
+        Rectangle connectRect = new Rectangle(locations.get(5)[0] + 150, locations.get(5)[1], bWidth, bHeight);
+        
         // create play Image
         Sound s = Resources.getSound("/assets/audio/effects/click.ogg");
         ArrayList<Image> images = this.makeImages();
 
+        Font defaultFont = images.get(0).getGraphics().getFont();
+        ipBox = new TextField(container,defaultFont,container.getWidth()/2,container.getHeight()/2,bWidth,bHeight);
+        ipBox.setBackgroundColor(Color.white);
+        ipBox.setTextColor(Color.black);
         // add button
         backBtn = new MenuButton(backRect, images.get(0), images.get(1), s);
-
+        connectBtn = new MenuButton(connectRect, images.get(2), images.get(3), s);
+        
         // create listeners
-        createListeners(container,game);
         listener.add(backBtn);
+        listener.add(connectBtn);
+        
+        ipBox.setText(Constants.MATCHMAKING_SERVER_IP);
+        
+        createListeners(container,game);
         
         bgImage = Resources.getImage("/assets/graphics/ui/menu_bg.png");
         bgImage.getGraphics().flush();
@@ -81,21 +99,6 @@ public class MatchMakingState extends BasicGameState {
     @Override
     public void enter(GameContainer container, StateBasedGame game) {
         container.getInput().addListener(listener);
-        socket = new Socket();
-        final MatchMakingState state = this;
-        new Thread(new Runnable(){
-            @Override
-            public void run() {
-                try {
-                    socket.connect(new InetSocketAddress(Constants.MATCHMAKING_SERVER_IP, Constants.SERVER_PORT));
-                    new MatchmakingNetworkingController(socket,state).start();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-        
-        
     }
     
     @Override
@@ -116,9 +119,11 @@ public class MatchMakingState extends BasicGameState {
         g.drawImage(bgImage, container.getWidth()/2-Constants.WINDOW_WIDTH/2,
                 container.getHeight()/2-Constants.WINDOW_HEIGHT/2);
         backBtn.render(container, g);
-        int w1 = g.getFont().getWidth("Waiting For Another Player to Connect to MatchMaking");
-        g.drawString("Waiting For Another Player to Connect to MatchMaking", 
-                    (container.getWidth()-w1)/2, container.getHeight()/2-300);
+        connectBtn.render(container, g);
+        ipBox.setLocation(container.getWidth()/2-100,container.getHeight()/2-150);
+        ipBox.render(container, g);
+        g.drawString(instructionTxt, 
+                (container.getWidth()-g.getFont().getWidth(instructionTxt))/2, ipBox.getY() -50);
     }
 
 
@@ -126,6 +131,7 @@ public class MatchMakingState extends BasicGameState {
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         ((Game)game).toggleFullscreenCheck((AppGameContainer)container);
         backBtn.update(container, delta);
+        connectBtn.update(container, delta);
         if (socket != null && setupDone){
             if (host) {
                 ((Game)game).startHostRemoteMatch(mapName, socket);
@@ -137,6 +143,25 @@ public class MatchMakingState extends BasicGameState {
                 socket = null;
                 game.enterState(PlayGameState.STATE_ID);
             }
+        }
+        if (container.getInput().isKeyPressed(Input.KEY_ENTER)) {
+            socket = new Socket();
+            final MatchMakingState state = this;
+            new Thread(new Runnable(){
+                private final String ip = ipBox.getText();
+                @Override
+                public void run() {
+                    try {
+                        socket.connect(new InetSocketAddress(ip, Constants.SERVER_PORT));
+                        instructionTxt = "Waiting for another player to join.";
+                        new MatchmakingNetworkingController(socket,state).start();
+                    }catch (IOException e) {
+                      instructionTxt = "A connection could not be established. Please try again.";
+                      ipBox.setText(e.getMessage());
+                      ipBox.setCursorVisible(true);
+                    }
+                }
+            }).start();
         }
     }
 
@@ -171,26 +196,80 @@ public class MatchMakingState extends BasicGameState {
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });
+        connectBtn.addListener(new ClickListener(){
+            public void onClick(Button clicked, float mx, float my) {
+                socket = new Socket();
+                final MatchMakingState state = thistate;
+                new Thread(new Runnable(){
+                    private final String ip = ipBox.getText();
+                    @Override
+                    public void run() {
+                        try {
+                            socket.connect(new InetSocketAddress(ip, Constants.SERVER_PORT));
+                            instructionTxt = "Waiting for another player to join.";
+                            new MatchmakingNetworkingController(socket,state).start();
+                        }catch (IOException e) {
+                          instructionTxt = "A connection could not be established. Please try again.";
+                          ipBox.setText(e.getMessage());
+                          ipBox.setCursorVisible(true);
+                        }
+                    }
+                }).start();
+            }
+
+            public void onDoubleClick(Button clicked, float mx, float my) {}
+            public void onRightClick(Button clicked, float mx, float my) {}
+        });
     }
     
     public ArrayList<Image> makeImages() throws SlickException {
         ArrayList<Image> images = new ArrayList<Image>();
-      Image im = Resources.getImage("assets/graphics/buttons/general/back.png");
-      Image clickPlay = Resources.getImage("assets/graphics/buttons/general/back_hover.png");
-/*        Image im = Resources.getImage(bWidth, bHeight);
-        im.getGraphics().setColor(Color.blue);
-        im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-        im.getGraphics().setColor(Color.white);
-        Image clickPlay = Resources.getImage(bWidth, bHeight);
-        clickPlay.getGraphics().setColor(Color.yellow);
-        clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
-        clickPlay.getGraphics().setColor(Color.black);
-        im.getGraphics().drawString("Back", 0, 0);
-        clickPlay.getGraphics().drawString("Back", 0, 0);
-*/        im.getGraphics().flush();
-        clickPlay.getGraphics().flush();
-        images.add(im);
-        images.add(clickPlay);
+        Image im;
+        Image clickPlay;
+        for (int i = 0; i <6; i++){
+            switch (i){
+            case 0:
+              im = Resources.getImage("assets/graphics/buttons/general/back.png");
+              clickPlay = Resources.getImage("assets/graphics/buttons/general/back_hover.png");
+/*                im = Resources.getImage(bWidth, bHeight);
+                im.getGraphics().setColor(Color.blue);
+                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                im.getGraphics().setColor(Color.white);
+                im.getGraphics().drawString("Back", 0, 0);
+                
+                clickPlay = Resources.getImage(bWidth, bHeight);
+                clickPlay.getGraphics().setColor(Color.yellow);
+                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                clickPlay.getGraphics().setColor(Color.black);
+                clickPlay.getGraphics().drawString("Back", 0, 0);
+*/                
+                im.getGraphics().flush();
+                clickPlay.getGraphics().flush();
+                images.add(im);
+                images.add(clickPlay);
+                break;
+            case 1:
+              im = Resources.getImage("assets/graphics/buttons/general/connect.png");
+              clickPlay = Resources.getImage("assets/graphics/buttons/general/connect_hover.png");
+/*                im = Resources.getImage(bWidth, bHeight);
+                im.getGraphics().setColor(Color.blue);
+                im.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                im.getGraphics().setColor(Color.white);
+                im.getGraphics().drawString("Connect", 0, 0);
+                
+                clickPlay = Resources.getImage(bWidth, bHeight);
+                clickPlay.getGraphics().setColor(Color.yellow);
+                clickPlay.getGraphics().fillRect(0, 0, im.getWidth(), im.getHeight());
+                clickPlay.getGraphics().setColor(Color.black);
+                clickPlay.getGraphics().drawString("Connect", 0, 0);
+*/                
+                im.getGraphics().flush();
+                clickPlay.getGraphics().flush();
+                images.add(im);
+                images.add(clickPlay);
+                break;
+            }
+        }
         return images;
     }
 
