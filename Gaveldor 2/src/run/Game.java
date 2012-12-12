@@ -94,6 +94,10 @@ public class Game extends StateBasedGame {
     public static void main(String[] args) throws SlickException, IOException, URISyntaxException {
         Resources.setupLWJGLNatives("/lwjgl_natives");
 
+        if (args.length > 0) {
+            Constants.MATCHMAKING_SERVER_IP = args[0];
+        }
+        
         Game game = new Game();
         AppGameContainer container = new AppGameContainer(game);
         container.setVerbose(false);
