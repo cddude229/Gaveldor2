@@ -47,6 +47,10 @@ public class RemotePlayerController extends PlayerController {
             super.renderPiece(container, g, p);
         }
     }
+    
+    public void stop(){
+        networkingController.stop();
+    }
 
     @Override
     public Action retrieveAction(){

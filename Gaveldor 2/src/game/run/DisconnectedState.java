@@ -48,12 +48,13 @@ public class DisconnectedState extends PlayerControllerState {
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
         pc.renderBoard(container, g);
         pc.renderHeaderText(container, g, "The Connection was Lost");
-        //TODO: render disconnected state
+        menuBtn.render(container, g);
     }
 
     @Override
     public void updateLocal(GameContainer container, LocalPlayerController pc, int delta) throws SlickException {
         //TODO: update local disconnected state
+        menuBtn.update(container, delta);
     }
 
 }

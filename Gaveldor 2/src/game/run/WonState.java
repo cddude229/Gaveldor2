@@ -44,6 +44,14 @@ public class WonState extends PlayerControllerState {
         });
         this.stickyListener.add(menuBtn);
     }
+    
+    @Override
+    public void enter(GameContainer container, PlayerController pc) throws SlickException{
+        super.enter(container, pc);
+        if (!isLocal){
+            ((RemotePlayerController)pc).stop();
+        }
+    }
 
     @Override
     public void render(GameContainer container, PlayerController pc, Graphics g) throws SlickException {
