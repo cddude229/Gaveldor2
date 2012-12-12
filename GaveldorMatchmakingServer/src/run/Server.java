@@ -117,8 +117,8 @@ public class Server extends Thread{
 	}
 
 	private String chooseMap() {    
-	    String[] maps = {"agincourt", "basic", "largefield", "mountain", "thermopylae"};
-		return "/assets/maps/" + maps[((int)(Math.random()*5))];
+	    String[] maps = {"agincourt", "basic", "bocage", "largefield", "mountain", "thermopylae"};
+		return "/assets/maps/" + maps[((int)(Math.random()*6))];
 	}
 
 	public void connectionClosed() {
