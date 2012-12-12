@@ -45,7 +45,6 @@ public class GameModel {
             BLOCKED.image = Resources.getImage("/assets/graphics/ui/strike_markers/blocked.png");
             CRITICAL.image = Resources.getImage("/assets/graphics/ui/strike_markers/critical.png");
         
-            //TODO: initialize attack result sounds
             CRITICAL.sound = Resources.getSound("/assets/audio/effects/sword_crit.ogg");
             BLOCKED.sound = Resources.getSound("/assets/audio/effects/sword_block2.ogg");
             STRIKE.sound = Resources.getSound("/assets/audio/effects/sword_hit.ogg");

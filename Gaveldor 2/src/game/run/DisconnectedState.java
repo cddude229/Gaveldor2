@@ -53,7 +53,6 @@ public class DisconnectedState extends PlayerControllerState {
 
     @Override
     public void updateLocal(GameContainer container, LocalPlayerController pc, int delta) throws SlickException {
-        //TODO: update local disconnected state
         menuBtn.update(container, delta);
     }
 
