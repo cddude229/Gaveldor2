@@ -1,4 +1,4 @@
-Gaveldor 2: The Ungaveling of Ambidextria
+Gaveldor 2: The Engaveling of Ambidextria
 =========
 
 Our team members are:
