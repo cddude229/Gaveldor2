@@ -37,7 +37,7 @@ public class PlayBoardState extends PlayerControllerState {
     private GameContainer gameContainer;
     //private PlayerController stateGame;
     
-    public static String tutorialString = Constants.NONE_SELECTED;
+    public static String tutorialString = ""; //Constants.NONE_SELECTED;
     
     private SidebarButton[] sidebarButtons;
     
@@ -301,7 +301,12 @@ public class PlayBoardState extends PlayerControllerState {
                 if (piece.equals(pc.selectedPiece) && piece.turnState == Piece.TurnState.MOVING){
                     tutorialString = Constants.MOVING;
                 } else{
-                    tutorialString = Constants.NONE_SELECTED;
+                    if (pc.isCurrentPC()) {
+                        tutorialString = Constants.NONE_SELECTED;
+                    }
+                    else {
+                        tutorialString = "";
+                    }
                 }
                 if (!piece.equals(pc.selectedPiece) || pc.selectedPieceMove == null){
                     Set<Point> moves = pc.model.findValidMoves(piece, true).keySet();
@@ -331,6 +336,14 @@ public class PlayBoardState extends PlayerControllerState {
                         }
                     }
                     pc.renderAtPosition(movableOverlay, g, pc.selectedPieceMove.x, pc.selectedPieceMove.y, 0f, 0f);
+                }
+            }
+            else {
+                if (pc.isCurrentPC()) {
+                    tutorialString = Constants.NONE_SELECTED;
+                }
+                else {
+                    tutorialString = "";
                 }
             }
         }
@@ -434,6 +447,7 @@ public class PlayBoardState extends PlayerControllerState {
 
     private void endTurn(LocalPlayerController pc){
         clearSelection(pc);
+        tutorialString = "";
         pc.actionQueue.add(new Action.TurnEndAction(pc.player));
     }
     
