@@ -19,14 +19,13 @@ Gaveldor 2 requires Java Version 1.6 or higher, and a screen resolution of at le
 
 Running The Game
 ========
-Run the following command line in the project folder:
+To run the game, execute the following command line in the project folder:
 
 java -jar gaveldor2.jar
 
+To run the matchmaking server, execute the following command line in the project folder:
 
-Some errors may appear in the terminal window, but the game will operate normally.  These
-just have to deal with black and white PNGs.
-
+java -jar gaveldor2server.jar
 
 Known Bugs
 ========
