@@ -10,6 +10,11 @@ Our team members are:
     Andres Romero
     Jeremy Sharpe
     Kevin White
+    
+Requirements
+=======
+
+Gaveldor 2 requires Java Version 1.6 or higher, and a screen resolution of at least 1024 x 768.
 
 
 Running The Game
