@@ -79,7 +79,8 @@ public class InstructionState extends BasicGameState {
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         float deltaW,deltaH;
-        if (container.getWidth()<=1280 && container.getHeight()<=800)
+        int w = 1200;
+        if (container.getWidth()<=w && container.getHeight()<=800)
         {
             deltaW = (container.getWidth()/(float) Constants.WINDOW_WIDTH - 1) * Constants.WINDOW_WIDTH;
             deltaH = (float) 0.0001 * (container.getHeight()/(float) Constants.WINDOW_HEIGHT - 1) * Constants.WINDOW_HEIGHT;
@@ -90,9 +91,10 @@ public class InstructionState extends BasicGameState {
         }
         else
         {
-            deltaW = (1280/(float) Constants.WINDOW_WIDTH - 1) * Constants.WINDOW_WIDTH;
+            deltaW = (w/(float) Constants.WINDOW_WIDTH - 1) * Constants.WINDOW_WIDTH;
             deltaH = (float) 0.0001 * (800/(float) Constants.WINDOW_HEIGHT - 1) * Constants.WINDOW_HEIGHT;
             g.drawImage(images.get(page+6), (container.getWidth()-(Constants.WINDOW_WIDTH + deltaW)), 0,Constants.WINDOW_WIDTH + deltaW,Constants.WINDOW_HEIGHT- Constants.WINDOW_HEIGHT/10 - deltaH,0,0,1280,800);
+            //g.drawImage(images.get(page+6), (container.getWidth()-1024)/2, 0,1024,800,0,0,1280,800);
             backBtn.render(container, g);
             fbtn.render(container, g);
             bbtn.render(container, g);
